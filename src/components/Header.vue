@@ -56,7 +56,7 @@
         data: () => ({
             language: 'en-us',
             homeLinkTitle: 'HOME',
-            storeLinkTitle: 'CATALOG',
+            storeLinkTitle: 'PRODUCT CATALOG',
             articlesLinkTitle: 'ARTICLES',
             aboutLinkTitle: 'ABOUT US',
             cafesLinkTitle: 'CAFES',

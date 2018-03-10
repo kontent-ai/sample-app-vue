@@ -48,18 +48,21 @@ class ArticleStore {
       .type('article')
       .orderParameter("elements.post_date", SortOrder.desc);
 
+
     if (language) {
       query.languageParameter(language);
     }
 
-    query.get()
-      .subscribe(response => {
+    return query.get()
+        .toPromise()
+      .then(response => {
         if (language) {
-          articleList[language] = response.items;
+          articleList[language] = response.items.slice(0,count);
         } else {
-          articleList[defaultLanguage] = response.items
+          articleList[defaultLanguage] = response.items.slice(0,count);
         }
         notifyChange();
+        return response.items.slice(0,count);
       });
   }
 
@@ -74,12 +77,13 @@ class ArticleStore {
   }
 
   getArticles(count, language) {
-    if (language) {
-      return articleList[language].slice(0, count);
-    }
-    else {
-      return articleList[defaultLanguage].slice(0, count);
-    }
+    return this.provideArticles(count, language);
+    // if (language) {
+    //   return articleList[language].slice(0, count);
+    // }
+    // else {
+    //   return articleList[defaultLanguage].slice(0, count);
+    // }
   }
 
   // Listeners

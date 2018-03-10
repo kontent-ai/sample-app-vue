@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "dateformat": "^3.0.3",
     "kentico-cloud-delivery-typescript-sdk": "^2.5.3",
     "lodash": "^4.17.5",
     "twitter-widgets": "^1.0.0",

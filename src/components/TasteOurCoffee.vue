@@ -5,6 +5,7 @@
         </div>
         <div v-for="cafe in cafes" class="col-xs-6 col-md-3">
             <div>
+                <!--TODO variable for name?-->
                 <router-link to="en-us/cafes" class="ourcoffee-tile-link">
                 <h2 class="ourcoffee-tile-text center-text">{{cafe.system.name}}</h2>
                 <span class="cafe-overlay"> </span>

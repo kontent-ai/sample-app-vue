@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <Header/>
-      <Home/>
+      <router-view/>
       <Footer/>
   </div>
 </template>
@@ -20,6 +20,3 @@ export default {
   }
 }
 </script>
-
-<style>
-</style>

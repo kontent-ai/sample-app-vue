@@ -28,9 +28,10 @@ let fetchCafes = (language) => {
   if (language) {
     query.languageParameter(language);
   }
-
-  query.get()
-    .subscribe(response => {
+  //TODO utilize observable
+  return query.get()
+      .toPromise()
+    .then(response => {
       if (language) {
         cafes[language] = response.items;
       } else {
@@ -38,6 +39,7 @@ let fetchCafes = (language) => {
       }
       notifyChange(language);
       languageInitialized[language] = true;
+      return response.items;
     });
 }
 
@@ -50,7 +52,7 @@ class CafeStore {
   }
 
   provideCompanyCafes(language) {
-    fetchCafes(language);
+    return fetchCafes(language);
   }
 
   // Methods
@@ -60,7 +62,7 @@ class CafeStore {
   }
 
   getCompanyCafes(language) {
-    return cafes[language].filter((cafe) => cafe.country.value === "USA");
+    return this.provideCompanyCafes(language).then(cafes => cafes.filter((cafe) => cafe.country.value === "USA"));
   }
 
   // Listeners

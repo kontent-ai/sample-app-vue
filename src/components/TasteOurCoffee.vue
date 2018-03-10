@@ -3,8 +3,15 @@
         <div>
             <h1 class="title-tab">TASTE OUR COFFEE</h1>
         </div>
-        <!--{cafes}-->
-        Cafes
+        <div v-for="cafe in cafes" class="col-xs-6 col-md-3">
+            <div>
+                <router-link to="en-us/cafes" class="ourcoffee-tile-link">
+                <h2 class="ourcoffee-tile-text center-text">{{cafe.system.name}}</h2>
+                <span class="cafe-overlay"> </span>
+                <img v-bind:alt="cafe.system.name" class="ourcoffee-tile-image" v-bind:src="cafe.photo.value[0].url" v-bind:title="cafe.system.name" />
+                </router-link>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -14,7 +21,10 @@
     export default {
         name: "taste-our-coffee",
         data: () => ({
-            cafes: CafeStore.getCompanyCafes('en-US'),
-        })
+            cafes: null,
+        }),
+        created: function(){
+            CafeStore.getCompanyCafes('en-US').then(cafes => this.cafes = cafes);
+        },
     }
 </script>

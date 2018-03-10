@@ -10,6 +10,7 @@
   "dependencies": {
     "kentico-cloud-delivery-typescript-sdk": "^2.5.3",
     "lodash": "^4.17.5",
+    "twitter-widgets": "^1.0.0",
     "vue": "^2.5.13",
     "vue-router": "^3.0.1"
   },

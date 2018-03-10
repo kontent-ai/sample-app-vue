@@ -1,13 +1,13 @@
 import _ from 'lodash'
 
-const languageCodes = [
+export const languageCodes = [
     'en-US', // default languages
     'es-ES'
 ];
 
-const languageCodesLowerCase = languageCodes.map(code => code.toLowerCase());
+export const languageCodesLowerCase = languageCodes.map(code => code.toLowerCase());
 
-const dateFormats = {
+export const dateFormats = {
     'en-US': {
         dayNames: [
             'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
@@ -36,9 +36,9 @@ const dateFormats = {
     }
 }
 
-const defaultLanguage = languageCodes[0];
+export const defaultLanguage = languageCodes[0];
 
-const initLanguageCodeObject = (object) => {
+export const initLanguageCodeObject = (object) => {
     if (!object) {
         object = {};
     }
@@ -50,7 +50,7 @@ const initLanguageCodeObject = (object) => {
     return object
 }
 
-const getLanguageCode = (match) => {
+export const getLanguageCode = (match) => {
     const languageCode = languageCodes[0];
     if (!_.has(match, ['params', 'lang'])) {
         return languageCode;
@@ -63,12 +63,4 @@ const getLanguageCode = (match) => {
     return defaultLanguage;
 }
 
-module.exports = {
-    languageCodes,
-    languageCodesLowerCase,
-    dateFormats,
-    defaultLanguage,
-    initLanguageCodeObject,
-    getLanguageCode
-};
 export default languageCodes;

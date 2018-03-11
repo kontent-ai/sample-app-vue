@@ -28,14 +28,16 @@ let fetchBrewers = (language) => {
     query.languageParameter(language);
   }
 
-  query.get()
-    .subscribe(response => {
+  return query.get()
+      .toPromise()
+    .then(response => {
       if (language) {
         brewers[language] = response.items;
       } else {
         brewers[defaultLanguage] = response.items;
       }
       notifyChange();
+      return response.items;
     });
 }
 
@@ -136,7 +138,7 @@ class BrewerStore {
   }
 
   provideBrewers(language) {
-    fetchBrewers(language);
+    return fetchBrewers(language);
   }
 
   provideManufacturers() {

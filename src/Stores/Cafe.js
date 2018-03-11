@@ -17,10 +17,11 @@ let notifyChange = (newlanguage) => {
 }
 
 let fetchCafes = (language) => {
-  if(languageInitialized[language]){
-    notifyChange(language);
-    return;
-  }
+  //TODO cache cafes?
+  // if(languageInitialized[language]){
+  //   notifyChange(language);
+  //   return;
+  // }
 
   let query = Client.items()
     .type('cafe')

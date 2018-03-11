@@ -42,30 +42,34 @@ let fetchBrewers = (language) => {
 }
 
 let fetchManufacturers = () => {
-  if (manufacturersInitialized) {
-    return;
-  }
+  // if (manufacturersInitialized) {
+  //   return;
+  // }
 
-  Client.taxonomy("manufacturer")
+  return Client.taxonomy("manufacturer")
     .get()
-    .subscribe(response => {
+      .toPromise()
+    .then(response => {
       manufacturers = response.taxonomy.terms;
       notifyChange();
       manufacturersInitialized = true;
+      return response.taxonomy.terms;
     });
 }
 
 let fetchProductStatuses = () => {
-  if (productStatusesInitialized) {
-    return;
-  }
+  // if (productStatusesInitialized) {
+  //   return;
+  // }
 
-  Client.taxonomy("product_status")
+  return Client.taxonomy("product_status")
     .get()
-    .subscribe(response => {
+      .toPromise()
+    .then(response => {
       productStatuses = response.taxonomy.terms;
       notifyChange();
       productStatusesInitialized = true;
+      return response.taxonomy.terms;
     });
 }
 
@@ -142,11 +146,11 @@ class BrewerStore {
   }
 
   provideManufacturers() {
-    fetchManufacturers();
+    return fetchManufacturers();
   }
 
   provideProductStatuses() {
-    fetchProductStatuses();
+    return fetchProductStatuses();
   }
 
   // Methods
@@ -160,11 +164,11 @@ class BrewerStore {
   }
 
   getManufacturers() {
-    return manufacturers;
+    return this.provideManufacturers();
   }
 
   getProductStatuses() {
-    return productStatuses;
+    return this.provideProductStatuses();
   }
 
   getFilter() {

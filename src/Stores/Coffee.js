@@ -23,32 +23,38 @@ let fetchCoffees = (language) => {
     query.languageParameter(language);
   }
 
-  query.get()
-    .subscribe(response => {
+  return query.get()
+      .toPromise()
+    .then(response => {
       if (language) {
         coffees[language] = response.items;
       } else {
         coffees[defaultLanguage] = response.items;
       }
       notifyChange();
+      return response.items;
     });
 }
 
 let fetchProcessings = () => {
-  Client.taxonomy("processing")
+  return Client.taxonomy("processing")
     .get()
-    .subscribe(response => {
+      .toPromise()
+    .then(response => {
       processings = response.taxonomy.terms;
       notifyChange();
+      return response.taxonomy.terms;
     });
 };
 
 let fetchProductStatuses = () => {
-  Client.taxonomy("product_status")
+  return Client.taxonomy("product_status")
     .get()
-    .subscribe(response => {
+      .toPromise()
+    .then(response => {
       productStatuses = response.taxonomy.terms;
       notifyChange();
+      return response.taxonomy.terms;
     });
 }
 
@@ -106,34 +112,37 @@ class CoffeeStore {
   }
 
   provideCoffees(language) {
-    fetchCoffees(language);
+    return fetchCoffees(language);
   }
 
   provideProcessings() {
-    fetchProcessings();
+    return fetchProcessings();
   }
 
   provideProductStatuses() {
-    fetchProductStatuses();
+    return fetchProductStatuses();
   }
 
   // Methods
 
   getCoffee(coffeeSlug, language) {
-    ;
+
     return coffees[language || defaultLanguage].find((coffee) => coffee.urlPattern.value === coffeeSlug);
   }
 
   getCoffees(language) {
-    return coffees[language];
+    // return coffees[language];
+      return this.provideCoffees(language);
   }
 
   getProcessings() {
-    return processings;
+    // return processings;
+      return this.provideProcessings();
   }
 
   getProductStatuses() {
-    return productStatuses;
+    // return productStatuses;
+      return this.provideProductStatuses();
   }
 
   getFilter() {

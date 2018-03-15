@@ -5,6 +5,7 @@ import Home from './components/Home.vue'
 import Store from './components/Store.vue'
 import CoffeeStore from './components/CoffeeStore.vue'
 import BrewerStore from './components/BrewerStore.vue'
+import Articles from './components/Articles.vue'
 import './index.css';
 
 Vue.config.productionTip = false;
@@ -32,6 +33,10 @@ let router = new Router({
                     component: CoffeeStore,
                 }
             ]
+        },
+        {
+            path: "/:lang/articles",
+            component: Articles,
         }
 
     ]

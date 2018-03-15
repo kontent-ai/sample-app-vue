@@ -18,14 +18,16 @@ let fetchFacts = (language) => {
     query.languageParameter(language);
   }
 
-  query.get()
-    .subscribe(response => {
+  return query.get()
+      .toPromise()
+    .then(response => {
       if(language){
         facts[language] = response.item.facts;
       } else {
         facts[defaultLanguage] = response.item.facts;        
       }
       notifyChange();
+      return response.item.facts;
     });
 }
 
@@ -34,13 +36,14 @@ class FactStore {
   // Actions
 
   provideFacts(language) {
-    fetchFacts(language);
+    return fetchFacts(language);
   }
 
   // Methods
 
   getFacts(language) {
-    return facts[language];
+    // return facts[language];
+      return this.provideFacts(language);
   }
 
   // Listeners

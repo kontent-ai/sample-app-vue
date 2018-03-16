@@ -8,10 +8,17 @@ import BrewerStore from './components/BrewerStore.vue'
 import Articles from './components/Articles.vue'
 import About from './components/About.vue'
 import Cafes from './components/Cafes.vue'
+import Contacts from './components/Contacts.vue'
+import * as VueGoogleMaps from 'vue2-google-maps'
 import './index.css';
 
 Vue.config.productionTip = false;
 Vue.use(Router);
+Vue.use(VueGoogleMaps, {
+    load: {
+        key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
+    }
+})
 let router = new Router({
     routes: [
         {
@@ -46,7 +53,11 @@ let router = new Router({
         },{
             path: "/:lang/cafes",
             component: Cafes,
-        }
+        },
+        {
+            path: "/:lang/contacts",
+            component: Contacts,
+        },
 
     ]
 });

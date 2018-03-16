@@ -59,7 +59,8 @@ class CafeStore {
   // Methods
 
   getPartnerCafes(language) {
-    return cafes[language].filter((cafe) => cafe.country.value !== "USA");
+    // return cafes[language].filter((cafe) => cafe.country.value !== "USA");
+      return this.provideCompanyCafes(language).then(cafes => cafes.filter((cafe) => cafe.country.value !== "USA"));
   }
 
   getCompanyCafes(language) {

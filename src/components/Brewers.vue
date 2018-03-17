@@ -1,6 +1,6 @@
 <template>
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
-        <div v-for="brewer in brewers" class="col-md-6 col-lg-4" >
+        <div v-for="brewer in filteredBrewers" class="col-md-6 col-lg-4" >
             <article class="product-tile">
                 <router-link :to="resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, 'en-us')">
                 <h1 class="product-heading">{{brewer.productName.value}}</h1>
@@ -28,7 +28,8 @@
     export default{
         name: "Brewers",
         data: () => ({
-            brewers: null,
+            brewers: [],
+            filter: null,
         }),
         methods: {
             formatPrice: function(price, language){
@@ -39,8 +40,17 @@
             },
             resolveContentLink,
         },
+        computed: {
+          filteredBrewers: function(){
+              if (this.brewers.length === 0 || !this.filter){
+                  return [];
+              }
+              return this.brewers.filter(brewer => this.filter.matches(brewer));
+          }
+        },
         created: function(){
             BrewerStore.provideBrewers('en-US').then(brewers => this.brewers = brewers);
+            this.filter = BrewerStore.getFilter();
         }
     }
 </script>

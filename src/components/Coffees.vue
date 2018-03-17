@@ -1,6 +1,6 @@
 <template>
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
-        <div v-for="(coffee, index) in coffees" class="col-md-6 col-lg-4" :key="index">
+        <div v-for="(coffee, index) in filteredCoffees" class="col-md-6 col-lg-4" :key="index">
             <article class="product-tile">
                 <router-link :to="`/en-us/coffees/${coffee.urlPattern.value}`">
                 <h1 class="product-heading">{{coffee.productName.value}}</h1>
@@ -28,7 +28,16 @@
         name: "Coffees",
         data: () => ({
             coffees: [],
+            filter: null,
         }),
+        computed: {
+          filteredCoffees: function(){
+              if (this.coffees.length === 0 || !this.filter){
+                  return [];
+              }
+              return this.coffees.filter(coffee => this.filter.matches(coffee));
+          }
+        },
         methods: {
             formatPrice: function(price, language){
                 return price.toLocaleString(language, {
@@ -39,6 +48,7 @@
         },
         created: function(){
             CoffeeStore.getCoffees("en-US").then(coffees => this.coffees = coffees);
+            this.filter = CoffeeStore.getFilter();
         }
     }
 </script>

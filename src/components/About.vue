@@ -33,6 +33,7 @@
         data: () => ({
             facts: [],
         }),
+        props: ['language'],
         methods: {
             getTitle: function(fact){
                 return fact.title.value;
@@ -48,7 +49,7 @@
             RichTextElement,
         },
         created : function(){
-            FactStore.getFacts('en-US').then(facts => this.facts = facts);
+            FactStore.getFacts(this.language).then(facts => this.facts = facts);
         }
     }
 </script>

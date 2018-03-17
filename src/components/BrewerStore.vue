@@ -1,8 +1,8 @@
 <template>
     <div class="product-page row">
         <div class="flex">
-            <BrewerFilter/>
-            <Brewers/>
+            <BrewerFilter />
+            <Brewers :language="this.language"/>
         </div>
     </div>
 </template>
@@ -16,7 +16,8 @@
         components: {
             BrewerFilter,
             Brewers
-        }
+        },
+        props: ['language'],
     }
 </script>
 

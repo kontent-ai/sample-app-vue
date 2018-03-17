@@ -28,7 +28,7 @@
         <!--TODO key in list rendering?-->
         <div v-for="article in articles.slice(1)" class="col-md-3" >
             <div class="article-tile">
-                <router-link :to="'/en-us/articles/' + article.urlPattern.value">
+                <router-link :to="`/${language}/articles/` + article.urlPattern.value">
                 <img v-bind:alt="'Article' + article.title.value" class="article-tile-image" v-bind:src="article.teaserImage.value[0].url" v-bind:title="'Article' + article.title.value" />
                 </router-link>
                 <div class="article-tile-date">
@@ -36,7 +36,7 @@
                 </div>
                 <div class="article-tile-content">
                     <h2 class="h4">
-                        <router-link :to="'/en-us/articles/' + article.urlPattern.value">{{article.title.value}}</router-link>
+                        <router-link :to="`/${language}/articles/` + article.urlPattern.value">{{article.title.value}}</router-link>
                     </h2>
                     <p class="article-tile-text">
                         {{article.summary.value}}
@@ -59,8 +59,9 @@
             articlesCount: 5,
             title: "Latest articles",
         }),
+        props: ['language'],
         created: function(){
-            ArticleStore.getArticles(this.articlesCount, 'en-US').then((articles) => this.articles = articles);
+            ArticleStore.getArticles(this.articlesCount, this.language).then((articles) => this.articles = articles);
         },
         methods: {
             formatDate: function(value){

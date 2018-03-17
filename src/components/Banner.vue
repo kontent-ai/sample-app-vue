@@ -18,7 +18,7 @@
             },
             heading: 'Roasting premium coffee',
             text: "Discover the fascinating world of Dancing Goat high-quality coffee and you will never miss a single coffee break again.",
-        })
+        }),
     }
 </script>
 

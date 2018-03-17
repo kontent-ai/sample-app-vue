@@ -2,7 +2,7 @@
     <div class="product-page row">
         <div class="flex">
             <CoffeeFilter />
-            <Coffees />
+            <Coffees :language="this.language"/>
         </div>
     </div>
 </template>
@@ -16,7 +16,9 @@
         components: {
             CoffeeFilter,
             Coffees
-        }
+        },
+        props: ['language'],
+
     }
 </script>
 

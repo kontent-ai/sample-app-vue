@@ -6,7 +6,7 @@
         <div v-for="cafe in cafes" class="col-xs-6 col-md-3">
             <div>
                 <!--TODO variable for name?-->
-                <router-link to="en-us/cafes" class="ourcoffee-tile-link">
+                <router-link :to="`${language}/cafes`" class="ourcoffee-tile-link">
                 <h2 class="ourcoffee-tile-text center-text">{{cafe.system.name}}</h2>
                 <span class="cafe-overlay"> </span>
                 <img v-bind:alt="cafe.system.name" class="ourcoffee-tile-image" v-bind:src="cafe.photo.value[0].url" v-bind:title="cafe.system.name" />
@@ -24,8 +24,9 @@
         data: () => ({
             cafes: null,
         }),
+        props: ['language'],
         created: function(){
-            CafeStore.getCompanyCafes('en-US').then(cafes => this.cafes = cafes);
+            CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
         },
     }
 </script>

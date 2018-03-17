@@ -50,6 +50,7 @@
             mapTitle: "Drop in",
             selectedAddress: null,
         }),
+        props: ['language'],
         methods: {
             model: function (cafe) {
                 let model = {
@@ -68,7 +69,7 @@
             }
         },
         created: function () {
-            CafeStore.getCompanyCafes('en-US').then(cafes => this.cafes = cafes);
+            CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
         },
         computed: {
             cafeModels: function () {

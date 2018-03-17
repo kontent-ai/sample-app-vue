@@ -35,12 +35,13 @@
         data: () => ({
             articles: [],
         }),
+        props: ['language'],
         methods: {
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
             },
             getArticleLink: function(article){
-                return '/en-us/articles/' + article.urlPattern.value;
+                return `/${this.language}/articles/${article.urlPattern.value}`;
             },
             getNextKey: function(){
                 return this.counter++;
@@ -50,7 +51,8 @@
             this.counter = 0;
         },
         created: function(){
-            ArticleStore.getArticles(10, 'en-US').then((articles) => this.articles = articles);
+            console.log(this.language);
+            ArticleStore.getArticles(10, this.language).then((articles) => this.articles = articles);
             this.counter = 0;
 
         }

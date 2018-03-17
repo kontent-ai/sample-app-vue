@@ -2,7 +2,7 @@
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
         <div v-for="(coffee, index) in filteredCoffees" class="col-md-6 col-lg-4" :key="index">
             <article class="product-tile">
-                <router-link :to="`/en-us/coffees/${coffee.urlPattern.value}`">
+                <router-link :to="`/${language}/coffees/${coffee.urlPattern.value}`">
                 <h1 class="product-heading">{{coffee.productName.value}}</h1>
                 <span v-if="coffee.productStatus.value.length === 0" />
                 <span v-else class="product-tile-status">
@@ -13,7 +13,7 @@
                 </figure>
                 <div class="product-tile-info">
                 <span class="product-tile-price">
-                  {{formatPrice(coffee.price.value, 'en-us')}}
+                  {{formatPrice(coffee.price.value, language)}}
                 </span>
                 </div>
                 </router-link>
@@ -30,6 +30,7 @@
             coffees: [],
             filter: null,
         }),
+        props: ['language'],
         computed: {
           filteredCoffees: function(){
               if (this.coffees.length === 0 || !this.filter){
@@ -47,7 +48,7 @@
             }
         },
         created: function(){
-            CoffeeStore.getCoffees("en-US").then(coffees => this.coffees = coffees);
+            CoffeeStore.getCoffees(this.language).then(coffees => this.coffees = coffees);
             this.filter = CoffeeStore.getFilter();
         }
     }

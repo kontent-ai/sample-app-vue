@@ -28,8 +28,9 @@
         data: () => ({
             article: null,
         }),
+        props: ['language'],
         created: function(){
-            ArticleStore.getArticle(this.$route.params.articleName, 'en-US').then(article => this.article = article);
+            ArticleStore.getArticle(this.$route.params.articleName, this.language).then(article => this.article = article);
         },
         methods: {
             formatDate: function(value){

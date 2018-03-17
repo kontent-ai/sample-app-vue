@@ -29,8 +29,9 @@ class ArticleStore {
       query.languageParameter(language);
     }
 
-    query.get()
-      .subscribe(response => {
+    return query.get()
+        .toPromise()
+      .then(response => {
         if (!response.isEmpty) {
           if (language) {
             articleDetails[language][articleSlug] = response.items[0];
@@ -38,6 +39,7 @@ class ArticleStore {
             articleDetails[defaultLanguage][articleSlug] = response.items[0];
           }
           notifyChange();
+          return response.items[0];
         }
       })
   }
@@ -68,11 +70,12 @@ class ArticleStore {
 
   // Methods
   getArticle(articleSlug, language) {
-    if (language) {
-      return articleDetails[language][articleSlug];
-    } else {
-      return articleDetails[defaultLanguage][articleSlug];
-    }
+    // if (language) {
+    //   return articleDetails[language][articleSlug];
+    // } else {
+    //   return articleDetails[defaultLanguage][articleSlug];
+    // }
+      return this.provideArticle(articleSlug, language);
 
   }
 

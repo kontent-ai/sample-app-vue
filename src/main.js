@@ -9,6 +9,7 @@ import Articles from './components/Articles.vue'
 import About from './components/About.vue'
 import Cafes from './components/Cafes.vue'
 import Contacts from './components/Contacts.vue'
+import Article from './components/Article.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import './index.css';
 
@@ -46,6 +47,10 @@ let router = new Router({
         {
             path: "/:lang/articles",
             component: Articles,
+        },
+        {
+            path: "/:lang/articles/:articleName",
+            component: Article,
         },
         {
             path: '/:lang/about',

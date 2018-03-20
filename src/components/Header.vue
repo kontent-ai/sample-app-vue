@@ -54,7 +54,6 @@
     export default {
         name: 'Header',
         data: () => ({
-            language: 'en-us',
             homeLinkTitle: 'HOME',
             storeLinkTitle: 'PRODUCT CATALOG',
             articlesLinkTitle: 'ARTICLES',
@@ -62,6 +61,7 @@
             cafesLinkTitle: 'CAFES',
             contactsLinkTitle: 'CONTACT'
         }),
+        props: ['language', 'changeLang'],
         computed: {
             homeRoute: function(){
                 return '/' + this.language;
@@ -85,7 +85,7 @@
         methods: {
             //TODO exctract
             changeLanguage: function(newLanguage){
-                this.language = newLanguage;
+                this.changeLang(newLanguage);
             },
         }
     }

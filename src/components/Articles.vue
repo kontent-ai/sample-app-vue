@@ -45,16 +45,23 @@
             },
             getNextKey: function(){
                 return this.counter++;
+            },
+            getArticlesData: function(){
+                ArticleStore.getArticles(10, this.language).then((articles) => this.articles = articles);
+
             }
         },
         updated: function(){
             this.counter = 0;
         },
         created: function(){
-            console.log(this.language);
-            ArticleStore.getArticles(10, this.language).then((articles) => this.articles = articles);
+            this.getArticlesData();
             this.counter = 0;
-
+        },
+        watch: {
+            language: function(){
+                this.getArticlesData();
+            }
         }
     }
 </script>

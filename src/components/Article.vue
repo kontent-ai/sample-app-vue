@@ -30,11 +30,19 @@
         }),
         props: ['language'],
         created: function(){
-            ArticleStore.getArticle(this.$route.params.articleName, this.language).then(article => this.article = article);
+            this.getArticleData();
         },
         methods: {
             formatDate: function(value){
                 return dateFormat(value, "dddd, mmmm d, yyyy");
+            },
+            getArticleData: function(){
+                ArticleStore.getArticle(this.$route.params.articleName, this.language).then(article => this.article = article);
+            }
+        },
+        watch: {
+            language: function(){
+                this.getArticleData();
             }
         },
         components: {

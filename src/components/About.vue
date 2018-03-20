@@ -44,12 +44,20 @@
             getImageLink: function(fact){
                 return fact.image.value[0].url;
             },
+            getFactsData: function(){
+                FactStore.getFacts(this.language).then(facts => this.facts = facts);
+            }
         },
         components: {
             RichTextElement,
         },
         created : function(){
-            FactStore.getFacts(this.language).then(facts => this.facts = facts);
+            this.getFactsData();
+        },
+        watch: {
+            language: function(){
+                this.getFactsData();
+            }
         }
     }
 </script>

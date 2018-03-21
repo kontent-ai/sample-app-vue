@@ -1,14 +1,15 @@
 <template>
-    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" :clickableIcons="false" >
+    <!--TODO clickable icons ?-->
+    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" :clickableIcons="false" id="map" >
         <gmap-marker v-for="(location, index) in markerLocations" :position="location" :key="index" />
-
-        <a href="#mapanchor" />
     </gmap-map>
 
 </template>
 <!--TODO check map props, scroll-->
 
 <script>
+    import VueScrollTo from 'vue-scrollto'
+
     export default {
         name: "ContactMap",
         props: ['cafesAddresses', 'focusOnAddress'],
@@ -23,8 +24,8 @@
             zoom : 4,
         }),
         watch: {
+            //TODO sometimes adresses dont load
             cafesAddresses: function(){
-                console.log(this.cafesAddresses);
                 this.cafesAddresses.map(cafeAddress => {
                         let geocoder = new window.google.maps.Geocoder();
                         geocoder.geocode({ 'address': cafeAddress }, (results, status) => {
@@ -47,7 +48,7 @@
                         let location = results[0].geometry.location;
                         this.centerLocation = location;
                         this.zoom = 17;
-
+                        VueScrollTo.scrollTo("#map");
                     } else {
                         console.warn('Geocode was not successful for the following reason: ' + status);
                     }

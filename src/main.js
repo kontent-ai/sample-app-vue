@@ -12,16 +12,23 @@ import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueTranslate from 'vue-translate-plugin'
+import VueScrollTo from 'vue-scrollto'
 import './index.css';
 
 Vue.config.productionTip = false;
-Vue.use(Router);
-Vue.use(VueTranslate);
 Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
     }
 })
+Vue.use(Router);
+Vue.use(VueTranslate);
+Vue.use(VueScrollTo, {
+    duration: 500,
+    easing: "ease",
+});
+
+
 
 let router = new Router({
     routes: [

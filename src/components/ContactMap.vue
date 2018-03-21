@@ -1,6 +1,5 @@
 <template>
-    <!--TODO clickable icons ?-->
-    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" :clickableIcons="false" id="map" ref="map" >
+    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" id="map" ref="map" >
         <gmap-marker v-for="(location, index) in markerLocations" v-if="mapLoaded" :position="location" :key="index" />
     </gmap-map>
 
@@ -60,7 +59,6 @@
             },
             getMapMarkers(){
                 if(!this.mapLoaded){
-//                    console.log("aborting");
                     return;
                 }
                 this.cafesAddresses.map(cafeAddress => {

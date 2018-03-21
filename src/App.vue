@@ -12,11 +12,10 @@
     import {languageCodes, languageCodesLowerCase} from './Utilities/LanguageCodes'
 
     export default {
+
         name: 'app',
         computed: {
             language: function() {
-//                this.$translate.setLang(this.$translate.lang);
-//                return this.$translate.lang;
                 return this.$i18n.locale
             },
         },
@@ -38,13 +37,11 @@
                     urlParts.splice(1, 0, newLanguage)
                 }
                 this.$router.push(urlParts.join('/'));
-//                TODO remove translator
-//                this.$translate.setLang(newLanguage);
                 this.$i18n.locale = newLanguage;
             }
         },
         created: function(){
-//            this.$translate.setLang('en-US');
+            this.$i18n.locale = this.$route.params.lang || 'en-US';
         },
     }
 </script>

@@ -36,6 +36,10 @@ Vue.use(VueScrollTo, {
 let router = new Router({
     routes: [
         {
+            path: '/',
+            component: Home,
+        },
+        {
             path: '/:lang',
             component: Home,
         },

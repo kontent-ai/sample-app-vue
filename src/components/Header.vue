@@ -5,22 +5,22 @@
                 <nav role="navigation">
                     <ul>
                         <li>
-                            <router-link :to="homeRoute">{{homeLinkTitle}}</router-link>
+                            <router-link :to="homeRoute">{{this.t('homeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="storeRoute">{{storeLinkTitle}}</router-link>
+                            <router-link :to="storeRoute">{{this.t('storeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="articlesRoute">{{articlesLinkTitle}}</router-link>
+                            <router-link :to="articlesRoute">{{this.t('articlesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="aboutRoute">{{aboutLinkTitle}}</router-link>
+                            <router-link :to="aboutRoute">{{this.t('aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="cafesRoute">{{cafesLinkTitle}}</router-link>
+                            <router-link :to="cafesRoute">{{this.t('cafesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="contactsRoute">{{contactsLinkTitle}}</router-link>
+                            <router-link :to="contactsRoute">{{this.t('contactsLinkTitle')}}</router-link>
                         </li>
                     </ul>
                 </nav>
@@ -51,16 +51,11 @@
 </template>
 
 <script>
+    import * as en from '../Localization/en-US.json'
+    import * as es from '../Localization/es-ES.json'
+
     export default {
         name: 'Header',
-        data: () => ({
-            homeLinkTitle: 'HOME',
-            storeLinkTitle: 'PRODUCT CATALOG',
-            articlesLinkTitle: 'ARTICLES',
-            aboutLinkTitle: 'ABOUT US',
-            cafesLinkTitle: 'CAFES',
-            contactsLinkTitle: 'CONTACT'
-        }),
         props: ['language', 'changeLang'],
         computed: {
             homeRoute: function(){
@@ -87,6 +82,12 @@
             changeLanguage: function(newLanguage){
                 this.changeLang(newLanguage);
             },
+        },
+        created: function(){
+            this.$translate.setLocales({
+                'en-US': en.Header,
+                'es-ES': es.Header
+            })
         }
     }
 </script>

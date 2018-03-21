@@ -1,7 +1,7 @@
 <template>
     <div class="product-page row">
         <div class="flex">
-            <CoffeeFilter />
+            <CoffeeFilter :language="this.language"/>
             <Coffees :language="this.language"/>
         </div>
     </div>

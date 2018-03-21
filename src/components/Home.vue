@@ -3,12 +3,12 @@
     <div class="container">
         <Banner/>
         <latest-articles :language="this.language"/>
-        <link-button text="More articles" :link="`/${this.language}/articles`"/>
-        <our-story title="our story" v-bind:text='storyText'/>
+        <link-button :text="this.t('moreArticles')" :link="`/${this.language}/articles`"/>
+        <our-story/>
         <!--TODO en-us resolve for spanish-->
-        <link-button text="Read the whole story" :link="`/${this.language}/about`"/>
+        <link-button :text="this.t('aboutLinkText')" :link="`/${this.language}/about`"/>
         <taste-our-coffee :language="this.language"/>
-        <link-button text="Find out more" :link="`/${this.language}/cafes`"/>
+        <link-button :text="this.t('cafesLinkText')" :link="`/${this.language}/cafes`"/>
     </div>
 </template>
 
@@ -18,6 +18,9 @@
     import LinkButton from './LinkButton'
     import OurStory from './OurStory'
     import TasteOurCoffee from './TasteOurCoffee'
+    import * as en from '../Localization/en-US.json'
+    import * as es from '../Localization/es-ES.json'
+
 
     export default {
         name: "Home",
@@ -29,11 +32,13 @@
             TasteOurCoffee,
         },
         props: ['language'],
-        //TODO where to keep this story text? Fetch?
-        data: () => ({
-            storyText: "At Dancing Goat, we strive to do things right. Not only do we source the best coffees you can get your hands on. We also make sure we have a direct relationship with our farmers. Visiting the micro farms where we source our coffees is our daily bread. This way, we can guarantee the highest quality standard all year long. No middle-men, no unfair shares. Our farmers get the best deal possible. So do you.",
-
-        }),
+        created: function(){
+            //TODO mistake in spanish, two headers identical
+            this.$translate.setLocales({
+                'en-US': en.Home,
+                'es-ES': es.Home
+            })
+        }
     }
 </script>
 

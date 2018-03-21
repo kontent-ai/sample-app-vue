@@ -2,7 +2,7 @@
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
         <div v-for="brewer in filteredBrewers" class="col-md-6 col-lg-4" >
             <article class="product-tile">
-                <router-link :to="resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, this.language)">
+                <router-link :to="resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, language)">
                 <h1 class="product-heading">{{brewer.productName.value}}</h1>
                     <span v-if="brewer.productStatus.value.length === 0"/>
                     <span v-else class="product-tile-status">

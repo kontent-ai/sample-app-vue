@@ -1,6 +1,6 @@
 <template>
     <aside class="col-md-4 col-lg-3 product-filter">
-        <h4>{{manufacturerTitle}}</h4>
+        <h4>{{t('manufacturerTitle')}}</h4>
         <span v-for="manufacturer in manufacturers" class="checkbox js-postback">
             <input
                     v-bind:id="'Manufacturer-' + manufacturer.codename"
@@ -12,13 +12,13 @@
                     type="checkbox"
                     @click="manufacturerOnChange(manufacturer.codename)">{{manufacturer.name}} </label>
         </span>
-        <h4>{{priceTitle}}</h4>
+        <h4>{{t('priceTitle')}}</h4>
         <span v-for="(priceRange, index) in priceRanges" class="checkbox js-postback">
             <input v-bind:id="'PriceRange-' + index" type="checkbox" :checked="priceRangeIsChecked(priceRange)"/>
             <!--TODO spanish price?-->
             <label v-bind:htmlFor="'PriceRange-' + index" @click="priceRangeOnChange(priceRange)" >{{formatPrice(priceRange.min, 'en-us') + " – " + formatPrice(priceRange.max, 'en-us')}}</label>
         </span>
-        <h4>{{statusTitle}}</h4>
+        <h4>{{t('statusTitle')}}</h4>
         <span v-for="productStatus in productStatuses" class="checkbox js-postback">
             <input :id="'ProductStatus-' + productStatus.codename" type="checkbox" :checked="filter.productStatuses.includes(productStatus.codename)" />
             <label :htmlFor="'ProductStatus-' + productStatus.codename" @click="productStatusOnChange(productStatus.codename)">{{productStatus.name}}</label>
@@ -28,12 +28,13 @@
 
 <script>
     import BrewerStore from '../Stores/Brewer'
+    import * as en from '../Localization/en-US.json'
+    import * as es from '../Localization/es-ES.json'
+
     export default{
         name: "BrewerFilter",
+        props: ['language'],
         data: () => ({
-            manufacturerTitle: "Manufacturer",
-            priceTitle: "Price",
-            statusTitle: "Status",
             filter: null,
             manufacturers: null,
             productStatuses: null,
@@ -47,6 +48,11 @@
             this.filter = BrewerStore.getFilter();
             this.manufacturers = BrewerStore.getManufacturers().then(manufacturers => this.manufacturers = manufacturers);
             this.productStatuses = BrewerStore.getProductStatuses().then(productStatuses => this.productStatuses = productStatuses);
+            this.$translate.setLocales({
+                'en-US': en.BrewerFilter,
+                'es-ES': es.BrewerFilter,
+            })
+
 
         },
         methods: {

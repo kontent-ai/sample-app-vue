@@ -3,10 +3,10 @@
 
     </div>
     <div v-else class="row">
-        <h1 class="title-tab">{{title}}</h1>
+        <h1 class="title-tab">{{t('title')}}</h1>
         <div class="article-tile article-tile-large">
             <div class="col-md-12 col-lg-6">
-                <router-link :to="'/en-us/articles/' + articles[0].urlPattern.value">
+                <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">
                 <img v-bind:alt="articles[0].title.value" class="article-tile-image" v-bind:src="articles[0].teaserImage.value[0].url" v-bind:title="articles[0].title.value" />
                 </router-link>
             </div>
@@ -16,7 +16,7 @@
                 </div>
                 <div class="article-tile-content">
                     <h2>
-                        <router-link :to="'/en-us/articles/' + articles[0].urlPattern.value">{{articles[0].title.value}}</router-link>
+                        <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">{{articles[0].title.value}}</router-link>
                     </h2>
                     <p class="article-tile-text lead-paragraph">
                         {{articles[0].summary.value}}
@@ -51,21 +51,34 @@
 <script>
     import ArticleStore from '../Stores/Article'
     import dateFormat from 'dateformat'
+    import * as en from '../Localization/en-US.json'
+    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "latest-articles",
         data: () => ({
             articles: [],
             articlesCount: 5,
-            title: "Latest articles",
         }),
         props: ['language'],
         created: function(){
-            ArticleStore.getArticles(this.articlesCount, this.language).then((articles) => this.articles = articles);
+            this.getArticlesData();
+            this.$translate.setLocales({
+                'en-US': en.LatestArticles,
+                'es-ES': es.LatestArticles
+            })
         },
         methods: {
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
+            },
+            getArticlesData: function(){
+                ArticleStore.getArticles(this.articlesCount, this.language).then((articles) => this.articles = articles);
+            }
+        },
+        watch: {
+            language: function(){
+                this.getArticlesData();
             }
         }
 

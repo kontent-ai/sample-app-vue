@@ -42,6 +42,6 @@
         },
         created: function(){
             this.$translate.setLang('en-US');
-        }
+        },
     }
 </script>

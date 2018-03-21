@@ -6,7 +6,7 @@
                 <li>{{firstCafe.phone}}</li>
                 <li><a :href="'mailto:' + firstCafe.email" target="_top">{{firstCafe.email}}</a></li>
                 <li>
-                    <a @click="selectedAddress = firstCafe.dataAddress" :data-address="firstCafe.dataAddress"
+                    <a @click="handleRoasteryClick" :data-address="firstCafe.dataAddress"
                        class="js-scroll-to-map">{{firstCafe.dataAddress}},<br/>
                         {{firstCafe.zipCode}}, {{firstCafe.countryWithState}}<br/>
                     </a>
@@ -17,7 +17,7 @@
             <h2>{{t('ourCafesTitle')}}</h2>
             <div class="row">
                 <div v-for="(model, index) in cafeModels" class="col-md-6 col-lg-3" :key="index">
-                    <div @click="selectedAddress = model.dataAddress" class="cafe-tile cursor-hand js-scroll-to-map"
+                    <div @click="handleAddressClick(model)" class="cafe-tile cursor-hand js-scroll-to-map"
                          :data-address="model.dataAddress">
                         <div class="cafe-tile-content">
                             <h3 class="cafe-tile-name">{{model.name}}</h3>
@@ -40,6 +40,7 @@
 <script>
     import CafeStore from '../Stores/Cafe'
     import ContactMap from './ContactMap.vue'
+    import VueScrollTo from 'vue-scrollto'
     import * as en from '../Localization/en-US.json'
     import * as es from '../Localization/es-ES.json'
 
@@ -65,6 +66,20 @@
                 model.dataAddress = model.city + ", " + model.street;
                 model.countryWithState = model.country + (model.state ? ", " + model.state : "");
                 return model;
+            },
+            handleRoasteryClick: function(){
+                if(this.selectedAddress === this.firstCafe.dataAddress){
+                    VueScrollTo.scrollTo("#map");
+                    return;
+                }
+                this.selectedAddress = this.firstCafe.dataAddress
+            },
+            handleAddressClick: function(model){
+                if(this.selectedAddress === model.dataAddress){
+                    VueScrollTo.scrollTo("#map");
+                    return;
+                }
+                this.selectedAddress = model.dataAddress
             }
         },
         created: function () {

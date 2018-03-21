@@ -48,10 +48,10 @@
             this.filter = BrewerStore.getFilter();
             this.manufacturers = BrewerStore.getManufacturers().then(manufacturers => this.manufacturers = manufacturers);
             this.productStatuses = BrewerStore.getProductStatuses().then(productStatuses => this.productStatuses = productStatuses);
-            this.$translate.setLocales({
-                'en-US': en.BrewerFilter,
-                'es-ES': es.BrewerFilter,
-            })
+        },
+        locales: {
+            'en-US': en.BrewerFilter,
+            'es-ES': es.BrewerFilter,
         },
         methods: {
             manufacturerOnChange: function(codename){

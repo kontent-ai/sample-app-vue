@@ -86,11 +86,11 @@
         created: function(){
             this.getCompanyCafesData();
             this.getPartnerCafesData();
-            this.$translate.setLocales({
-                'en-US': en.Cafes,
-                'es-ES': es.Cafes,
-            })
         },
+        locales: {
+            'en-US': en.Cafes,
+            'es-ES': es.Cafes,
+        }
 
     }
 </script>

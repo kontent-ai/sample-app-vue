@@ -83,11 +83,9 @@
                 this.changeLang(newLanguage);
             },
         },
-        created: function(){
-            this.$translate.setLocales({
-                'en-US': en.Header,
-                'es-ES': es.Header
-            })
+        locales: {
+            'en-US': en.Header,
+            'es-ES': es.Header
         }
     }
 </script>

@@ -1,9 +1,9 @@
 <template>
     <div class="row">
-        <h1 class="title-tab">{{this.t('title')}}</h1>
+        <h1 class="title-tab">{{this.t('ourStoryTitle')}}</h1>
         <div class="col-sm-12">
             <div class="ourstory-section center-text" v-bind:style='sectionStyleObject'>
-            {{this.t('text')}}
+            {{this.t('ourStoryText')}}
         </div>
     </div>
     </div>
@@ -21,11 +21,9 @@
                 backgroundImage: "url(" + StoryImage + ")",
             },
         }),
-        created: function(){
-            this.$translate.setLocales({
-                'en-US': en.OurStory,
-                'es-ES': es.OurStory
-            })
+        locales: {
+            'en-US': en.OurStory,
+            'es-ES': es.OurStory
         }
     }
 </script>

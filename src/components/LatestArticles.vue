@@ -3,7 +3,7 @@
 
     </div>
     <div v-else class="row">
-        <h1 class="title-tab">{{t('title')}}</h1>
+        <h1 class="title-tab">{{t('latestArticlestitle')}}</h1>
         <div class="article-tile article-tile-large">
             <div class="col-md-12 col-lg-6">
                 <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">
@@ -63,10 +63,6 @@
         props: ['language'],
         created: function(){
             this.getArticlesData();
-            this.$translate.setLocales({
-                'en-US': en.LatestArticles,
-                'es-ES': es.LatestArticles
-            })
         },
         methods: {
             formatDate: function(value){
@@ -80,6 +76,10 @@
             language: function(){
                 this.getArticlesData();
             }
+        },
+        locales: {
+            'en-US': en.LatestArticles,
+            'es-ES': es.LatestArticles
         }
 
     }

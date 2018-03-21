@@ -69,10 +69,6 @@
         },
         created: function () {
             CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
-            this.$translate.setLocales({
-                'en-US': en.Contacts,
-                'es-ES': es.Contacts,
-            })
         },
         computed: {
             cafeModels: function () {
@@ -95,6 +91,10 @@
         },
         components: {
             ContactMap,
+        },
+        locales: {
+            'en-US': en.Contacts,
+            'es-ES': es.Contacts,
         }
     }
 </script>

@@ -2,7 +2,7 @@
     <section class="banner-section" v-bind:style="sectionStyleObject">
         <h2 class="banner-heading">{{t('heading')}}</h2>
         <p class="banner-text">
-            {{t('text')}}
+            {{t('bannerText')}}
         </p>
     </section>
 </template>
@@ -20,11 +20,9 @@
                 backgroundImage: "url(" + BackgroundImage + ")",
             },
         }),
-        created: function () {
-            this.$translate.setLocales({
-                'en-US': en.Banner,
-                'es-ES': es.Banner
-            })
+        locales: {
+            'en-US': en.Banner,
+            'es-ES': es.Banner,
         }
     }
 </script>

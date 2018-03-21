@@ -43,10 +43,10 @@
             this.filter = CoffeeStore.getFilter();
             this.processings = CoffeeStore.getProcessings().then(processings => this.processings = processings);
             this.productStatuses = CoffeeStore.getProductStatuses().then(productStatuses => this.productStatuses = productStatuses);
-            this.$translate.setLocales({
-                'en-US': en.CoffeeFilter,
-                'es-ES': es.CoffeeFilter,
-            })
+        },
+        locales: {
+            'en-US': en.CoffeeFilter,
+            'es-ES': es.CoffeeFilter,
         }
     }
 </script>

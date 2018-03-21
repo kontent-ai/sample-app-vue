@@ -42,11 +42,9 @@
         data: () => ({
             email: "dancinggoat@localhost.local",
         }),
-        created: function(){
-            this.$translate.setLocales({
-                'en-US': en.Footer,
-                'es-ES': es.Footer,
-            })
+        locales: {
+            'en-US': en.Footer,
+            'es-ES': es.Footer,
         }
     }
 </script>

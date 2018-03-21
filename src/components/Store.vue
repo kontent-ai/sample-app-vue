@@ -26,11 +26,9 @@
     export default {
         name: "Store",
         props: ['language'],
-        created: function(){
-            this.$translate.setLocales({
-                'en-US': en.Store,
-                'es-ES': es.Store
-            })
+        locales: {
+            'en-US': en.Store,
+            'es-ES': es.Store
         }
     }
 </script>

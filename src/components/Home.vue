@@ -32,12 +32,9 @@
             TasteOurCoffee,
         },
         props: ['language'],
-        created: function(){
-            //TODO mistake in spanish, two headers identical
-            this.$translate.setLocales({
-                'en-US': en.Home,
-                'es-ES': es.Home
-            })
+        locales: {
+            'en-US': en.Home,
+            'es-ES': es.Home
         }
     }
 </script>

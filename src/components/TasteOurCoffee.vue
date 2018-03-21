@@ -1,7 +1,7 @@
 <template>
     <div class="row">
         <div>
-            <h1 class="title-tab">{{this.t('title')}}</h1>
+            <h1 class="title-tab">{{this.t('tasteOurCoffeeTitle')}}</h1>
         </div>
         <div v-for="cafe in cafes" class="col-xs-6 col-md-3">
             <div>
@@ -29,10 +29,10 @@
         props: ['language'],
         created: function(){
             CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
-            this.$translate.setLocales({
-                'en-US': en.TasteOurCoffee,
-                'es-ES': es.TasteOurCoffee
-            })
         },
+        locales: {
+            'en-US': en.TasteOurCoffee,
+            'es-ES': es.TasteOurCoffee
+        }
     }
 </script>

@@ -15,12 +15,12 @@
                         </div>
                         <div class="col-md-4 col-lg-4 footer-col">
                             <h3>{{this.t('followUs')}}</h3>
-                            <router-link class="followus-link" to="https://www.facebook.com/Dancing.Goat" target="_blank">
+                            <a class="followus-link" href="https://www.facebook.com/Dancing.Goat" target="_blank">
                             <img alt="Follow us on Facebook" class="" src="/Images/facebook-icon.png" :title="this.t('followUsOnFacebook')" />
-                            </router-link>
-                            <router-link class="followus-link" to="https://twitter.com/DancingGoat78" target="_blank">
+                            </a>
+                            <a class="followus-link" href="https://twitter.com/DancingGoat78" target="_blank">
                             <img alt="Follow us on Twitter" class="" src="/Images/twitter-icon.png" :title="this.t('followUsOnTwitter')" />
-                            </router-link>
+                            </a>
                         </div>
                         <div class="col-md-4 col-lg-4 footer-col"></div>
                     </div>

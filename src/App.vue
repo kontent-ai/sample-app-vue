@@ -15,8 +15,8 @@
         name: 'app',
         computed: {
             language: function() {
-                this.$translate.setLang(this.$route.params.lang || this.$translate.lang);
-                return this.$route.params.lang || this.$translate.lang;
+                this.$translate.setLang(this.$translate.lang);
+                return this.$translate.lang;
             },
         },
         components: {
@@ -36,12 +36,7 @@
                 } else {
                     urlParts.splice(1, 0, newLanguage)
                 }
-
-//                this.setState({
-//                    language: newLanguage
-//                });
-                let newRoute = urlParts.join('/');
-                this.$router.push(urlParts.join('/'))
+                this.$router.push(urlParts.join('/'));
                 this.$translate.setLang(newLanguage);
             }
         },

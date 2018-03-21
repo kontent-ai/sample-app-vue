@@ -38,6 +38,7 @@
 
     export default {
         name: "Cafes",
+        props: ['language'],
         data: () => ({
             ourCafesTitle: "Our cafes",
             partnerCafesTitle: "Other places where you can drink our coffee",
@@ -74,11 +75,18 @@
                 model.countryWithState = model.country + (model.state ? ", " + model.state : "");
                 model.location = model.city + ", " + model.countryWithState;
                 return model;
+            },
+            getCompanyCafesData: function(){
+                CafeStore.getCompanyCafes(this.language).then(companyCafes => this.ourCafes = companyCafes);
+            },
+            getPartnerCafesData: function(){
+                CafeStore.getPartnerCafes(this.language).then(partnerCafes => this.partnerCafes = partnerCafes);
             }
         },
         created: function(){
-            CafeStore.getCompanyCafes('en-US').then(companyCafes => this.ourCafes = companyCafes);
-            CafeStore.getPartnerCafes('en-US').then(partnerCafes => this.partnerCafes = partnerCafes);
-        }
+            this.getCompanyCafesData();
+            this.getPartnerCafesData();
+        },
+
     }
 </script>

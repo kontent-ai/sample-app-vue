@@ -11,15 +11,18 @@ import Cafes from './components/Cafes.vue'
 import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import VueTranslate from 'vue-translate-plugin'
 import './index.css';
 
 Vue.config.productionTip = false;
 Vue.use(Router);
+Vue.use(VueTranslate);
 Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
     }
 })
+
 let router = new Router({
     routes: [
         {

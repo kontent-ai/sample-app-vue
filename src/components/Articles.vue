@@ -44,6 +44,7 @@
                 return `/${this.language}/articles/${article.urlPattern.value}`;
             },
             getNextKey: function(){
+                console.log(this.counter);
                 return this.counter++;
             },
             getArticlesData: function(){
@@ -51,11 +52,9 @@
 
             }
         },
-        updated: function(){
-            this.counter = 0;
-        },
         created: function(){
             this.getArticlesData();
+            //setting up non-reactive counter
             this.counter = 0;
         },
         watch: {

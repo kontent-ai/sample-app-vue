@@ -15,7 +15,8 @@
         name: 'app',
         computed: {
             language: function() {
-                return this.$route.params.lang || 'en-us';
+                this.$translate.setLang(this.$route.params.lang || this.$translate.lang);
+                return this.$route.params.lang || this.$translate.lang;
             },
         },
         components: {
@@ -24,7 +25,6 @@
         },
         methods: {
             changeLang: function(newLanguage){
-                console.log("Changed language");
                 if (this.language === newLanguage || languageCodes.indexOf(newLanguage) < 0) {
                     return;
                 }
@@ -42,7 +42,11 @@
 //                });
                 let newRoute = urlParts.join('/');
                 this.$router.push(urlParts.join('/'))
+                this.$translate.setLang(newLanguage);
             }
+        },
+        created: function(){
+            this.$translate.setLang('en-US');
         }
     }
 </script>

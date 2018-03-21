@@ -6,7 +6,7 @@
                 <li>{{firstCafe.phone}}</li>
                 <li><a :href="'mailto:' + firstCafe.email" target="_top">{{firstCafe.email}}</a></li>
                 <li>
-                    <a @click="selectedAddress = firstCafe.dataAdress" :data-address="firstCafe.dataAddress"
+                    <a @click="selectedAddress = firstCafe.dataAddress" :data-address="firstCafe.dataAddress"
                        class="js-scroll-to-map">{{firstCafe.dataAddress}},<br/>
                         {{firstCafe.zipCode}}, {{firstCafe.countryWithState}}<br/>
                     </a>

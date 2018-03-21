@@ -3,12 +3,12 @@
     <div class="container">
         <Banner/>
         <latest-articles :language="language"/>
-        <link-button :text="t('moreArticles')" :link="`/${language}/articles`"/>
+        <link-button :text="$t('Home.moreArticles')" :link="`/${language}/articles`"/>
         <our-story/>
         <!--TODO en-us resolve for spanish-->
-        <link-button :text="t('aboutLinkText')" :link="`/${language}/about`"/>
+        <link-button :text="$t('Home.aboutLinkText')" :link="`/${language}/about`"/>
         <taste-our-coffee :language="language"/>
-        <link-button :text="t('cafesLinkText')" :link="`/${language}/cafes`"/>
+        <link-button :text="$t('Home.cafesLinkText')" :link="`/${language}/cafes`"/>
     </div>
 </template>
 
@@ -18,9 +18,6 @@
     import LinkButton from './LinkButton'
     import OurStory from './OurStory'
     import TasteOurCoffee from './TasteOurCoffee'
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
-
 
     export default {
         name: "Home",
@@ -32,10 +29,6 @@
             TasteOurCoffee,
         },
         props: ['language'],
-        locales: {
-            'en-US': en.Home,
-            'es-ES': es.Home
-        }
     }
 </script>
 

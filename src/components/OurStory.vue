@@ -1,9 +1,9 @@
 <template>
     <div class="row">
-        <h1 class="title-tab">{{this.t('ourStoryTitle')}}</h1>
+        <h1 class="title-tab">{{$t('OurStory.title')}}</h1>
         <div class="col-sm-12">
             <div class="ourstory-section center-text" v-bind:style='sectionStyleObject'>
-            {{this.t('ourStoryText')}}
+            {{$t('OurStory.text')}}
         </div>
     </div>
     </div>
@@ -11,8 +11,6 @@
 
 <script>
     import StoryImage from '../Images/our-story.jpg';
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "our-story",
@@ -21,9 +19,5 @@
                 backgroundImage: "url(" + StoryImage + ")",
             },
         }),
-        locales: {
-            'en-US': en.OurStory,
-            'es-ES': es.OurStory
-        }
     }
 </script>

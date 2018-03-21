@@ -5,10 +5,10 @@
                 <div class="store-menu-list row">
                     <ul>
                         <li>
-                            <router-link :to="`/${language}/store/coffees`">{{this.t('coffeesLinkTitle')}}</router-link>
+                            <router-link :to="`/${language}/store/coffees`">{{$t('Store.coffeesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="`/${language}/store/brewers`">{{this.t('brewersLinkTitle')}}</router-link>
+                            <router-link :to="`/${language}/store/brewers`">{{$t('Store.brewersLinkTitle')}}</router-link>
                         </li>
                     </ul>
                 </div>
@@ -20,16 +20,9 @@
 </template>
 
 <script>
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
-
     export default {
         name: "Store",
         props: ['language'],
-        locales: {
-            'en-US': en.Store,
-            'es-ES': es.Store
-        }
     }
 </script>
 

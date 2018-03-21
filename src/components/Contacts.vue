@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="col-md-12">
-            <h2 class="contact-title">{{t('roasteryTitle')}}</h2>
+            <h2 class="contact-title">{{$t('Contacts.roasteryTitle')}}</h2>
             <ul v-if="firstCafe" class="contact-info">
                 <li>{{firstCafe.phone}}</li>
                 <li><a :href="'mailto:' + firstCafe.email" target="_top">{{firstCafe.email}}</a></li>
@@ -14,7 +14,7 @@
             </ul>
         </div>
         <div>
-            <h2>{{t('ourCafesTitle')}}</h2>
+            <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
             <div class="row">
                 <div v-for="(model, index) in cafeModels" class="col-md-6 col-lg-3" :key="index">
                     <div @click="handleAddressClick(model)" class="cafe-tile cursor-hand js-scroll-to-map"
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <h2 class="map-title">{{t('mapTitle')}}</h2>
+        <h2 class="map-title">{{$t('Contacts.mapTitle')}}</h2>
         <ContactMap :cafesAddresses="cafesAddresses" :focusOnAddress="selectedAddress" />
     </div>
 </template>
@@ -41,8 +41,6 @@
     import CafeStore from '../Stores/Cafe'
     import ContactMap from './ContactMap.vue'
     import VueScrollTo from 'vue-scrollto'
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "Contacts",
@@ -107,9 +105,5 @@
         components: {
             ContactMap,
         },
-        locales: {
-            'en-US': en.Contacts,
-            'es-ES': es.Contacts,
-        }
     }
 </script>

@@ -11,8 +11,10 @@ import Cafes from './components/Cafes.vue'
 import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
-import VueTranslate from 'vue-translate-plugin'
 import VueScrollTo from 'vue-scrollto'
+import VueI18n from 'vue-i18n'
+import * as en from './Localization/en-US.json'
+import * as es from './Localization/es-ES.json'
 import './index.css';
 
 Vue.config.productionTip = false;
@@ -21,8 +23,9 @@ Vue.use(VueGoogleMaps, {
         key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
     }
 })
+Vue.use(VueI18n);
 Vue.use(Router);
-Vue.use(VueTranslate);
+
 Vue.use(VueScrollTo, {
     duration: 1000,
     easing: "ease-in-out",
@@ -77,8 +80,16 @@ let router = new Router({
     ]
 });
 
+let i18n = new VueI18n({
+    locale: 'en-US',
+    messages: {
+        'en-US': en,
+        'es-ES': es,
+    },
+})
 
 new Vue({
     router,
+    i18n,
     render: h => h(App)
 }).$mount('#app');

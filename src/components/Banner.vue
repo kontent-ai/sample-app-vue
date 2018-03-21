@@ -1,17 +1,14 @@
 <template>
     <section class="banner-section" v-bind:style="sectionStyleObject">
-        <h2 class="banner-heading">{{t('heading')}}</h2>
+        <h2 class="banner-heading">{{$t('Banner.heading')}}</h2>
         <p class="banner-text">
-            {{t('bannerText')}}
+            {{$t('Banner.text')}}
         </p>
     </section>
 </template>
 
 <script>
     import BackgroundImage from '../Images/banner-default.jpg';
-    import VueTranslate from 'vue-translate-plugin'
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "Banner",
@@ -20,10 +17,5 @@
                 backgroundImage: "url(" + BackgroundImage + ")",
             },
         }),
-        locales: {
-            'en-US': en.Banner,
-            'es-ES': es.Banner,
-        }
     }
 </script>
-

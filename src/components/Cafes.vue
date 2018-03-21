@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>{{t('ourCafesTitle')}}</h2>
+        <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
         <div class="row">
             <div v-for="(ourCafe,index) in ourCafes" class="col-md-6" :key="index">
                 <div class="cafe-image-tile js-scroll-to-map" :data-address="model(ourCafe).dataAddress">
@@ -18,7 +18,7 @@
             </div>
         </div>
         </div>
-        <h2>{{t('partnerCafesTitle')}}</h2>
+        <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
         <div class="row">
             <div v-for="(location, locationIndex) in locations" :key="locationIndex">
                 <h3>{{location}}</h3>
@@ -35,8 +35,6 @@
 
 <script>
     import CafeStore from '../Stores/Cafe';
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "Cafes",
@@ -87,10 +85,5 @@
             this.getCompanyCafesData();
             this.getPartnerCafesData();
         },
-        locales: {
-            'en-US': en.Cafes,
-            'es-ES': es.Cafes,
-        }
-
     }
 </script>

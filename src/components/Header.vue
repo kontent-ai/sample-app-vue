@@ -5,22 +5,22 @@
                 <nav role="navigation">
                     <ul>
                         <li>
-                            <router-link :to="homeRoute">{{this.t('homeLinkTitle')}}</router-link>
+                            <router-link :to="homeRoute">{{$t('Header.homeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="storeRoute">{{this.t('storeLinkTitle')}}</router-link>
+                            <router-link :to="storeRoute">{{$t('Header.storeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="articlesRoute">{{this.t('articlesLinkTitle')}}</router-link>
+                            <router-link :to="articlesRoute">{{$t('Header.articlesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="aboutRoute">{{this.t('aboutLinkTitle')}}</router-link>
+                            <router-link :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="cafesRoute">{{this.t('cafesLinkTitle')}}</router-link>
+                            <router-link :to="cafesRoute">{{$t('Header.cafesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="contactsRoute">{{this.t('contactsLinkTitle')}}</router-link>
+                            <router-link :to="contactsRoute">{{$t('Header.contactsLinkTitle')}}</router-link>
                         </li>
                     </ul>
                 </nav>
@@ -51,9 +51,6 @@
 </template>
 
 <script>
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
-
     export default {
         name: 'Header',
         props: ['language', 'changeLang'],
@@ -83,9 +80,5 @@
                 this.changeLang(newLanguage);
             },
         },
-        locales: {
-            'en-US': en.Header,
-            'es-ES': es.Header
-        }
     }
 </script>

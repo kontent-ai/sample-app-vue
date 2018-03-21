@@ -3,7 +3,7 @@
 
     </div>
     <div v-else class="row">
-        <h1 class="title-tab">{{t('latestArticlestitle')}}</h1>
+        <h1 class="title-tab">{{$t('LatestArticles.latestArticlesTitle')}}</h1>
         <div class="article-tile article-tile-large">
             <div class="col-md-12 col-lg-6">
                 <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">
@@ -51,8 +51,6 @@
 <script>
     import ArticleStore from '../Stores/Article'
     import dateFormat from 'dateformat'
-    import * as en from '../Localization/en-US.json'
-    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "latest-articles",
@@ -77,10 +75,6 @@
                 this.getArticlesData();
             }
         },
-        locales: {
-            'en-US': en.LatestArticles,
-            'es-ES': es.LatestArticles
-        }
 
     }
 </script>

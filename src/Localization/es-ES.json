@@ -2,10 +2,10 @@
     "locale": "es-ES",
     "Banner": {
         "heading": "Café tostado de primera calidad ",
-        "bannerText": "Descubre el fascinante mundo de Dancing Goat café de la mas alta calidad. Nunca más perderás una sola oportunidad de disfrutar un buen café."
+        "text": "Descubre el fascinante mundo de Dancing Goat café de la mas alta calidad. Nunca más perderás una sola oportunidad de disfrutar un buen café."
     },
     "LatestArticles": {
-        "lastestArticlesTitle": "Último artículo"
+        "latestArticlesTitle": "Último artículo"
     },
     "Home": {
         "moreArticles": "Más artículos",
@@ -13,11 +13,11 @@
         "cafesLinkText": "Más cafés"
     },
     "OurStory": {
-        "ourStoryTitle": "Nuestra historia",
-        "ourStoryText": "Dancing Goat originó en 1969 como una empresa de entusiastas del café. Nuestro principal objetivo siempre ha sido ofrecer una experiencia inolvidable a nuestros clientes. Conocemos a todos los agricultores personalmente y tenemos la calidad como la mayor exigencia. Con esta creencia nos hemos convertido en una marca reconocida y disfrutarda por todo el mundo."
+        "title": "Nuestra historia",
+        "text": "Dancing Goat originó en 1969 como una empresa de entusiastas del café. Nuestro principal objetivo siempre ha sido ofrecer una experiencia inolvidable a nuestros clientes. Conocemos a todos los agricultores personalmente y tenemos la calidad como la mayor exigencia. Con esta creencia nos hemos convertido en una marca reconocida y disfrutarda por todo el mundo."
     },
     "TasteOurCoffee": {
-        "tasteOurCoffeeTitle": "Probar nuestro café"
+        "title": "Probar nuestro café"
     },
     "Header": {
         "homeLinkTitle": "Inicio",

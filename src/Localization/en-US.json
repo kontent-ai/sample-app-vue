@@ -2,10 +2,10 @@
     "locale": "en-US",
     "Banner": {
         "heading": "Roasting premium coffee",
-        "bannerText": "Discover the fascinating world of Dancing Goat high-quality coffee and you will never miss a single coffee break again."
+        "text": "Discover the fascinating world of Dancing Goat high-quality coffee and you will never miss a single coffee break again."
     },
     "LatestArticles": {
-        "latestArticlestitle": "Latest articles"
+        "latestArticlesTitle": "Latest articles"
     },
     "Home": {
         "moreArticles": "More articles",
@@ -13,11 +13,11 @@
         "cafesLinkText": "Find out more"
     },
     "OurStory": {
-        "ourStoryTitle": "Our Story",
-        "ourStoryText": "At Dancing Goat, we strive to do things right. Not only do we source the best coffees you can get your hands on. We also make sure we have a direct relationship with our farmers. Visiting the micro farms where we source our coffees is our daily bread. This way, we can guarantee the highest quality standard all year long. No middle-men, no unfair shares. Our farmers get the best deal possible. So do you."
+        "title": "Our Story",
+        "text": "At Dancing Goat, we strive to do things right. Not only do we source the best coffees you can get your hands on. We also make sure we have a direct relationship with our farmers. Visiting the micro farms where we source our coffees is our daily bread. This way, we can guarantee the highest quality standard all year long. No middle-men, no unfair shares. Our farmers get the best deal possible. So do you."
     },
     "TasteOurCoffee": {
-        "tasteOurCoffeeTitle": "Taste Our Coffee"
+        "title": "Taste Our Coffee"
     },
     "Header": {
         "homeLinkTitle": "Home",

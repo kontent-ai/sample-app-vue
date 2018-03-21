@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="col-md-12">
-            <h2 class="contact-title">{{roasteryTitle}}</h2>
+            <h2 class="contact-title">{{t('roasteryTitle')}}</h2>
             <ul v-if="firstCafe" class="contact-info">
                 <li>{{firstCafe.phone}}</li>
                 <li><a :href="'mailto:' + firstCafe.email" target="_top">{{firstCafe.email}}</a></li>
@@ -14,7 +14,7 @@
             </ul>
         </div>
         <div>
-            <h2>{{ourCafesTitle}}</h2>
+            <h2>{{t('ourCafesTitle')}}</h2>
             <div class="row">
                 <div v-for="(model, index) in cafeModels" class="col-md-6 col-lg-3" :key="index">
                     <div @click="selectedAddress = model.dataAddress" class="cafe-tile cursor-hand js-scroll-to-map"
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <h2 class="map-title">{{mapTitle}}</h2>
+        <h2 class="map-title">{{t('mapTitle')}}</h2>
         <ContactMap :cafesAddresses="cafesAddresses" :focusOnAddress="selectedAddress" />
     </div>
 </template>
@@ -40,14 +40,13 @@
 <script>
     import CafeStore from '../Stores/Cafe'
     import ContactMap from './ContactMap.vue'
+    import * as en from '../Localization/en-US.json'
+    import * as es from '../Localization/es-ES.json'
 
     export default {
         name: "Contacts",
         data: () => ({
             cafes: [],
-            roasteryTitle: "Roastery",
-            ourCafesTitle: "Our cafes",
-            mapTitle: "Drop in",
             selectedAddress: null,
         }),
         props: ['language'],
@@ -70,6 +69,10 @@
         },
         created: function () {
             CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
+            this.$translate.setLocales({
+                'en-US': en.Contacts,
+                'es-ES': es.Contacts,
+            })
         },
         computed: {
             cafeModels: function () {

@@ -13,7 +13,7 @@
                 </figure>
                 <div class="product-tile-info">
                 <span class="product-tile-price">
-                  {{formatPrice(brewer.price.value, 'en-us')}}
+                  {{formatPrice(brewer.price.value, language)}}
                 </span>
                 </div>
                 </router-link>
@@ -34,6 +34,7 @@
         props: ['language'],
         methods: {
             formatPrice: function(price, language){
+                console.log(language);
                 return price.toLocaleString(language, {
                     style: "currency",
                     currency: "USD"

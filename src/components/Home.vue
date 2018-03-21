@@ -2,13 +2,13 @@
 <template>
     <div class="container">
         <Banner/>
-        <latest-articles :language="this.language"/>
-        <link-button :text="this.t('moreArticles')" :link="`/${this.language}/articles`"/>
+        <latest-articles :language="language"/>
+        <link-button :text="t('moreArticles')" :link="`/${language}/articles`"/>
         <our-story/>
         <!--TODO en-us resolve for spanish-->
-        <link-button :text="this.t('aboutLinkText')" :link="`/${this.language}/about`"/>
-        <taste-our-coffee :language="this.language"/>
-        <link-button :text="this.t('cafesLinkText')" :link="`/${this.language}/cafes`"/>
+        <link-button :text="t('aboutLinkText')" :link="`/${language}/about`"/>
+        <taste-our-coffee :language="language"/>
+        <link-button :text="t('cafesLinkText')" :link="`/${language}/cafes`"/>
     </div>
 </template>
 

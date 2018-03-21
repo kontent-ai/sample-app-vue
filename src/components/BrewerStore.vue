@@ -2,8 +2,7 @@
     <div class="product-page row">
         <div class="flex">
             <BrewerFilter :language="language" />
-            <!--brewers dont need language prop?-->
-            <Brewers />
+            <Brewers :language="language"/>
         </div>
     </div>
 </template>

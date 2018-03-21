@@ -29,6 +29,8 @@
 <script>
     import dateFormat from 'dateformat';
     import ArticleStore from '../Stores/Article';
+    import { dateFormats } from '../Utilities/LanguageCodes'
+
 
     export default {
         name: "Articles",
@@ -44,7 +46,8 @@
                 return `/${this.language}/articles/${article.urlPattern.value}`;
             },
             getNextKey: function(){
-                console.log(this.counter);
+//                wrong ids when switching languages
+//                console.log(this.counter);
                 return this.counter++;
             },
             getArticlesData: function(){
@@ -56,10 +59,13 @@
             this.getArticlesData();
             //setting up non-reactive counter
             this.counter = 0;
+            dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+
         },
         watch: {
             language: function(){
                 this.getArticlesData();
+                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             }
         }
     }

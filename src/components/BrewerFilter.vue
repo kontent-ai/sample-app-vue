@@ -52,8 +52,6 @@
                 'en-US': en.BrewerFilter,
                 'es-ES': es.BrewerFilter,
             })
-
-
         },
         methods: {
             manufacturerOnChange: function(codename){

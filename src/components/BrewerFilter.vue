@@ -16,7 +16,7 @@
         <span v-for="(priceRange, index) in priceRanges" class="checkbox js-postback">
             <input v-bind:id="'PriceRange-' + index" type="checkbox" :checked="priceRangeIsChecked(priceRange)"/>
             <!--TODO spanish price?-->
-            <label v-bind:htmlFor="'PriceRange-' + index" @click="priceRangeOnChange(priceRange)" >{{formatPrice(priceRange.min, 'en-us') + " – " + formatPrice(priceRange.max, 'en-us')}}</label>
+            <label v-bind:htmlFor="'PriceRange-' + index" @click="priceRangeOnChange(priceRange)" >{{formatPrice(priceRange.min, language) + " – " + formatPrice(priceRange.max, language)}}</label>
         </span>
         <h4>{{t('statusTitle')}}</h4>
         <span v-for="productStatus in productStatuses" class="checkbox js-postback">

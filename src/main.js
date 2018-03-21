@@ -24,8 +24,8 @@ Vue.use(VueGoogleMaps, {
 Vue.use(Router);
 Vue.use(VueTranslate);
 Vue.use(VueScrollTo, {
-    duration: 500,
-    easing: "ease",
+    duration: 1000,
+    easing: "ease-in-out",
 });
 
 

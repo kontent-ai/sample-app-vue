@@ -34,7 +34,6 @@
         props: ['language'],
         methods: {
             formatPrice: function(price, language){
-                console.log(language);
                 return price.toLocaleString(language, {
                     style: "currency",
                     currency: "USD"

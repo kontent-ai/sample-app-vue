@@ -1,7 +1,7 @@
 <template>
     <!--TODO clickable icons ?-->
-    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" :clickableIcons="false" id="map" >
-        <gmap-marker v-for="(location, index) in markerLocations" :position="location" :key="index" />
+    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" :clickableIcons="false" id="map" ref="map" >
+        <gmap-marker v-for="(location, index) in markerLocations" v-if="mapLoaded" :position="location" :key="index" />
     </gmap-map>
 
 </template>
@@ -22,23 +22,22 @@
             markerLocations: [],
             centerLocation: {lat: 40.854885, lng: -88.081807},
             zoom : 4,
+            mapLoaded: false,
         }),
+        mounted: function(){
+            this.map = this.$refs.map.mapObject;
+            this.$refs.map.$mapCreated.then(() => {
+                this.mapLoaded=true
+            })
+        },
         watch: {
             //TODO sometimes adresses dont load
+            //TODO dupliacte code refactoring
             cafesAddresses: function(){
-                this.cafesAddresses.map(cafeAddress => {
-                        let geocoder = new window.google.maps.Geocoder();
-                        geocoder.geocode({ 'address': cafeAddress }, (results, status) => {
-                            if (status === window.google.maps.GeocoderStatus.OK) {
-                                let location = results[0].geometry.location;
-                                this.pushLocation(location);
-
-                            } else {
-                                console.warn('Geocode was not successful for the following reason: ' + status);
-                            }
-                        })
-
-                });
+                this.getMapMarkers();
+            },
+            mapLoaded: function(){
+                this.getMapMarkers();
             },
             focusOnAddress: function(){
                 let geocoder = new window.google.maps.Geocoder();
@@ -58,7 +57,25 @@
         methods: {
             pushLocation(location){
                 this.markerLocations.push(location);
+            },
+            getMapMarkers(){
+                if(!this.mapLoaded){
+//                    console.log("aborting");
+                    return;
+                }
+                this.cafesAddresses.map(cafeAddress => {
+                    let geocoder = new window.google.maps.Geocoder();
+                    geocoder.geocode({ 'address': cafeAddress }, (results, status) => {
+                        if (status === window.google.maps.GeocoderStatus.OK) {
+                            let location = results[0].geometry.location;
+                            this.pushLocation(location);
 
+                        } else {
+                            console.warn('Geocode was not successful for the following reason: ' + status);
+                        }
+                    })
+
+                });
             }
         },
     }

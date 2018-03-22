@@ -1,6 +1,6 @@
 <template>
     <div v-if="articlesData.length === 0" class="row">
-    </div>    
+    </div>
     <div v-else class="row">
         <h1 class="title-tab">{{$t('LatestArticles.latestArticlesTitle')}}</h1>
         <div class="article-tile article-tile-large">

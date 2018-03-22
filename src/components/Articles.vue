@@ -1,23 +1,23 @@
 <template>
     <div class="container">
-        <template  v-for="(article, index) in articles">
+        <template  v-for="(article, index) in articlesData">
             <div v-if="index % 4 === 0" class="clear" :key="getNextKey()">
 
             </div>
             <div class="col-md-3" :key="getNextKey()">
                 <div class="article-tile">
-                    <router-link :to="getArticleLink(article)">
-                    <img :alt="'Article '  + article.title.value" class="article-tile-image" :src="article.teaserImage.value[0].url" :title="'Article ' + article.title.value" />
+                    <router-link :to="article.link">
+                    <img :alt="'Article '  + article.title" class="article-tile-image" :src="article.imageLink" :title="'Article ' + article.title" />
                     </router-link>
                     <div class="article-tile-date">
-                        {{formatDate(article.postDate.value)}}
+                        {{article.postDate}}
                     </div>
                     <div class="article-tile-content">
                         <h2 class="h4">
-                            <router-link :to="getArticleLink(article)">{{article.title.value}}</router-link>
+                            <router-link :to="article.link">{{article.title}}</router-link>
                         </h2>
                         <p class="article-tile-text">
-                            {{article.summary.value}}
+                            {{article.summary}}
                         </p>
                     </div>
                 </div>
@@ -36,27 +36,37 @@
         name: "Articles",
         data: () => ({
             articles: [],
+            articleCount: 10,
         }),
+        computed: {
+            articlesData: function(){
+                return this.articles.map(article => ({
+                    title: article.title.value,
+                    imageLink : article.teaserImage.value[0].url,
+                    postDate : this.formatDate(article.postDate.value),
+                    summary : article.summary.value,
+                    link : `/${this.language}/articles/${article.urlPattern.value}`,
+                }))
+            }
+        },
         props: ['language'],
         methods: {
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
-            },
-            getArticleLink: function(article){
-                return `/${this.language}/articles/${article.urlPattern.value}`;
             },
             getNextKey: function(){
 //                wrong ids when switching languages
 //                console.log(this.counter);
                 return this.counter++;
             },
-            getArticlesData: function(){
-                ArticleStore.getArticles(10, this.language).then((articles) => this.articles = articles);
-
+            onChange: function(){
+                this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             }
         },
         created: function(){
-            this.getArticlesData();
+            ArticleStore.addChangeListener(this.onChange);
+            ArticleStore.provideArticles(this.articleCount, this.language);
+            this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             //setting up non-reactive counter
             this.counter = 0;
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
@@ -64,9 +74,12 @@
         },
         watch: {
             language: function(){
-                this.getArticlesData();
+                ArticleStore.provideArticles(this.articleCount, this.language);
                 dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             }
+        },
+        destroyed: function(){
+            ArticleStore.removeChangeListener(this.onChange);
         }
     }
 </script>

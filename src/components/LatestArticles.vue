@@ -1,46 +1,44 @@
 <template>
-    <div v-if="articles.length === 0" class="row">
-
-    </div>
-    <!--TODO bug when switching languages - date is formated in spanish-->
+    <div v-if="articlesData.length === 0" class="row">
+    </div>    
     <div v-else class="row">
         <h1 class="title-tab">{{$t('LatestArticles.latestArticlesTitle')}}</h1>
         <div class="article-tile article-tile-large">
             <div class="col-md-12 col-lg-6">
-                <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">
-                <img v-bind:alt="articles[0].title.value" class="article-tile-image" v-bind:src="articles[0].teaserImage.value[0].url" v-bind:title="articles[0].title.value" />
+                <router-link :to="articlesData[0].link">
+                <img v-bind:alt="articlesData[0].title" class="article-tile-image" v-bind:src="articlesData[0].imageLink" v-bind:title="articlesData[0].title" />
                 </router-link>
             </div>
             <div class="col-md-12 col-lg-6">
                 <div class="article-tile-date">
-                    {{formatDate(articles[0].postDate.value)}}
+                    {{articlesData[0].postDate}}
                 </div>
                 <div class="article-tile-content">
                     <h2>
-                        <router-link :to="`/${language}/articles/` + articles[0].urlPattern.value">{{articles[0].title.value}}</router-link>
+                        <router-link :to="articlesData[0].link">{{articlesData[0].title}}</router-link>
                     </h2>
                     <p class="article-tile-text lead-paragraph">
-                        {{articles[0].summary.value}}
+                        {{articlesData[0].summary}}
                     </p>
                 </div>
             </div>
         </div>
         <!--OTHER ARTICLES-->
         <!--TODO key in list rendering?-->
-        <div v-for="article in articles.slice(1)" class="col-md-3" >
+        <div v-for="article in articlesData.slice(1)" class="col-md-3" >
             <div class="article-tile">
-                <router-link :to="`/${language}/articles/` + article.urlPattern.value">
-                <img v-bind:alt="'Article' + article.title.value" class="article-tile-image" v-bind:src="article.teaserImage.value[0].url" v-bind:title="'Article' + article.title.value" />
+                <router-link :to="article.link">
+                <img v-bind:alt="'Article' + article.title" class="article-tile-image" v-bind:src="article.imageLink" v-bind:title="'Article' + article.title" />
                 </router-link>
                 <div class="article-tile-date">
-                    {{formatDate(article.postDate.value)}}
+                    {{article.postDate}}
                 </div>
                 <div class="article-tile-content">
                     <h2 class="h4">
-                        <router-link :to="`/${language}/articles/` + article.urlPattern.value">{{article.title.value}}</router-link>
+                        <router-link :to="article.link">{{article.title}}</router-link>
                     </h2>
                     <p class="article-tile-text">
-                        {{article.summary.value}}
+                        {{article.summary}}
                     </p>
                 </div>
             </div>
@@ -52,30 +50,50 @@
 <script>
     import ArticleStore from '../Stores/Article'
     import dateFormat from 'dateformat'
+    import { dateFormats } from '../Utilities/LanguageCodes'
+
 
     export default {
         name: "latest-articles",
         data: () => ({
             articles: [],
-            articlesCount: 5,
+            articleCount: 5,
         }),
+        computed: {
+            articlesData: function(){
+                return this.articles.map(article => ({
+                    imageLink : article.teaserImage.value[0].url,
+                    postDate : this.formatDate(article.postDate.value),
+                    summary : article.summary.value,
+                    link : `/${this.language}/articles/${article.urlPattern.value}`,
+                }))
+            }
+        },
         props: ['language'],
         created: function(){
-            this.getArticlesData();
+            ArticleStore.addChangeListener(this.onChange);
+            ArticleStore.provideArticles(this.articleCount, this.language);
+            this.articles =  ArticleStore.getArticles(this.articleCount, this.language)
+
         },
         methods: {
+//            TODO extract formatDate, repeats
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
             },
-            getArticlesData: function(){
-                ArticleStore.getArticles(this.articlesCount, this.language).then((articles) => this.articles = articles);
+            onChange: function(){
+                this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             }
         },
         watch: {
             language: function(){
-                this.getArticlesData();
+                ArticleStore.provideArticles(this.articleCount, this.language);
+                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             }
         },
+        destroyed: function() {
+            ArticleStore.removeChangeListener(this.onChange);
+        }
 
     }
 </script>

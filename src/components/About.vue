@@ -61,5 +61,8 @@
         components: {
             RichTextElement,
         },
+        destroyed: function(){
+            FactStore.removeChangeListener(this.onChange);
+        }
     }
 </script>

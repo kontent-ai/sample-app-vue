@@ -39,17 +39,32 @@
               return this.coffees.filter(coffee => this.filter.matches(coffee));
           }
         },
+        watch:{
+            language: function(){
+                CoffeeStore.provideCoffees(this.language);
+            }
+        },
         methods: {
             formatPrice: function(price, language){
                 return price.toLocaleString(language, {
                     style: "currency",
                     currency: "USD"
                 })
+            },
+            onChange: function(){
+                this.filter = CoffeeStore.getFilter();
+                this.coffees = CoffeeStore.getCoffees(this.language);
             }
         },
         created: function(){
-            CoffeeStore.getCoffees(this.language).then(coffees => this.coffees = coffees);
+            CoffeeStore.addChangeListener(this.onChange);
+            CoffeeStore.provideCoffees(this.language);
             this.filter = CoffeeStore.getFilter();
+            this.coffees = CoffeeStore.getCoffees(this.language);
+
+        },
+        destroyed: function(){
+            CoffeeStore.removeChangeListener(this.onChange);
         }
     }
 </script>

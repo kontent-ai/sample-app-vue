@@ -35,13 +35,30 @@
             productStatusOnChange: function(codename){
                 this.filter.toggleProductStatus(codename);
                 CoffeeStore.setFilter(this.filter);
+            },
+            onChange: function(){
+                this.processings = CoffeeStore.getProcessings();
+                this.productStatuses = CoffeeStore.getProductStatuses();
+                this.filter = CoffeeStore.getFilter();
+            }
+        },
+        watch:{
+            language: function(){
+                CoffeeStore.provideProcessings();
+                CoffeeStore.provideProductStatuses();
             }
         },
         created: function(){
+            CoffeeStore.addChangeListener(this.onChange);
+            CoffeeStore.provideProcessings();
+            CoffeeStore.provideProductStatuses();
+            this.processings = CoffeeStore.getProcessings();
+            this.productStatuses = CoffeeStore.getProductStatuses();
             this.filter = CoffeeStore.getFilter();
-            this.processings = CoffeeStore.getProcessings().then(processings => this.processings = processings);
-            this.productStatuses = CoffeeStore.getProductStatuses().then(productStatuses => this.productStatuses = productStatuses);
         },
+        destroyed: function(){
+            CoffeeStore.removeChangeListener(this.onChange);
+        }
     }
 </script>
 

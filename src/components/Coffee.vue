@@ -55,6 +55,11 @@
             altitude: "",
         }),
         props: ['language'],
+        methods: {
+            onChange: function(){
+                this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
+            }
+        },
         watch: {
             coffee: function(newCoffee){
                 if(!newCoffee){
@@ -67,14 +72,21 @@
                 this.variety = newCoffee.variety.value ;
                 this.processing = newCoffee.processing.value.length > 0 ? newCoffee.processing.value[0].name : "";
                 this.altitude =  newCoffee.altitude.value + " feet";
+            },
+            language: function(){
+                CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
             }
         },
         created: function(){
-//            TODO when someone goes directly to this url, not through store
+            CoffeeStore.addChangeListener(this.onChange);
+            CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
             this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
         },
         components: {
             RichTextElement,
+        },
+        destroyed: function(){
+            CoffeeStore.removeChangeListener(this.onChange);
         }
     }
 </script>

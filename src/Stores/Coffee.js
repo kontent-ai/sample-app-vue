@@ -126,7 +126,6 @@ class CoffeeStore {
   // Methods
 
   getCoffee(coffeeSlug, language) {
-
     return coffees[language || defaultLanguage].find((coffee) => coffee.urlPattern.value === coffeeSlug);
   }
 

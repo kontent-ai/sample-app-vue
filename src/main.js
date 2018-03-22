@@ -8,6 +8,8 @@ import BrewerStore from './components/BrewerStore.vue'
 import Articles from './components/Articles.vue'
 import About from './components/About.vue'
 import Cafes from './components/Cafes.vue'
+import Coffee from './components/Coffee.vue'
+import Brewer from './components/Brewer.vue'
 import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
 import * as VueGoogleMaps from 'vue2-google-maps'
@@ -80,6 +82,14 @@ let router = new Router({
             path: "/:lang/contacts",
             component: Contacts,
         },
+        {
+            path: "/:lang/coffees/:coffeeSlug",
+            component: Coffee,
+        },
+        {
+            path: "/:lang/brewers/:brewerSlug",
+            component: Brewer,
+        }
 
     ]
 });

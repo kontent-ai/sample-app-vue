@@ -15,7 +15,6 @@
         <h4>{{$t('BrewerFilter.priceTitle')}}</h4>
         <span v-for="(priceRange, index) in priceRanges" class="checkbox js-postback">
             <input v-bind:id="'PriceRange-' + index" type="checkbox" :checked="priceRangeIsChecked(priceRange)"/>
-            <!--TODO spanish price?-->
             <label v-bind:htmlFor="'PriceRange-' + index" @click="priceRangeOnChange(priceRange)" >{{formatPrice(priceRange.min, language) + " – " + formatPrice(priceRange.max, language)}}</label>
         </span>
         <h4>{{$t('BrewerFilter.statusTitle')}}</h4>

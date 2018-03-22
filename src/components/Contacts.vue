@@ -78,10 +78,21 @@
                     return;
                 }
                 this.selectedAddress = model.dataAddress
+            },
+            onChange: function(){
+                this.cafes = CafeStore.getCompanyCafes(this.language);
             }
         },
         created: function () {
-            CafeStore.getCompanyCafes(this.language).then(cafes => this.cafes = cafes);
+            CafeStore.addChangeListener(this.onChange);
+            CafeStore.provideCompanyCafes(this.language);
+            this.cafes = CafeStore.getCompanyCafes(this.language);
+
+        },
+        watch: {
+            language: function(){
+                CafeStore.provideCompanyCafes(this.language);
+            }
         },
         computed: {
             cafeModels: function () {
@@ -105,5 +116,8 @@
         components: {
             ContactMap,
         },
+        destroyed: function(){
+            CafeStore.removeChangeListener(this.onChange);
+        }
     }
 </script>

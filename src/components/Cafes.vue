@@ -79,11 +79,27 @@
             },
             getPartnerCafesData: function(){
                 CafeStore.getPartnerCafes(this.language).then(partnerCafes => this.partnerCafes = partnerCafes);
+            },
+            onChange: function(){
+                this.ourCafes = CafeStore.getCompanyCafes(this.language);
+                this.partnerCafes = CafeStore.getPartnerCafes(this.language);
+            }
+        },
+        watch: {
+            language: function(){
+                CafeStore.provideCompanyCafes(this.language);
+                CafeStore.providePartnerCafes(this.language);
             }
         },
         created: function(){
-            this.getCompanyCafesData();
-            this.getPartnerCafesData();
+            CafeStore.addChangeListener(this.onChange);
+            CafeStore.provideCompanyCafes(this.language);
+            CafeStore.providePartnerCafes(this.language);
+            this.ourCafes = CafeStore.getCompanyCafes(this.language);
+            this.partnerCafes = CafeStore.getPartnerCafes(this.language);
         },
+        destroyed: function(){
+            CafeStore.removeChangeListener(this.onChange);
+        }
     }
 </script>

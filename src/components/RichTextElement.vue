@@ -22,8 +22,6 @@
                         const language = this.$i18n.locale;
 
                         if (path) {
-                            console.log(path);
-                            console.log(language);
                             this.$router.push(`/${language}${path}`);
                         }
                     }

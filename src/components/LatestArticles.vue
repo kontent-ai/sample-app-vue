@@ -2,6 +2,7 @@
     <div v-if="articles.length === 0" class="row">
 
     </div>
+    <!--TODO bug when switching languages - date is formated in spanish-->
     <div v-else class="row">
         <h1 class="title-tab">{{$t('LatestArticles.latestArticlesTitle')}}</h1>
         <div class="article-tile article-tile-large">

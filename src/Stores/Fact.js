@@ -6,57 +6,54 @@ let changeListeners = [];
 let facts = initLanguageCodeObject();
 
 let notifyChange = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
+    changeListeners.forEach((listener) => {
+        listener();
+    });
 }
 
 let fetchFacts = (language) => {
-  var query = Client.item('about_us')
+    var query = Client.item('about_us')
 
-  if (language) {
-    query.languageParameter(language);
-  }
+    if (language) {
+        query.languageParameter(language);
+    }
 
-  return query.get()
-      .toPromise()
-    .then(response => {
-      if(language){
-        facts[language] = response.item.facts;
-      } else {
-        facts[defaultLanguage] = response.item.facts;        
-      }
-      notifyChange();
-      return response.item.facts;
-    });
+    query.get()
+        .subscribe(response => {
+            if(language){
+                facts[language] = response.item.facts;
+            } else {
+                facts[defaultLanguage] = response.item.facts;
+            }
+            notifyChange();
+        });
 }
 
 class FactStore {
 
-  // Actions
+    // Actions
 
-  provideFacts(language) {
-    return fetchFacts(language);
-  }
+    provideFacts(language) {
+        fetchFacts(language);
+    }
 
-  // Methods
+    // Methods
 
-  getFacts(language) {
-    // return facts[language];
-      return this.provideFacts(language);
-  }
+    getFacts(language) {
+        return facts[language];
+    }
 
-  // Listeners
+    // Listeners
 
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
+    addChangeListener(listener) {
+        changeListeners.push(listener);
+    }
 
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
+    removeChangeListener(listener) {
+        changeListeners = changeListeners.filter((element) => {
+            return element !== listener;
+        });
+    }
 
 }
 

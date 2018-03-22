@@ -1,6 +1,5 @@
 <template>
     <div class="container" v-if="!coffee">
-        No coffee
     </div>
     <div class="container" v-else>
         <article  v-if="coffee" class="product-detail">

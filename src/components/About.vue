@@ -1,22 +1,22 @@
 <template>
     <div class="container" >
-        <div v-for="(fact, index) in facts">
+        <div v-for="(fact, index) in computedFacts">
             <section v-if="index % 2 === 0" class="row text-and-image" :key="index" >
-                <h2 class="col-lg-12">{{getTitle(fact)}}</h2>
+                <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6">
-                    <RichTextElement styleClass="text-and-image-text" :element="getDescriptionElement(fact)" />
+                    <RichTextElement class="text-and-image-text" :element="fact.descriptionElement" />
                 </div>
                 <div class="col-md-6">
-                    <img :alt="getTitle(fact)" class="img-responsive" :src="getImageLink(fact)" :title="getTitle(fact)" />
+                    <img :alt="fact.title" class="img-responsive" :src="fact.imageLink" :title="fact.title" />
                 </div>
             </section>
-            <section class="row text-and-image" :key="index" v-else>
-                <h2 class="col-lg-12">{{getTitle(fact)}}</h2>
+            <section v-else class="row text-and-image" :key="index" >
+                <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6 col-md-push-6">
-                    <RichTextElement styleClass="text-and-image-text-right" :element="getDescriptionElement(fact)" />
+                    <RichTextElement class="text-and-image-text-right" :element="fact.descriptionElement" />
                 </div>
                 <div class="col-md-6 col-md-pull-6">
-                    <img :alt="getTitle(fact)" class="img-responsive" :src="getImageLink(fact)" :title="getTitle(fact)" />
+                    <img :alt="fact.title" class="img-responsive" :src="fact.imageLink" :title="fact.title" />
                 </div>
             </section>
         </div>
@@ -35,17 +35,19 @@
         }),
         props: ['language'],
         methods: {
-            getTitle: function(fact){
-                return fact.title.value;
-            },
-            getDescriptionElement: function(fact){
-                return fact.description;
-            },
-            getImageLink: function(fact){
-                return fact.image.value[0].url;
-            },
             getFactsData: function(){
                 FactStore.getFacts(this.language).then(facts => this.facts = facts);
+            }
+        },
+        computed: {
+            computedFacts: function(){
+                    return this.facts.map(fact => ({
+                        title: fact.title.value,
+                        descriptionElement: fact.description,
+                        imageLink: fact.image.value[0].url,
+                    }))
+
+
             }
         },
         components: {

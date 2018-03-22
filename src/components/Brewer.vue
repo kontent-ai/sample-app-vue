@@ -46,14 +46,26 @@
                 this.name = newBrewer.productName.value;
                 this.imageLink = newBrewer.image.value[0].url;
                 this.descriptionElement = newBrewer.longDescription;
+            },
+            language: function(){
+                BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
+            }
+        },
+        methods:{
+            onChange: function(){
+                this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
             }
         },
         created: function(){
-//            TODO when someone goes directly to this url, not through store
+            BrewerStore.addChangeListener(this.onChange);
+            BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
             this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
         },
         components: {
             RichTextElement,
+        },
+        destroyed: function(){
+            BrewerStore.removeChangeListener(this.onChange);
         }
     }
 </script>

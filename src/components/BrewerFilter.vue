@@ -43,9 +43,13 @@
             ],
         }),
         created: function(){
+            BrewerStore.addChangeListener(this.onChange);
+            BrewerStore.provideBrewers();
+            BrewerStore.provideManufacturers();
+            BrewerStore.provideProductStatuses();
             this.filter = BrewerStore.getFilter();
-            this.manufacturers = BrewerStore.getManufacturers().then(manufacturers => this.manufacturers = manufacturers);
-            this.productStatuses = BrewerStore.getProductStatuses().then(productStatuses => this.productStatuses = productStatuses);
+            this.manufacturers = BrewerStore.getManufacturers();
+            this.productStatuses = BrewerStore.getProductStatuses()
         },
         methods: {
             manufacturerOnChange: function(codename){
@@ -70,7 +74,16 @@
             productStatusOnChange: function(codename){
                 this.filter.toggleProductStatus(codename);
                 BrewerStore.setFilter(this.filter);
+            },
+            onChange: function(){
+                this.filter = BrewerStore.getFilter();
+                this.manufacturers = BrewerStore.getManufacturers();
+                this.productStatuses = BrewerStore.getProductStatuses()
             }
+        },
+        destroyed: function(){
+            BrewerStore.removeChangeListener(this.onChange);
         }
+
     }
 </script>

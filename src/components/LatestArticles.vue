@@ -23,9 +23,7 @@
                 </div>
             </div>
         </div>
-        <!--OTHER ARTICLES-->
-        <!--TODO key in list rendering?-->
-        <div v-for="article in articlesData.slice(1)" class="col-md-3" >
+        <div v-for="(article, key) in articlesData.slice(1)" class="col-md-3" :key="key">
             <div class="article-tile">
                 <router-link :to="article.link">
                 <img v-bind:alt="'Article' + article.title" class="article-tile-image" v-bind:src="article.imageLink" v-bind:title="'Article' + article.title" />
@@ -43,7 +41,6 @@
                 </div>
             </div>
         </div>
-        <!--END OF OTHER ARTICLES-->
     </div>
 </template>
 

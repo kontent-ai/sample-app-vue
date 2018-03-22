@@ -14,7 +14,7 @@ export function resolveContentLink(link, language) {
       resultLink = "";
   }
   if(language){
-    resultLink = `/${language.toLowerCase()}${resultLink}`
+    resultLink = `/${language}${resultLink}`
   }
 
   return resultLink;

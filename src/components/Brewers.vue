@@ -40,6 +40,10 @@
                 });
             },
             resolveContentLink,
+            onChange: function(){
+                this.brewers = BrewerStore.getBrewers(this.language);
+                this.filter = BrewerStore.getFilter();
+            }
         },
         computed: {
           filteredBrewers: function(){
@@ -50,8 +54,16 @@
           }
         },
         created: function(){
-            BrewerStore.provideBrewers(this.language).then(brewers => this.brewers = brewers);
-            this.filter = BrewerStore.getFilter();
+            BrewerStore.addChangeListener(this.onChange);
+            BrewerStore.provideBrewers(this.language);
+        },
+        watch: {
+            language: function(){
+                BrewerStore.provideBrewers(this.language);
+            }
+        },
+        destroyed: function(){
+            BrewerStore.removeChangeListener(this.onChange);
         }
     }
 </script>

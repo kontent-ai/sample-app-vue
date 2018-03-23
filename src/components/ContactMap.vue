@@ -21,8 +21,12 @@
             centerLocation: {lat: 40.854885, lng: -88.081807},
             zoom: 4,
             mapLoaded: false,
-            markersLoaded: false,
         }),
+        computed: {
+            markersLoaded: function(){
+                return this.markerLocations.length > 0;
+            }
+        },
         mounted: function () {
             this.map = this.$refs.map.mapObject;
             this.$refs.map.$mapCreated.then(() => {
@@ -57,12 +61,9 @@
                 this.markerLocations.push(location);
             },
             getMapMarkers() {
-                console.log("getting markers");
                 if (!this.mapLoaded || this.markersLoaded) {
                     return;
                 }
-                this.markersLoaded = true;
-                console.log("inside");
                 this.cafesAddresses.map(cafeAddress => {
                     let geocoder = new window.google.maps.Geocoder();
                     geocoder.geocode({'address': cafeAddress}, (results, status) => {

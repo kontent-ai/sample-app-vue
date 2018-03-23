@@ -13,7 +13,7 @@
                     @click="manufacturerOnChange(manufacturer.codename)">{{manufacturer.name}} </label>
         </span>
         <h4>{{$t('BrewerFilter.priceTitle')}}</h4>
-        <span v-for="(priceRange, index) in priceRangesData" class="checkbox js-postback">
+        <span v-for="priceRange in priceRangesData" class="checkbox js-postback">
             <input v-bind:id="priceRange.id" type="checkbox" :checked="priceRange.checked"/>
             <label v-bind:htmlFor="priceRange.id"
                    @click="priceRangeOnChange(priceRange.rawPriceRange)">{{priceRange.formattedPriceRange}}</label>

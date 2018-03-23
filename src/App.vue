@@ -9,7 +9,7 @@
 <script>
     import Header from './components/Header.vue'
     import Footer from './components/Footer.vue'
-    import {languageCodes, languageCodesLowerCase} from './Utilities/LanguageCodes'
+    import {languageCodes, languageCodesLowerCase, getLanguageCode} from './Utilities/LanguageCodes'
 
     export default {
 
@@ -22,6 +22,9 @@
         components: {
             Header,
             Footer,
+        },
+        created: function(){
+            this.$i18n.locale = getLanguageCode(this.$route.path);
         },
         methods: {
             changeLang: function(newLanguage){

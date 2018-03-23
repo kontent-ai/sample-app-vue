@@ -4,7 +4,6 @@
 
 <script>
     import {resolveContentLink} from '../Utilities/ContentLinks'
-    import {getLanguageCode} from '../Utilities/LanguageCodes'
 
     export default {
         name: "RichTextElement",

@@ -50,13 +50,10 @@ export const initLanguageCodeObject = (object) => {
     return object
 }
 
-export const getLanguageCode = (match) => {
-    const languageCode = languageCodes[0];
-    if (!_.has(match, ['params', 'lang'])) {
-        return languageCode;
-    }
+export const getLanguageCode = (route) => {
+    const defaultLanguage = languageCodes[0];
+    const languageParameter = route.split('/')[1];
 
-    const languageParameter = _.get(match, ['params', 'lang']);
     if (languageCodesLowerCase.indexOf(languageParameter.toLowerCase()) > -1) {
         return languageCodes[languageCodesLowerCase.indexOf(languageParameter.toLowerCase())];
     }

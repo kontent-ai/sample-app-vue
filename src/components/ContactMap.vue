@@ -1,10 +1,9 @@
 <template>
-    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" id="map" ref="map" >
-        <gmap-marker v-for="(location, index) in markerLocations" v-if="mapLoaded" :position="location" :key="index" />
+    <gmap-map class="map" :style="mapStyle" :center="centerLocation" :zoom="zoom" id="map" ref="map">
+        <gmap-marker v-for="location in markerLocations" v-if="mapLoaded" :position="location"/>
     </gmap-map>
 
 </template>
-<!--TODO check map props, scroll-->
 
 <script>
     import VueScrollTo from 'vue-scrollto'
@@ -20,28 +19,27 @@
             },
             markerLocations: [],
             centerLocation: {lat: 40.854885, lng: -88.081807},
-            zoom : 4,
+            zoom: 4,
             mapLoaded: false,
+            markersLoaded: false,
         }),
-        mounted: function(){
+        mounted: function () {
             this.map = this.$refs.map.mapObject;
             this.$refs.map.$mapCreated.then(() => {
-                this.mapLoaded=true
+                this.mapLoaded = true
             })
         },
         watch: {
-            //TODO sometimes adresses dont load
-            //TODO dupliacte code refactoring
-            cafesAddresses: function(){
+            cafesAddresses: function () {
                 this.getMapMarkers();
             },
-            mapLoaded: function(){
+            mapLoaded: function () {
                 this.getMapMarkers();
             },
-            focusOnAddress: function(){
+            focusOnAddress: function () {
                 let geocoder = new window.google.maps.Geocoder();
                 let cafeAddress = this.focusOnAddress;
-                geocoder.geocode({ 'address': cafeAddress }, (results, status) => {
+                geocoder.geocode({'address': cafeAddress}, (results, status) => {
                     if (status === window.google.maps.GeocoderStatus.OK) {
                         let location = results[0].geometry.location;
                         this.centerLocation = location;
@@ -54,26 +52,25 @@
             }
         },
         methods: {
-            pushLocation(location){
+            pushLocation(location) {
                 this.markerLocations.push(location);
             },
-            getMapMarkers(){
-                if(!this.mapLoaded){
+            getMapMarkers() {
+                if (!this.mapLoaded || this.markersLoaded) {
                     return;
                 }
                 this.cafesAddresses.map(cafeAddress => {
                     let geocoder = new window.google.maps.Geocoder();
-                    geocoder.geocode({ 'address': cafeAddress }, (results, status) => {
+                    geocoder.geocode({'address': cafeAddress}, (results, status) => {
                         if (status === window.google.maps.GeocoderStatus.OK) {
                             let location = results[0].geometry.location;
                             this.pushLocation(location);
-
                         } else {
                             console.warn('Geocode was not successful for the following reason: ' + status);
                         }
                     })
-
                 });
+                this.markersLoaded = true;
             }
         },
     }

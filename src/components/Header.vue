@@ -28,10 +28,10 @@
                     <nav role="navigation">
                         <ul class="dropdown-items-list dropdown-desktop-visible">
                             <li>
-                                <a v-on:click="changeLanguage('en-US')">English</a>
+                                <a v-on:click="changeLang('en-US')">English</a>
                             </li>
                             <li>
-                                <a v-on:click="changeLanguage('es-ES')">Español</a>
+                                <a v-on:click="changeLang('es-ES')">Español</a>
                             </li>
                         </ul>
                     </nav>
@@ -72,12 +72,6 @@
             },
             contactsRoute: function(){
                 return '/' + this.language + '/' + 'contacts';
-            },
-        },
-        methods: {
-            //TODO exctract
-            changeLanguage: function(newLanguage){
-                this.changeLang(newLanguage);
             },
         },
     }

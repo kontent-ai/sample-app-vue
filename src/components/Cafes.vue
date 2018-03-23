@@ -55,14 +55,14 @@
                 }, []).sort();
             },
             partnerCafesData: function(){
-                return this.partnerCafes.map(cafe => this.model(cafe));
+                return this.partnerCafes.map(cafe => this.getModel(cafe));
             },
             ourCafesData: function(){
-                return this.ourCafes.map(cafe => this.model(cafe));
+                return this.ourCafes.map(cafe => this.getModel(cafe));
             }
         },
         methods: {
-            model: function (cafe) {
+            getModel: function (cafe) {
                 let model = {
                     name: cafe.system.name,
                     imageLink: "url(" + cafe.photo.value[0].url + ")",

@@ -3,13 +3,12 @@
         <div>
             <h1 class="title-tab">{{$t('TasteOurCoffee.title')}}</h1>
         </div>
-        <div v-for="cafe in cafes" class="col-xs-6 col-md-3">
+        <div v-for="cafe in cafesData" class="col-xs-6 col-md-3">
             <div>
-                <!--TODO variable for name?-->
-                <router-link :to="`${language}/cafes`" class="ourcoffee-tile-link">
-                <h2 class="ourcoffee-tile-text center-text">{{cafe.system.name}}</h2>
+                <router-link :to="cafesLink" class="ourcoffee-tile-link">
+                <h2 class="ourcoffee-tile-text center-text">{{cafe.name}}</h2>
                 <span class="cafe-overlay"> </span>
-                <img v-bind:alt="cafe.system.name" class="ourcoffee-tile-image" v-bind:src="cafe.photo.value[0].url" v-bind:title="cafe.system.name" />
+                <img v-bind:alt="cafe.name" class="ourcoffee-tile-image" v-bind:src="cafe.imageLink" v-bind:title="cafe.name" />
                 </router-link>
             </div>
         </div>
@@ -22,8 +21,17 @@
     export default {
         name: "taste-our-coffee",
         data: () => ({
-            cafes: null,
+            cafes: [],
+            cafesLink: `${this.language}/cafes`,
         }),
+        computed: {
+            cafesData: function(){
+                return this.cafes.map(cafe => ({
+                    name: cafe.system.name,
+                    imageLink: cafe.photo.value[0].url,
+                }))
+            },
+        },
         props: ['language'],
         created: function(){
             CafeStore.addChangeListener(this.onChange);

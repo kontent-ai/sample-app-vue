@@ -35,6 +35,7 @@
             },
             mapLoaded: function () {
                 this.getMapMarkers();
+
             },
             focusOnAddress: function () {
                 let geocoder = new window.google.maps.Geocoder();
@@ -56,9 +57,12 @@
                 this.markerLocations.push(location);
             },
             getMapMarkers() {
+                console.log("getting markers");
                 if (!this.mapLoaded || this.markersLoaded) {
                     return;
                 }
+                this.markersLoaded = true;
+                console.log("inside");
                 this.cafesAddresses.map(cafeAddress => {
                     let geocoder = new window.google.maps.Geocoder();
                     geocoder.geocode({'address': cafeAddress}, (results, status) => {
@@ -70,7 +74,6 @@
                         }
                     })
                 });
-                this.markersLoaded = true;
             }
         },
     }

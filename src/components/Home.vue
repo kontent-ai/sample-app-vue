@@ -1,11 +1,9 @@
-<!--TODO extract to 'page' component, write in pug, not html - demonstrates vue?-->
 <template>
     <div class="container">
         <Banner/>
         <latest-articles :language="language"/>
         <link-button :text="$t('Home.moreArticles')" :link="`/${language}/articles`"/>
         <our-story/>
-        <!--TODO en-us resolve for spanish-->
         <link-button :text="$t('Home.aboutLinkText')" :link="`/${language}/about`"/>
         <taste-our-coffee :language="language"/>
         <link-button :text="$t('Home.cafesLinkText')" :link="`/${language}/cafes`"/>

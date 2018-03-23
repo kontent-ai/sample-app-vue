@@ -49,7 +49,6 @@
     import dateFormat from 'dateformat'
     import { dateFormats } from '../Utilities/LanguageCodes'
 
-
     export default {
         name: "latest-articles",
         data: () => ({
@@ -71,10 +70,8 @@
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticles(this.articleCount, this.language);
             this.articles =  ArticleStore.getArticles(this.articleCount, this.language)
-
         },
         methods: {
-//            TODO extract formatDate, repeats
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
             },

@@ -16,7 +16,7 @@
         <div>
             <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
             <div class="row">
-                <div v-for="(model, index) in cafeModels" class="col-md-6 col-lg-3" :key="index">
+                <div v-for="model in cafeModels" class="col-md-6 col-lg-3" >
                     <div @click="handleAddressClick(model)" class="cafe-tile cursor-hand js-scroll-to-map"
                          :data-address="model.dataAddress">
                         <div class="cafe-tile-content">
@@ -50,7 +50,7 @@
         }),
         props: ['language'],
         methods: {
-            model: function (cafe) {
+            getModel: function (cafe) {
                 let model = {
                     name: cafe.system.name,
                     street: cafe.street.value,
@@ -96,13 +96,13 @@
         },
         computed: {
             cafeModels: function () {
-                return this.cafes.map((cafe) => this.model(cafe));
+                return this.cafes.map((cafe) => this.getModel(cafe));
             },
             firstCafe: function () {
                 if(this.cafes.length === 0){
                     return null;
                 }
-                return this.model(this.cafes[0]);
+                return this.getModel(this.cafes[0]);
             },
             cafesAddresses: function(){
                 if (this.cafes.length === 0){

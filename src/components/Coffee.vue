@@ -16,7 +16,6 @@
                         <img :alt="name" class="" :src="imageLink" :title="name"/>
                     </figure>
                     <div class="description">
-                        <!--TODO should not render if descEle is null, remove v-if-->
                         <RichTextElement v-if="descriptionElement" :element="descriptionElement"/>
                         <div class="product-detail-properties">
                             <h4>Parameters</h4>

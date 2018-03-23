@@ -16,7 +16,6 @@
                         <img :alt="name" class="" :src="imageLink" :title="name" />
                     </figure>
                     <div class="description">
-                        <!--TODO should not be null sent here-->
                         <RichTextElement v-if="descriptionElement" :element="descriptionElement" />
                     </div>
                 </div>

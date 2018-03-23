@@ -54,24 +54,26 @@
                 return dateFormat(value, "mmmm d");
             },
             getNextKey: function(){
-//                wrong ids when switching languages
-                console.log(this.counter);
                 return this.counter++;
             },
+            resetIdCounter: function(){
+                this.counter = 0;
+            },
             onChange: function(){
+                this.resetIdCounter();
                 this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             }
         },
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticles(this.articleCount, this.language);
-            this.counter = 0;
+            this.resetIdCounter();
             this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
 
         },
-        updated: function(){
-            this.counter = 0;
+        beforeUpdate: function(){
+            this.resetIdCounter();
         },
         watch: {
             language: function(){

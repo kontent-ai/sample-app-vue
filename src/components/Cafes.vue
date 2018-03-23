@@ -2,30 +2,32 @@
     <div class="container">
         <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="(ourCafe,index) in ourCafes" class="col-md-6" :key="index">
-                <div class="cafe-image-tile js-scroll-to-map" :data-address="model(ourCafe).dataAddress">
-                    <div class="cafe-image-tile-image-wrapper" :style="{ backgroundImage: model(ourCafe).imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }">
-                </div>
-                <div class="cafe-image-tile-content">
-                    <h3 class="cafe-image-tile-name">{{model(ourCafe).name}}</h3>
-                    <address class="cafe-tile-address">
-                <span :name="model(ourCafe).name" class="cafe-tile-address-anchor">
-                  {{model(ourCafe).street}}, {{model(ourCafe).city}}<br />{{model(ourCafe).zipCode}}, {{model(ourCafe).countryWithState}}
+            <div v-for="(ourCafe, index) in ourCafesData" class="col-md-6" :key="index">
+                <div class="cafe-image-tile js-scroll-to-map" :data-address="ourCafe.dataAddress">
+                    <div class="cafe-image-tile-image-wrapper"
+                         :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }">
+                    </div>
+                    <div class="cafe-image-tile-content">
+                        <h3 class="cafe-image-tile-name">{{ourCafe.name}}</h3>
+                        <address class="cafe-tile-address">
+                <span :name="ourCafe.name" class="cafe-tile-address-anchor">
+                  {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
                 </span>
-                    </address>
-                    <p>{{model(ourCafe).phone}}</p>
+                        </address>
+                        <p>{{ourCafe.phone}}</p>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
         <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="(location, locationIndex) in locations" :key="locationIndex">
+            <div v-for="(location, index) in locations" :key="index">
                 <h3>{{location}}</h3>
                 <p
-                        v-for="(partnerCafeModel, index) in partnerCafes.map(function(cafe){return model(cafe);})"
+                        v-for="(partnerCafeModel, index) in partnerCafesData"
                         v-if="partnerCafeModel.location === location"
-                        :key="index">
+                        :key="index"
+                >
                     {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
                 </p>
             </div>
@@ -44,20 +46,23 @@
             partnerCafes: [],
         }),
         computed: {
-          locations: function(){
-              let models = this.partnerCafes.map(cafe => this.model(cafe));
-              return  models.map((model) => model.location).reduce((result, location) => {
-                  if (result.indexOf(location) < 0) {
-                      result.push(location);
-                  }
-
-                  return result;
-              }, []).sort();
-          }
+            locations: function () {
+                return this.partnerCafesData.map((model) => model.location).reduce((result, location) => {
+                    if (result.indexOf(location) < 0) {
+                        result.push(location);
+                    }
+                    return result;
+                }, []).sort();
+            },
+            partnerCafesData: function(){
+                return this.partnerCafes.map(cafe => this.model(cafe));
+            },
+            ourCafesData: function(){
+                return this.ourCafes.map(cafe => this.model(cafe));
+            }
         },
         methods: {
-            //TODO make model computed?
-            model: function(cafe){
+            model: function (cafe) {
                 let model = {
                     name: cafe.system.name,
                     imageLink: "url(" + cafe.photo.value[0].url + ")",
@@ -68,37 +73,31 @@
                     state: cafe.state.value,
                     phone: cafe.phone.value,
 
-                }
+                };
                 model.dataAddress = model.city + ", " + model.street;
                 model.countryWithState = model.country + (model.state ? ", " + model.state : "");
                 model.location = model.city + ", " + model.countryWithState;
                 return model;
             },
-            getCompanyCafesData: function(){
-                CafeStore.getCompanyCafes(this.language).then(companyCafes => this.ourCafes = companyCafes);
-            },
-            getPartnerCafesData: function(){
-                CafeStore.getPartnerCafes(this.language).then(partnerCafes => this.partnerCafes = partnerCafes);
-            },
-            onChange: function(){
+            onChange: function () {
                 this.ourCafes = CafeStore.getCompanyCafes(this.language);
                 this.partnerCafes = CafeStore.getPartnerCafes(this.language);
             }
         },
         watch: {
-            language: function(){
+            language: function () {
                 CafeStore.provideCompanyCafes(this.language);
                 CafeStore.providePartnerCafes(this.language);
             }
         },
-        created: function(){
+        created: function () {
             CafeStore.addChangeListener(this.onChange);
             CafeStore.provideCompanyCafes(this.language);
             CafeStore.providePartnerCafes(this.language);
             this.ourCafes = CafeStore.getCompanyCafes(this.language);
             this.partnerCafes = CafeStore.getPartnerCafes(this.language);
         },
-        destroyed: function(){
+        destroyed: function () {
             CafeStore.removeChangeListener(this.onChange);
         }
     }

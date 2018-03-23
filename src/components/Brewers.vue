@@ -4,7 +4,7 @@
             <article class="product-tile">
                 <router-link :to="brewer.link">
                     <h1 class="product-heading">{{brewer.productName}}</h1>
-                    <span v-if="brewer.hasProductStatus"/>
+                    <span v-if="brewer.hasNoProductStatus"/>
                     <span v-else class="product-tile-status">
                         {{brewer.productStatusText}}
                     </span>
@@ -59,7 +59,7 @@
                     price: this.formatPrice(brewer.price.value, this.language),
                     productName: brewer.productName.value,
                     link: resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, this.language),
-                    hasProductStatus: brewer.productStatus.value.length === 0,
+                    hasNoProductStatus: brewer.productStatus.value.length === 0,
                     productStatusText: brewer.productStatus.value.map((x) => x.name).join(", "),
                     imageLink: brewer.image.value[0].url,
                 }))

@@ -31,7 +31,6 @@
     import ArticleStore from '../Stores/Article';
     import { dateFormats } from '../Utilities/LanguageCodes'
 
-
     export default {
         name: "Articles",
         data: () => ({
@@ -56,7 +55,7 @@
             },
             getNextKey: function(){
 //                wrong ids when switching languages
-//                console.log(this.counter);
+                console.log(this.counter);
                 return this.counter++;
             },
             onChange: function(){
@@ -66,11 +65,13 @@
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticles(this.articleCount, this.language);
-            this.articles = ArticleStore.getArticles(this.articleCount, this.language);
-            //setting up non-reactive counter
             this.counter = 0;
+            this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
 
+        },
+        updated: function(){
+            this.counter = 0;
         },
         watch: {
             language: function(){

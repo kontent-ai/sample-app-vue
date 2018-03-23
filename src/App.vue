@@ -40,8 +40,5 @@
                 this.$i18n.locale = newLanguage;
             }
         },
-        created: function(){
-            this.$i18n.locale = this.$route.params.lang || 'en-US';
-        },
     }
 </script>

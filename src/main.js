@@ -24,29 +24,18 @@ Vue.use(VueGoogleMaps, {
     load: {
         key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
     }
-})
+});
 Vue.use(VueI18n);
 Vue.use(Router);
-
 Vue.use(VueScrollTo, {
     duration: 1000,
     easing: "ease-in-out",
 });
 
-
-
 let router = new Router({
     routes: [
         {
-            path: '/',
-            component: Home,
-        },
-        {
-            path: '/:lang',
-            component: Home,
-        },
-        {
-            path: '/:lang/store',
+            path: '/:lang?/store',
             component: Store,
             children: [
                 {
@@ -64,32 +53,37 @@ let router = new Router({
             ]
         },
         {
-            path: "/:lang/articles",
+            path: "/:lang?/articles",
             component: Articles,
         },
         {
-            path: "/:lang/articles/:articleName",
+            path: "/:lang?/articles/:articleName",
             component: Article,
         },
         {
-            path: '/:lang/about',
+            path: '/:lang?/about',
             component: About,
-        },{
-            path: "/:lang/cafes",
+        },
+        {
+            path: "/:lang?/cafes",
             component: Cafes,
         },
         {
-            path: "/:lang/contacts",
+            path: "/:lang?/contacts",
             component: Contacts,
         },
         {
-            path: "/:lang/coffees/:coffeeSlug",
+            path: "/:lang?/coffees/:coffeeSlug",
             component: Coffee,
         },
         {
-            path: "/:lang/brewers/:brewerSlug",
+            path: "/:lang?/brewers/:brewerSlug",
             component: Brewer,
-        }
+        },
+        {
+            path: '/:lang?',
+            component: Home,
+        },
 
     ]
 });
@@ -100,7 +94,7 @@ let i18n = new VueI18n({
         'en-US': en,
         'es-ES': es,
     },
-})
+});
 
 new Vue({
     router,

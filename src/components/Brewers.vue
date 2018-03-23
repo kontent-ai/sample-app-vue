@@ -1,21 +1,22 @@
 <template>
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
-        <div v-for="brewer in filteredBrewers" class="col-md-6 col-lg-4" >
+        <div v-for="brewer in brewersData" class="col-md-6 col-lg-4">
             <article class="product-tile">
-                <router-link :to="resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, language)">
-                <h1 class="product-heading">{{brewer.productName.value}}</h1>
-                    <span v-if="brewer.productStatus.value.length === 0"/>
+                <router-link :to="brewer.link">
+                    <h1 class="product-heading">{{brewer.productName}}</h1>
+                    <span v-if="brewer.hasProductStatus"/>
                     <span v-else class="product-tile-status">
-                        {{brewer.productStatus.value.map(function(x){return x.name}).join(" ,")}}
+                        {{brewer.productStatusText}}
                     </span>
-                <figure class="product-tile-image">
-                    <img v-bind:alt="brewer.productName.value" class="" v-bind:src="brewer.image.value[0].url" v-bind:title="brewer.productName.value" />
-                </figure>
-                <div class="product-tile-info">
+                    <figure class="product-tile-image">
+                        <img v-bind:alt="brewer.productName" class="" v-bind:src="brewer.imageLink"
+                             v-bind:title="brewer.productName"/>
+                    </figure>
+                    <div class="product-tile-info">
                 <span class="product-tile-price">
-                  {{formatPrice(brewer.price.value, language)}}
+                  {{brewer.price}}
                 </span>
-                </div>
+                    </div>
                 </router-link>
             </article>
         </div>
@@ -25,7 +26,8 @@
 <script>
     import BrewerStore from '../Stores/Brewer'
     import {resolveContentLink} from '../Utilities/ContentLinks'
-    export default{
+
+    export default {
         name: "Brewers",
         data: () => ({
             brewers: [],
@@ -33,36 +35,46 @@
         }),
         props: ['language'],
         methods: {
-            formatPrice: function(price, language){
+            formatPrice: function (price, language) {
                 return price.toLocaleString(language, {
                     style: "currency",
                     currency: "USD"
                 });
             },
             resolveContentLink,
-            onChange: function(){
+            onChange: function () {
                 this.brewers = BrewerStore.getBrewers(this.language);
                 this.filter = BrewerStore.getFilter();
             }
         },
         computed: {
-          filteredBrewers: function(){
-              if (this.brewers.length === 0 || !this.filter){
-                  return [];
-              }
-              return this.brewers.filter(brewer => this.filter.matches(brewer));
-          }
+            filteredBrewers: function () {
+                if (this.brewers.length === 0 || !this.filter) {
+                    return [];
+                }
+                return this.brewers.filter(brewer => this.filter.matches(brewer));
+            },
+            brewersData: function () {
+                return this.filteredBrewers.map(brewer => ({
+                    price: this.formatPrice(brewer.price.value, this.language),
+                    productName: brewer.productName.value,
+                    link: resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, this.language),
+                    hasProductStatus: brewer.productStatus.value.length === 0,
+                    productStatusText: brewer.productStatus.value.map((x) => x.name).join(", "),
+                    imageLink: brewer.image.value[0].url,
+                }))
+            }
         },
-        created: function(){
+        created: function () {
             BrewerStore.addChangeListener(this.onChange);
             BrewerStore.provideBrewers(this.language);
         },
         watch: {
-            language: function(){
+            language: function () {
                 BrewerStore.provideBrewers(this.language);
             }
         },
-        destroyed: function(){
+        destroyed: function () {
             BrewerStore.removeChangeListener(this.onChange);
         }
     }

@@ -13,8 +13,8 @@
                         <li>
                             <router-link :to="articlesRoute">{{$t('Header.articlesLinkTitle')}}</router-link>
                         </li>
-                        <li>
-                            <router-link :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
+                        <li >
+                            <router-link @click.native="LogAboutUs" :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
                             <router-link :to="cafesRoute">{{$t('Header.cafesLinkTitle')}}</router-link>
@@ -51,6 +51,8 @@
 </template>
 
 <script>
+    import { LogAboutUs }from '../Utilities/ActivityLogging'
+
     export default {
         name: 'Header',
         props: ['language', 'changeLang'],
@@ -74,5 +76,8 @@
                 return '/' + this.language + '/' + 'contacts';
             },
         },
+        methods: {
+            LogAboutUs,
+        }
     }
 </script>

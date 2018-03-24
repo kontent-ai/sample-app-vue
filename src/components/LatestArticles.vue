@@ -74,7 +74,6 @@
         },
         methods: {
             formatDate: function(value){
-                console.log(this.language);
                 return dateFormat(value, "mmmm d");
             },
             onChange: function(){

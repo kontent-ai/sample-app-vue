@@ -57,6 +57,7 @@
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticle(this.$route.params.articleName, this.language);
+            dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
         },
         destroyed: function(){

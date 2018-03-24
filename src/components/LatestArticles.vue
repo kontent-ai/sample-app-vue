@@ -74,6 +74,7 @@
         },
         methods: {
             formatDate: function(value){
+                console.log(this.language);
                 return dateFormat(value, "mmmm d");
             },
             onChange: function(){
@@ -83,7 +84,8 @@
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticles(this.articleCount, this.language);
-            this.articles =  ArticleStore.getArticles(this.articleCount, this.language)
+            dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+            this.articles =  ArticleStore.getArticles(this.articleCount, this.language);
         },
         destroyed: function() {
             ArticleStore.removeChangeListener(this.onChange);

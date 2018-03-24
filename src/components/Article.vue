@@ -60,6 +60,9 @@
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
         },
+        beforeUpdate: function(){
+            this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+        },
         destroyed: function(){
             ArticleStore.removeChangeListener(this.onChange);
         },

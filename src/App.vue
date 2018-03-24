@@ -43,5 +43,19 @@
                 this.$i18n.locale = newLanguage;
             }
         },
+        watch: {
+            '$route': {
+                deep: true,
+                handler: function () {
+                    const newLanguage = this.$route.path.split('/')[1];
+                    if(this.language === newLanguage || languageCodes.indexOf(newLanguage) < 0){
+                        return
+                    }
+                    if (languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1) {
+                        this.$router.go(this.$route.path);
+                    }
+                }
+            }
+        }
     }
 </script>

@@ -84,7 +84,10 @@ let router = new Router({
             path: '/:lang?',
             component: Home,
         },
-
+        {
+            path: "*",
+            redirect: "/",
+        }
     ]
 });
 

@@ -13,11 +13,11 @@
 
     export default {
         name: "CoffeeStore",
+        props: ['language'],
         components: {
             CoffeeFilter,
             Coffees
         },
-        props: ['language'],
 
     }
 </script>

@@ -60,6 +60,12 @@
                 return this.ourCafes.map(cafe => this.getModel(cafe));
             }
         },
+        watch: {
+            language: function () {
+                CafeStore.provideCompanyCafes(this.language);
+                CafeStore.providePartnerCafes(this.language);
+            }
+        },
         methods: {
             getModel: function (cafe) {
                 let model = {
@@ -81,12 +87,6 @@
             onChange: function () {
                 this.ourCafes = CafeStore.getCompanyCafes(this.language);
                 this.partnerCafes = CafeStore.getPartnerCafes(this.language);
-            }
-        },
-        watch: {
-            language: function () {
-                CafeStore.provideCompanyCafes(this.language);
-                CafeStore.providePartnerCafes(this.language);
             }
         },
         created: function () {

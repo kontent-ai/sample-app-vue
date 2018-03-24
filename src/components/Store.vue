@@ -13,7 +13,6 @@
                     </ul>
                 </div>
             </nav>
-            <!--language prop needed?-->
             <router-view :language="language"/>
         </div>
     </div>

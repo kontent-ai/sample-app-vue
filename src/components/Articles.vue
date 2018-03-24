@@ -33,6 +33,7 @@
 
     export default {
         name: "Articles",
+        props: ['language'],
         data: () => ({
             articles: [],
             articleCount: 10,
@@ -48,7 +49,12 @@
                 }))
             }
         },
-        props: ['language'],
+        watch: {
+            language: function(){
+                ArticleStore.provideArticles(this.articleCount, this.language);
+                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+            }
+        },
         methods: {
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
@@ -74,12 +80,6 @@
         },
         beforeUpdate: function(){
             this.resetIdCounter();
-        },
-        watch: {
-            language: function(){
-                ArticleStore.provideArticles(this.articleCount, this.language);
-                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-            }
         },
         destroyed: function(){
             ArticleStore.removeChangeListener(this.onChange);

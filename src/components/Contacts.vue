@@ -44,11 +44,35 @@
 
     export default {
         name: "Contacts",
+        props: ['language'],
         data: () => ({
             cafes: [],
             selectedAddress: null,
         }),
-        props: ['language'],
+        computed: {
+            cafeModels: function () {
+                return this.cafes.map((cafe) => this.getModel(cafe));
+            },
+            firstCafe: function () {
+                if(this.cafes.length === 0){
+                    return null;
+                }
+                return this.getModel(this.cafes[0]);
+            },
+            cafesAddresses: function(){
+                if (this.cafes.length === 0){
+                    return [];
+                }
+                return this.cafes.map((cafe) => {
+                    return `${cafe.city.value}, ${cafe.street.value}`;
+                })
+            }
+        },
+        watch: {
+            language: function(){
+                CafeStore.provideCompanyCafes(this.language);
+            }
+        },
         methods: {
             getModel: function (cafe) {
                 let model = {
@@ -89,35 +113,11 @@
             this.cafes = CafeStore.getCompanyCafes(this.language);
 
         },
-        watch: {
-            language: function(){
-                CafeStore.provideCompanyCafes(this.language);
-            }
-        },
-        computed: {
-            cafeModels: function () {
-                return this.cafes.map((cafe) => this.getModel(cafe));
-            },
-            firstCafe: function () {
-                if(this.cafes.length === 0){
-                    return null;
-                }
-                return this.getModel(this.cafes[0]);
-            },
-            cafesAddresses: function(){
-                if (this.cafes.length === 0){
-                    return [];
-                }
-                return this.cafes.map((cafe) => {
-                    return `${cafe.city.value}, ${cafe.street.value}`;
-                })
-            }
+        destroyed: function(){
+            CafeStore.removeChangeListener(this.onChange);
         },
         components: {
             ContactMap,
         },
-        destroyed: function(){
-            CafeStore.removeChangeListener(this.onChange);
-        }
     }
 </script>

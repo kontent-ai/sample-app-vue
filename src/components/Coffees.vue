@@ -28,11 +28,11 @@
 
     export default {
         name: "Coffees",
+        props: ['language'],
         data: () => ({
             coffees: [],
             filter: null,
         }),
-        props: ['language'],
         computed: {
             filteredCoffees: function () {
                 if (this.coffees.length === 0 || !this.filter) {

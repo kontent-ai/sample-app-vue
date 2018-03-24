@@ -43,15 +43,6 @@
                 {min: 250, max: 5000},
             ],
         }),
-        created: function () {
-            BrewerStore.addChangeListener(this.onChange);
-            BrewerStore.provideBrewers();
-            BrewerStore.provideManufacturers();
-            BrewerStore.provideProductStatuses();
-            this.filter = BrewerStore.getFilter();
-            this.manufacturers = BrewerStore.getManufacturers();
-            this.productStatuses = BrewerStore.getProductStatuses()
-        },
         computed: {
             manufacturersData: function () {
                 return this.manufacturers.map(manufacturer => ({
@@ -103,6 +94,15 @@
                 this.manufacturers = BrewerStore.getManufacturers();
                 this.productStatuses = BrewerStore.getProductStatuses()
             }
+        },
+        created: function () {
+            BrewerStore.addChangeListener(this.onChange);
+            BrewerStore.provideBrewers();
+            BrewerStore.provideManufacturers();
+            BrewerStore.provideProductStatuses();
+            this.filter = BrewerStore.getFilter();
+            this.manufacturers = BrewerStore.getManufacturers();
+            this.productStatuses = BrewerStore.getProductStatuses()
         },
         destroyed: function () {
             BrewerStore.removeChangeListener(this.onChange);

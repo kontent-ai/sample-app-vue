@@ -20,6 +20,7 @@
 
     export default {
         name: "taste-our-coffee",
+        props: ['language'],
         data: () => ({
             cafes: [],
             cafesLink: `${this.language}/cafes`,
@@ -32,21 +33,20 @@
                 }))
             },
         },
-        props: ['language'],
-        created: function(){
-            CafeStore.addChangeListener(this.onChange);
-            CafeStore.provideCompanyCafes(this.language);
-            this.cafes = CafeStore.getCompanyCafes(this.language);
+        watch: {
+            language: function(){
+                CafeStore.provideCompanyCafes(this.language);
+            }
         },
         methods: {
             onChange: function(){
                 this.cafes = CafeStore.getCompanyCafes(this.language);
             }
         },
-        watch: {
-            language: function(){
-                CafeStore.provideCompanyCafes(this.language);
-            }
+        created: function(){
+            CafeStore.addChangeListener(this.onChange);
+            CafeStore.provideCompanyCafes(this.language);
+            this.cafes = CafeStore.getCompanyCafes(this.language);
         },
         destroyed: function(){
             CafeStore.removeChangeListener(this.onChange);

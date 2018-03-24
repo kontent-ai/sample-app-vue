@@ -43,8 +43,13 @@
                 }))
             }
         },
+        watch: {
+            language: function () {
+                FactStore.provideFacts(this.language);
+            }
+        },
         methods: {
-            onChange: function(){
+            onChange: function () {
                 this.facts = FactStore.getFacts(this.language);
             }
         },
@@ -53,16 +58,11 @@
             FactStore.provideFacts(this.language);
             this.facts = FactStore.getFacts(this.language);
         },
-        watch: {
-            language: function () {
-                FactStore.provideFacts(this.language);
-            }
+        destroyed: function () {
+            FactStore.removeChangeListener(this.onChange);
         },
         components: {
             RichTextElement,
         },
-        destroyed: function(){
-            FactStore.removeChangeListener(this.onChange);
-        }
     }
 </script>

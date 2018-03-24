@@ -43,6 +43,12 @@
                 }))
             }
         },
+        watch:{
+            language: function(){
+                CoffeeStore.provideProcessings();
+                CoffeeStore.provideProductStatuses();
+            }
+        },
         methods: {
             processingOnChange: function(codename){
                 this.filter.toggleProcessing(codename);
@@ -56,12 +62,6 @@
                 this.processings = CoffeeStore.getProcessings();
                 this.productStatuses = CoffeeStore.getProductStatuses();
                 this.filter = CoffeeStore.getFilter();
-            }
-        },
-        watch:{
-            language: function(){
-                CoffeeStore.provideProcessings();
-                CoffeeStore.provideProductStatuses();
             }
         },
         created: function(){

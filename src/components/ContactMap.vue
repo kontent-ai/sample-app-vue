@@ -27,12 +27,6 @@
                 return this.markerLocations.length > 0;
             }
         },
-        mounted: function () {
-            this.map = this.$refs.map.mapObject;
-            this.$refs.map.$mapCreated.then(() => {
-                this.mapLoaded = true
-            })
-        },
         watch: {
             cafesAddresses: function () {
                 this.getMapMarkers();
@@ -76,6 +70,12 @@
                     })
                 });
             }
+        },
+        mounted: function () {
+            this.map = this.$refs.map.mapObject;
+            this.$refs.map.$mapCreated.then(() => {
+                this.mapLoaded = true
+            })
         },
     }
 </script>

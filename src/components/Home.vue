@@ -19,6 +19,7 @@
 
     export default {
         name: "Home",
+        props: ['language'],
         components: {
             Banner,
             LatestArticles,
@@ -26,7 +27,6 @@
             OurStory,
             TasteOurCoffee,
         },
-        props: ['language'],
     }
 </script>
 

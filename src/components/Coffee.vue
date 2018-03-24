@@ -43,10 +43,10 @@
 
     export default {
         name: "Coffee",
+        props: ['language'],
         data: () => ({
             coffee: null,
         }),
-        props: ['language'],
         computed: {
             name: function () {
                 return this.coffee ? this.coffee.productName.value : ""
@@ -70,14 +70,14 @@
                 return this.coffee ? this.coffee.altitude.value + " feet" : ""
             },
         },
-        methods: {
-            onChange: function () {
-                this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
-            }
-        },
         watch: {
             language: function () {
                 CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
+            }
+        },
+        methods: {
+            onChange: function () {
+                this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
             }
         },
         created: function () {
@@ -85,11 +85,11 @@
             CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
             this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
         },
+        destroyed: function () {
+            CoffeeStore.removeChangeListener(this.onChange);
+        },
         components: {
             RichTextElement,
         },
-        destroyed: function () {
-            CoffeeStore.removeChangeListener(this.onChange);
-        }
     }
 </script>

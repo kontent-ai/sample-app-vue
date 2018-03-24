@@ -29,24 +29,11 @@
 
     export default {
         name: "Brewers",
+        props: ['language'],
         data: () => ({
             brewers: [],
             filter: null,
         }),
-        props: ['language'],
-        methods: {
-            formatPrice: function (price, language) {
-                return price.toLocaleString(language, {
-                    style: "currency",
-                    currency: "USD"
-                });
-            },
-            resolveContentLink,
-            onChange: function () {
-                this.brewers = BrewerStore.getBrewers(this.language);
-                this.filter = BrewerStore.getFilter();
-            }
-        },
         computed: {
             filteredBrewers: function () {
                 if (this.brewers.length === 0 || !this.filter) {
@@ -65,14 +52,27 @@
                 }))
             }
         },
-        created: function () {
-            BrewerStore.addChangeListener(this.onChange);
-            BrewerStore.provideBrewers(this.language);
-        },
         watch: {
             language: function () {
                 BrewerStore.provideBrewers(this.language);
             }
+        },
+        methods: {
+            formatPrice: function (price, language) {
+                return price.toLocaleString(language, {
+                    style: "currency",
+                    currency: "USD"
+                });
+            },
+            resolveContentLink,
+            onChange: function () {
+                this.brewers = BrewerStore.getBrewers(this.language);
+                this.filter = BrewerStore.getFilter();
+            }
+        },
+        created: function () {
+            BrewerStore.addChangeListener(this.onChange);
+            BrewerStore.provideBrewers(this.language);
         },
         destroyed: function () {
             BrewerStore.removeChangeListener(this.onChange);

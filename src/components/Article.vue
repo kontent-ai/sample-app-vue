@@ -40,10 +40,11 @@
                 })
             }
         },
-        created: function(){
-            ArticleStore.addChangeListener(this.onChange);
-            ArticleStore.provideArticle(this.$route.params.articleName, this.language);
-            this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+        watch: {
+            language: function(){
+                ArticleStore.provideArticle(this.$route.params.articleName, this.language);
+                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+            }
         },
         methods: {
             formatDate: function(value){
@@ -53,18 +54,17 @@
                 this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
             }
         },
-        watch: {
-            language: function(){
-                ArticleStore.provideArticle(this.$route.params.articleName, this.language);
-                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-            }
+        created: function(){
+            ArticleStore.addChangeListener(this.onChange);
+            ArticleStore.provideArticle(this.$route.params.articleName, this.language);
+            this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+        },
+        destroyed: function(){
+            ArticleStore.removeChangeListener(this.onChange);
         },
         components: {
             RichTextElement
         },
-        destroyed: function(){
-            ArticleStore.removeChangeListener(this.onChange);
-        }
 
     }
 </script>

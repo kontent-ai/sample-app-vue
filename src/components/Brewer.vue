@@ -30,13 +30,13 @@
 
     export default {
         name: "Brewer",
+        props: ['language'],
         data: () => ({
             brewer: null,
             name: "",
             imageLink: "",
             descriptionElement: null,
         }),
-        props: ['language'],
         watch: {
             brewer: function(newBrewer){
                 if(!newBrewer){
@@ -60,11 +60,11 @@
             BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
             this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
         },
+        destroyed: function(){
+            BrewerStore.removeChangeListener(this.onChange);
+        },
         components: {
             RichTextElement,
         },
-        destroyed: function(){
-            BrewerStore.removeChangeListener(this.onChange);
-        }
     }
 </script>

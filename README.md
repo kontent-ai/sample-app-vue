@@ -1,4 +1,4 @@
-# Kentico Cloud sample Vue single-page application
+# Kentico Cloud sample Vue.js single-page application
 [![Build Status](https://api.travis-ci.org/Kentico/cloud-sample-app-vue.svg?branch=master)](https://travis-ci.org/Kentico/cloud-sample-app-vue)
 [![Deploy Status](https://img.shields.io/badge/deploy-surge-brightgreen.svg)](http://kentico-cloud-sample-app-vue.surge.sh)
 [![Forums](https://img.shields.io/badge/chat-on%20forums-orange.svg)](https://forums.kenticocloud.com)

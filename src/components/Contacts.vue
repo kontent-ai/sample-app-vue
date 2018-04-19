@@ -16,7 +16,7 @@
         <div>
             <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
             <div class="row">
-                <div v-for="model in cafeModels" class="col-md-6 col-lg-3" >
+                <div v-for="(model, index) in cafeModels" class="col-md-6 col-lg-3" :key="index">
                     <div @click="handleAddressClick(model)" class="cafe-tile cursor-hand js-scroll-to-map"
                          :data-address="model.dataAddress">
                         <div class="cafe-tile-content">

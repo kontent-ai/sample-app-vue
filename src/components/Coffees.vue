@@ -1,6 +1,6 @@
 <template>
     <div id="product-list" class="col-md-8 col-lg-9 product-list">
-        <div v-for="coffee in coffeesData" class="col-md-6 col-lg-4">
+        <div v-for="(coffee, index) in coffeesData" class="col-md-6 col-lg-4" :key="index">
             <article class="product-tile">
                 <router-link :to="coffee.link">
                     <h1 class="product-heading">{{coffee.name}}</h1>

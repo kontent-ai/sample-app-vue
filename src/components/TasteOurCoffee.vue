@@ -3,7 +3,7 @@
         <div>
             <h1 class="title-tab">{{$t('TasteOurCoffee.title')}}</h1>
         </div>
-        <div v-for="cafe in cafesData" class="col-xs-6 col-md-3">
+        <div v-for="(cafe, index) in cafesData" class="col-xs-6 col-md-3" :key="index">
             <div>
                 <router-link :to="cafesLink" class="ourcoffee-tile-link">
                 <h2 class="ourcoffee-tile-text center-text">{{cafe.name}}</h2>

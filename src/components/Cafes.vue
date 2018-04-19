@@ -2,7 +2,7 @@
     <div class="container">
         <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="ourCafe in ourCafesData" class="col-md-6" >
+            <div v-for="(ourCafe, index) in ourCafesData" class="col-md-6" :key="index">
                 <div class="cafe-image-tile js-scroll-to-map" :data-address="ourCafe.dataAddress">
                     <div class="cafe-image-tile-image-wrapper"
                          :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }">

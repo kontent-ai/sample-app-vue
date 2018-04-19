@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-for="(fact, index) in factsData">
+        <div v-for="(fact, index) in factsData" :key="index">
             <section v-if="index % 2 === 0" class="row text-and-image" :key="index">
                 <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6">

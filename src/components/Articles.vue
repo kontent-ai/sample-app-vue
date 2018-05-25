@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <template  v-for="(article, index) in articlesData">
-            <div v-if="index % 4 === 0" class="clear" :key="index">
-
+          <div :key="article.id">
+            <div v-if="index % 4 === 0" class="clear">
             </div>
-            <div class="col-md-3" :key="article.id">
+            <div class="col-md-3" >
                 <div class="article-tile">
                     <router-link :to="article.link">
                     <img :alt="'Article '  + article.title" class="article-tile-image" :src="article.imageLink" :title="'Article ' + article.title" />
@@ -22,6 +22,7 @@
                     </div>
                 </div>
             </div>
+          </div>
         </template>
     </div>
 </template>

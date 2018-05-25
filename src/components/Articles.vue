@@ -1,10 +1,10 @@
 <template>
     <div class="container">
         <template  v-for="(article, index) in articlesData">
-            <div v-if="index % 4 === 0" class="clear" :key="getNextKey()">
+            <div v-if="index % 4 === 0" class="clear" :key="index">
 
             </div>
-            <div class="col-md-3" :key="getNextKey()">
+            <div class="col-md-3" :key="article.id">
                 <div class="article-tile">
                     <router-link :to="article.link">
                     <img :alt="'Article '  + article.title" class="article-tile-image" :src="article.imageLink" :title="'Article ' + article.title" />
@@ -59,27 +59,16 @@
             formatDate: function(value){
                 return dateFormat(value, "mmmm d");
             },
-            getNextKey: function(){
-                return this.counter++;
-            },
-            resetIdCounter: function(){
-                this.counter = 0;
-            },
             onChange: function(){
-                this.resetIdCounter();
                 this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             }
         },
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
             ArticleStore.provideArticles(this.articleCount, this.language);
-            this.resetIdCounter();
             this.articles = ArticleStore.getArticles(this.articleCount, this.language);
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
 
-        },
-        beforeUpdate: function(){
-            this.resetIdCounter();
         },
         destroyed: function(){
             ArticleStore.removeChangeListener(this.onChange);

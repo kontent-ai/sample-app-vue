@@ -21,10 +21,10 @@
         </div>
         <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="location in locations">
+            <div v-for="(location, index) in locations" :key="index">
                 <h3>{{location}}</h3>
                 <p
-                        v-for="partnerCafeModel in partnerCafesData"
+                        v-for="(partnerCafeModel, index) in partnerCafesData" :key="index"
                         v-if="partnerCafeModel.location === location"
                 >
                     {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}

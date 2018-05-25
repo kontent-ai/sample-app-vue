@@ -27,52 +27,54 @@
 </template>
 
 <script>
-    import dateFormat from 'dateformat';
-    import ArticleStore from '../Stores/Article';
-    import { dateFormats } from '../Utilities/LanguageCodes'
+import dateFormat from "dateformat";
+import ArticleStore from "../Stores/Article";
+import { dateFormats } from "../Utilities/LanguageCodes";
 
-    export default {
-        name: "Articles",
-        props: ['language'],
-        data: () => ({
-            articles: [],
-            articleCount: 10,
-        }),
-        computed: {
-            articlesData: function(){
-                return this.articles.map(article => ({
-                    title: article.title.value,
-                    imageLink : article.teaserImage.value[0].url,
-                    postDate : this.formatDate(article.postDate.value),
-                    summary : article.summary.value,
-                    link : `/${this.language}/articles/${article.urlPattern.value}`,
-                }))
-            }
-        },
-        watch: {
-            language: function(){
-                ArticleStore.provideArticles(this.articleCount, this.language);
-                dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-            }
-        },
-        methods: {
-            formatDate: function(value){
-                return dateFormat(value, "mmmm d");
-            },
-            onChange: function(){
-                this.articles = ArticleStore.getArticles(this.articleCount, this.language);
-            }
-        },
-        created: function(){
-            ArticleStore.addChangeListener(this.onChange);
-            ArticleStore.provideArticles(this.articleCount, this.language);
-            this.articles = ArticleStore.getArticles(this.articleCount, this.language);
-            dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-
-        },
-        destroyed: function(){
-            ArticleStore.removeChangeListener(this.onChange);
-        }
+export default {
+  name: "Articles",
+  props: ["language"],
+  data: () => ({
+    articles: [],
+    articleCount: 10
+  }),
+  computed: {
+    articlesData: function() {
+      return this.articles.map(article => ({
+        title: article.title.value,
+        imageLink: article.teaserImage.value[0].url,
+        postDate: this.formatDate(article.postDate.value),
+        summary: article.summary.value,
+        link: `/${this.language}/articles/${article.urlPattern.value}`
+      }));
     }
+  },
+  watch: {
+    language: function() {
+      ArticleStore.provideArticles(this.articleCount, this.language);
+      dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+    }
+  },
+  methods: {
+    formatDate: function(value) {
+      return dateFormat(value, "mmmm d");
+    },
+    onChange: function() {
+      this.articles = ArticleStore.getArticles(
+        this.articleCount,
+        this.language
+      );
+    }
+  },
+  created: function() {
+    ArticleStore.addChangeListener(this.onChange);
+    ArticleStore.provideArticles(this.articleCount, this.language);
+    this.articles = ArticleStore.getArticles(this.articleCount, this.language);
+    dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+  },
+  destroyed: function() {
+    ArticleStore.removeChangeListener(this.onChange);
+  }
+};
 </script>
 

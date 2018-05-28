@@ -1,5 +1,5 @@
 // kentico cloud
-import { DeliveryClient, DeliveryClientConfig, TypeResolver } from 'kentico-cloud-delivery-typescript-sdk';
+import { DeliveryClient, TypeResolver } from 'kentico-cloud-delivery';
 
 const projectId = '975bf280-fd91-488c-994c-2f04416e5ee3';
 const previewApiKey = "";
@@ -41,11 +41,9 @@ function isPreview() {
   return previewApiKey !== "";
 }
 
-export default new DeliveryClient(
-  new DeliveryClientConfig(projectId, typeResolvers,
-    {
-      enablePreviewMode: isPreview(),
-      previewApiKey: previewApiKey
-    }
-  )
-)
+export default new DeliveryClient({
+  projectId: projectId,
+  typeResolvers: typeResolvers,
+  enablePreviewMode: isPreview(),
+  previewApiKey: previewApiKey
+})

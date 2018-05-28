@@ -42,7 +42,7 @@
         },
         watch: {
             language: function(){
-                ArticleStore.provideArticle(this.$route.params.articleName, this.language);
+                ArticleStore.provideArticle(this.$route.params.articleId, this.language);
                 dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
             }
         },
@@ -51,17 +51,17 @@
                 return dateFormat(value, "dddd, mmmm d, yyyy");
             },
             onChange: function(){
-                this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+                this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
             }
         },
         created: function(){
             ArticleStore.addChangeListener(this.onChange);
-            ArticleStore.provideArticle(this.$route.params.articleName, this.language);
+            ArticleStore.provideArticle(this.$route.params.articleId, this.language);
             dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-            this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+            this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
         },
         beforeUpdate: function(){
-            this.article = ArticleStore.getArticle(this.$route.params.articleName, this.language);
+            this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
         },
         destroyed: function(){
             ArticleStore.removeChangeListener(this.onChange);

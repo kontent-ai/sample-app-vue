@@ -57,7 +57,7 @@ let router = new Router({
             component: Articles,
         },
         {
-            path: "/:lang?/articles/:articleName",
+            path: "/:lang?/articles/:articleId",
             component: Article,
         },
         {

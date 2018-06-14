@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export const languageCodes = [
     'en-US', // default languages
     'es-ES'

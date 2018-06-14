@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "kentico-cloud-delivery-typescript-sdk": "^2.5.3",
+    "kentico-cloud-delivery": "^4.0.2",
+    "rxjs": "^6.2.0",
     "lodash": "^4.17.5",
     "twitter-widgets": "^1.0.0",
     "vue": "^2.5.13",

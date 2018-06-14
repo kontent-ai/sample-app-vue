@@ -1,4 +1,4 @@
-import {  ContentItem } from 'kentico-cloud-delivery-typescript-sdk';
+import {  ContentItem } from 'kentico-cloud-delivery';
 import {  resolveContentLink } from '../Utilities/ContentLinks';
 
 export class HeroUnit extends ContentItem {

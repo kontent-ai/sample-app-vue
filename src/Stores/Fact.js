@@ -18,7 +18,7 @@ let fetchFacts = (language) => {
         query.languageParameter(language);
     }
 
-    query.get()
+    query.getObservable()
         .subscribe(response => {
             if(language){
                 facts[language] = response.item.facts;

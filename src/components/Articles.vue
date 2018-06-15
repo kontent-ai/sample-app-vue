@@ -46,7 +46,7 @@ export default {
         imageLink: article.teaserImage.value[0].url,
         postDate: this.formatDate(article.postDate.value),
         summary: article.summary.value,
-        link: `/${this.language}/articles/${article.urlPattern.value}`
+        link: `/${this.language}/articles/${article.system.id}`
       }));
     }
   },

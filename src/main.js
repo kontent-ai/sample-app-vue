@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
+import Configuration from './components/Admin/Configuration.vue'
 import Home from './components/Home.vue'
 import Store from './components/Store.vue'
 import CoffeeStore from './components/CoffeeStore.vue'
@@ -18,6 +19,7 @@ import VueI18n from 'vue-i18n'
 import * as en from './Localization/en-US.json'
 import * as es from './Localization/es-ES.json'
 import './index.css';
+import './components/Admin/Admin.css';
 
 Vue.config.productionTip = false;
 Vue.use(VueGoogleMaps, {
@@ -33,7 +35,12 @@ Vue.use(VueScrollTo, {
 });
 
 let router = new Router({
+    mode: 'history',
     routes: [
+        {
+            path: '/Admin/Configuration',
+            component: Configuration
+        },
         {
             path: '/:lang?/store',
             component: Store,

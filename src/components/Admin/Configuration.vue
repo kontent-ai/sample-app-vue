@@ -19,13 +19,13 @@
       <div class="content">
         <h1>Sample Site—Configuration</h1>
         <p>For your sample app to work, you should have a Kentico Cloud project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kentico Cloud credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
-        {ADD MESSAGE PLACEHOLDER!}
+        <SpinnerBox v-if="this.preparingProject" message="Waiting for the sample project to become ready..."></SpinnerBox>
       </div>
     </header>
     <section>
       <h2>Get a Project ID</h2>
       <p>You may wish to either select from existing projects or create a new sample project. The app will be configured with its project ID.</p>
-      <form onSubmit="alert('Implement functionality');">
+      <form @submit="openKenticoCloudProjectSelector">
         <input type="submit" class="button-secondary" value="Get Project ID from Kentico Cloud" />
       </form>
     </section>
@@ -34,7 +34,7 @@
         <h2>Set A Project ID Manually</h2>
         <p>Alternatively, you can configure your app manually by submitting a project ID below.</p>
         <div class="inline-controls">
-          <form onSubmit="alert('Implement functionality');">
+          <form @submit="handleSetProjectSubmit">
             <div class="form-group">
               <div class="form-group-label">
                 <label htmlFor="ProjectGuid">ProjectGuid</label>
@@ -44,7 +44,8 @@
                   id="ProjectGuid"
                   name="ProjectGuid"
                   placeholder="ProjectGuid"
-                  type="text"/>
+                  type="text"
+                  v-model="currentProjectInputValue"/>
               </div>
               <div class="message-validation">
                 <span class="field-validation-valid"></span>
@@ -62,17 +63,138 @@
           type="submit"
           class="button-secondary"
           value="Use the shared project"
-          onClick="alert('Implement functionality');"/>
+          @click="setNewProjectId(defaultProjectId)"/>
       </section>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: "Configuration"
-};
-</script>
+import Cookies from "universal-cookie";
+import { isUUID } from "validator";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from 'rxjs';
 
-<style>
-</style>
+import SpinnerBox from '../SpinnerBox.vue';
+
+import { resetClient, Client } from "../../Client";
+import { resetStores } from "../../Utilities/StoreManager";
+import {
+  defaultProjectId,
+  selectedProjectCookieName,
+  SAMPLE_PROJECT_ITEM_COUNT
+} from "../../Utilities/SelectedProject";
+
+const getWindowCenterPosition = (windowWidth, windowHeight) => {
+  const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : window.screenX;
+  const dualScreenTop = window.screenTop !== undefined ? window.screenTop : window.screenY;
+  const screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : window.screen.width;
+  const screenHeight = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : window.screen.height;
+  const left = ((screenWidth / 2) - (windowWidth / 2)) + dualScreenLeft;
+  const top = ((screenHeight / 2) - (windowHeight / 2)) + dualScreenTop;
+  return { left, top };
+}
+
+export default {
+  name: "Configuration",
+  data: () => ({
+    currentProjectInputValue: '',
+    preparingProject: false,
+    unsubscribeSubject: new Subject(),
+    defaultProjectId: defaultProjectId
+  }),
+  created() {
+    this.currentProjectInputValue = this.projectIdCookie;
+  },
+  mounted() {
+    window.addEventListener("message", this.receiveMessage, false);
+  },
+  beforeDestroy(){
+    window.removeEventListener("message", this.receiveMessage);
+
+  },
+  methods: {
+    handleSetProjectSubmit(event) {
+      event.preventDefault();
+      const newProjectId = this.currentProjectInputValue;
+      this.setNewProjectId(newProjectId);
+    },
+    unsubscribe() {
+      this.unsubscribe.next();
+      this.unsubscribe.complete();
+      this.unsubscribeSubject = new Subject();
+    },
+    setNewProjectId(newProjectId, newlyGeneratedProject) {
+      if (!isUUID(newProjectId)) {
+        const message = `Selected project (${newProjectId}) is not a valid GUID`;
+        console.error(message);
+        alert(message);
+        this.currentProjectInputValue = this.projectIdCookie;
+        return;
+      }
+
+      resetClient(newProjectId);
+      resetStores();
+      if (newlyGeneratedProject) {
+        this.waitUntilProjectAccessible(newProjectId);
+        this.preparingProject = true;
+        return;
+      }
+      this.redirectToHome(newProjectId);
+    },
+    waitUntilProjectAccessible(newProjectId) {
+      setTimeout(() => {
+        Client.items()
+          .elementsParameter(["id"])
+          .depthParameter(0)
+          .getObservable()
+          .pipe(takeUntil(this.unsubscribeSubject))
+          .subscribe(response => {
+            if (response.items.length === SAMPLE_PROJECT_ITEM_COUNT) {
+              this.preparingProject = false;
+              this.redirectToHome(newProjectId);
+            } else {
+              this.waitUntilProjectAccessible(newProjectId);
+            }
+          });
+      }, 2000);
+    },
+    redirectToHome(newProjectId) {
+      const infoMessage =
+        newProjectId === defaultProjectId
+          ? `You've configured your app to with a project ID of a shared Kentico Cloud project.`
+          : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kenticocloud.com/.`;
+      this.$router.push(`/?infoMessage=${infoMessage}`);
+    },
+    receiveMessage(event) {
+    if (event.origin.toLowerCase() !== "https://app.kenticocloud.com")
+      return;
+
+    if (!event.data.projectGuid) {
+      return;
+    }
+
+    this.setNewProjectId(event.data.projectGuid, event.data.newlyGeneratedProject);
+    },
+    openKenticoCloudProjectSelector(event) {
+      event.preventDefault();
+      const windowWidth = 800;
+      const windowHeight = 800;
+      const { left, top } = getWindowCenterPosition(windowWidth, windowHeight);
+
+      window.open("https://app.kenticocloud.com/sample-site-configuration", "Kentico Cloud",
+        `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
+        ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`);
+    },
+
+  },
+  computed: {
+    cookies() { return new Cookies(document.cookie)},
+    projectIdCookie() { return this.cookies.get(selectedProjectCookieName)}
+  },
+  components: {
+    SpinnerBox
+  }
+};
+
+</script>

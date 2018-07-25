@@ -38,6 +38,7 @@
                 </div>
             </div>
         </div>
+        <MessageBox v-if="infoMessageText" :message="infoMessageText" />
         <div class="header-row">
             <div class="container">
                 <div class="col-xs-8 col-md-8 col-lg-4 logo">
@@ -52,10 +53,11 @@
 
 <script>
     import { LogAboutUs }from '../Utilities/ActivityLogging'
+    import MessageBox from './MessageBox'    
 
     export default {
         name: 'Header',
-        props: ['language', 'changeLang'],
+        props: ['language', 'changeLang', 'infoMessageText'],
         computed: {
             homeRoute: function(){
                 return '/' + this.language;
@@ -74,10 +76,13 @@
             },
             contactsRoute: function(){
                 return '/' + this.language + '/' + 'contacts';
-            },
+            }
         },
         methods: {
             LogAboutUs,
+        },
+        components: {
+            MessageBox
         }
     }
 </script>

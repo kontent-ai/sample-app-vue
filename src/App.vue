@@ -1,6 +1,6 @@
 <template>
     <div v-if="this.$route.path !== '/Admin/Configuration'" id="app" class="application-content">
-        <Header :language="language" :changeLang="changeLang"/>
+        <Header :language="language" :changeLang="changeLang" :infoMessageText="infoMessageText"/>
         <router-view :language="language"/>
         <Footer :language="language"/>
     </div>
@@ -10,9 +10,15 @@
 </template>
 
 <script>
+import Cookies from "universal-cookie";
+import qs from 'qs';
+
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
-import Configuration from "./components/Admin/Configuration.vue";
+
+import { selectedProjectCookieName, projectConfigurationPath } from './Utilities/SelectedProject';
+
+
 import {
   languageCodes,
   languageCodesLowerCase,
@@ -21,9 +27,19 @@ import {
 
 export default {
   name: "app",
+  beforeCreate(){
+    const cookies = new Cookies(document.cookie);
+    const projectId = cookies.get(selectedProjectCookieName)
+    if (!projectId) {
+      this.$router.push(projectConfigurationPath);
+    }
+  },
   computed: {
     language: function() {
       return this.$i18n.locale;
+    },
+    infoMessageText: function() {
+      return qs.parse(location.search.slice(1)).infoMessage;
     }
   },
   components: {

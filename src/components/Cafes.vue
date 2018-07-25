@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import CafeStore from "../Stores/Cafe";
+import { CafeStore } from "../Stores/Cafe";
 
 export default {
   name: "Cafes",

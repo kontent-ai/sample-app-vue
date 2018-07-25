@@ -25,8 +25,8 @@
 </template>
 
 <script>
+    import { FactStore } from '../Stores/Fact'
     import RichTextElement from './RichTextElement.vue'
-    import FactStore from '../Stores/Fact'
 
     export default {
         name: "About",

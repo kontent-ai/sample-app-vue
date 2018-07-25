@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import CafeStore from '../Stores/Cafe'
+    import { CafeStore } from '../Stores/Cafe'
     import ContactMap from './ContactMap.vue'
     import VueScrollTo from 'vue-scrollto'
 

@@ -1,4 +1,4 @@
-import Client from "../Client.js";
+import { Client } from "../Client.js";
 
 import { initLanguageCodeObject, defaultLanguage, languageCodes } from '../Utilities/LanguageCodes'
 

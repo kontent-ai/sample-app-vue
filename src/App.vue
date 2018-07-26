@@ -34,12 +34,12 @@ export default {
       this.$router.push(projectConfigurationPath);
     }
   },
+  data: () => ({
+    infoMessageText : ''
+  }),
   computed: {
     language: function() {
       return this.$i18n.locale;
-    },
-    infoMessageText: function() {
-      return qs.parse(location.search.slice(1)).infoMessage;
     }
   },
   components: {
@@ -48,8 +48,12 @@ export default {
   },
   created: function() {
     this.$i18n.locale = getLanguageCode(this.$route.path);
+    this.infoMessageText = this.getInfoMessage();
   },
   methods: {
+    getInfoMessage: function() {
+      return qs.parse(location.search.slice(1)).infoMessage;
+    },
     changeLang: function(newLanguage) {
       if (
         this.language === newLanguage ||
@@ -75,6 +79,7 @@ export default {
     $route: {
       deep: true,
       handler: function() {
+        this.infoMessageText = this.getInfoMessage();
         const newLanguage = this.$route.path.split("/")[1];
         if (
           this.language === newLanguage ||

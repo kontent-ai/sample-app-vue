@@ -57,7 +57,7 @@
       </section>
       <section class="section-secondary">
         <h2>Use the Shared Project</h2>
-        <p>Alternatively, you may wish to use the shared project (project ID "{TODO Add binding for defaultProjectId}").</p>
+        <p>Alternatively, you may wish to use the shared project (project ID "{{defaultProjectId}}").</p>
         <p><strong>Note:</strong> You cannot edit content in the shared project.</p>
         <input
           type="submit"

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import ArticleStore from '../Stores/Article'
+    import { ArticleStore } from '../Stores/Article'
     import dateFormat from 'dateformat'
     import { dateFormats } from '../Utilities/LanguageCodes'
 

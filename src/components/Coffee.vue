@@ -38,7 +38,7 @@
 </template>
 
 <script>
-    import CoffeeStore from '../Stores/Coffee'
+    import { CoffeeStore } from '../Stores/Coffee'
     import RichTextElement from './RichTextElement.vue'
 
     export default {

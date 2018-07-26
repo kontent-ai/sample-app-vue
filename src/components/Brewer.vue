@@ -25,7 +25,7 @@
 </template>
 
 <script>
-    import BrewerStore from '../Stores/Brewer'
+    import { BrewerStore } from '../Stores/Brewer'
     import RichTextElement from './RichTextElement.vue'
 
     export default {

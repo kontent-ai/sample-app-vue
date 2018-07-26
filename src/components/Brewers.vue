@@ -24,8 +24,8 @@
 </template>
 
 <script>
-    import BrewerStore from '../Stores/Brewer'
-    import {resolveContentLink} from '../Utilities/ContentLinks'
+    import { BrewerStore } from '../Stores/Brewer'
+    import { resolveContentLink } from '../Utilities/ContentLinks'
 
     export default {
         name: "Brewers",

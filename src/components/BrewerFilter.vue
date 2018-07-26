@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import BrewerStore from "../Stores/Brewer";
+import { BrewerStore } from "../Stores/Brewer";
 
 export default {
   name: "BrewerFilter",

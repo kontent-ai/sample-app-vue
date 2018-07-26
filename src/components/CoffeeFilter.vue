@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import CoffeeStore from "../Stores/Coffee";
+import { CoffeeStore } from "../Stores/Coffee";
 
 export default {
   name: "CoffeeFilter",

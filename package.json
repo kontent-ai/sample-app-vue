@@ -10,9 +10,12 @@
   "dependencies": {
     "dateformat": "^3.0.3",
     "kentico-cloud-delivery": "^4.0.2",
-    "rxjs": "^6.2.0",
     "lodash": "^4.17.5",
+    "qs": "^6.5.2",
+    "rxjs": "^6.2.0",
     "twitter-widgets": "^1.0.0",
+    "universal-cookie": "^2.2.0",
+    "validator": "^10.4.0",
     "vue": "^2.5.13",
     "vue-i18n": "^7.6.0",
     "vue-i18n-loader": "^1.0.0",

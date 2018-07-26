@@ -29,7 +29,7 @@
 
 <script>
 import dateFormat from "dateformat";
-import ArticleStore from "../Stores/Article";
+import { ArticleStore } from "../Stores/Article";
 import { dateFormats } from "../Utilities/LanguageCodes";
 
 export default {

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="this.$route.path !== '/Admin/Configuration'" id="app" class="application-content">
+    <div v-if="this.$route.path !== projectConfigurationPath" id="app" class="application-content">
         <Header :language="language" :changeLang="changeLang" :infoMessageText="infoMessageText"/>
         <router-view :language="language"/>
         <Footer :language="language"/>
@@ -18,7 +18,6 @@ import Footer from "./components/Footer.vue";
 
 import { selectedProjectCookieName, projectConfigurationPath } from './Utilities/SelectedProject';
 
-
 import {
   languageCodes,
   languageCodesLowerCase,
@@ -35,7 +34,8 @@ export default {
     }
   },
   data: () => ({
-    infoMessageText : ''
+    infoMessageText : '',
+    projectConfigurationPath : projectConfigurationPath
   }),
   computed: {
     language: function() {

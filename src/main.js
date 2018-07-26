@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueScrollTo from 'vue-scrollto'
+import VueI18n from 'vue-i18n'
+import * as VueGoogleMaps from 'vue2-google-maps'
+
 import App from './App.vue'
 import Configuration from './components/Admin/Configuration.vue'
 import Home from './components/Home.vue'
@@ -13,11 +17,12 @@ import Coffee from './components/Coffee.vue'
 import Brewer from './components/Brewer.vue'
 import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
-import * as VueGoogleMaps from 'vue2-google-maps'
-import VueScrollTo from 'vue-scrollto'
-import VueI18n from 'vue-i18n'
+
+import { projectConfigurationPath } from './Utilities/SelectedProject'
+
 import * as en from './Localization/en-US.json'
 import * as es from './Localization/es-ES.json'
+
 import './index.css';
 import './components/Admin/Admin.css';
 
@@ -38,7 +43,7 @@ let router = new Router({
     mode: 'history',
     routes: [
         {
-            path: '/Admin/Configuration',
+            path: projectConfigurationPath,
             component: Configuration
         },
         {

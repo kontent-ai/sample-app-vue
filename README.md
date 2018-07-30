@@ -15,9 +15,13 @@ This is a sample website written in JavaScript utilizing the Kentico Cloud Deliv
 5. Type `npm run serve` to start a development server.
 6. The application opens in your browser at <http://localhost:8080>.
 
-After starting, the sample application retrieves content from the default Kentico Cloud sample project.
+### Connecting to your sample project
 
-## Preview content from your project
+At the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kentico Cloud sample project or create a new one. You'll also be able to start a trial and convert to a free plan when the trial expires. 
+
+Alternatively, you can connect your project manually as per the chapter below.
+
+#### Connecting to your project manually
 
 If you already have a Kentico Cloud account and you want to connect the sample application to a project of your own, you need to provide your Project ID and your Preview API key to authorize requests to the Delivery Preview API. For example, you can connect the application to your modified version of the sample project.
 

@@ -23,9 +23,21 @@ Alternatively, you can connect your project manually as per the chapter below.
 
 #### Connecting to your project manually
 
-If you already have a Kentico Cloud account and you want to connect the sample application to a project of your own, you need to provide your Project ID and your Preview API key to authorize requests to the Delivery Preview API. For example, you can connect the application to your modified version of the sample project.
+If you want to change the source Kentico Cloud project, follow these steps:
 
-To preview content in the sample application, follow these steps:
+1. In Kentico Cloud, choose Project settings from the app menu.
+2. Under Development, choose API keys.
+3. Copy your Project ID and Preview API key.
+4. Open the `src\Client.js` file in the sample application folder.
+5. Find the `projectId` constant.
+6. Change the values of the constants using the Project ID key you copied.
+7. Save the file.
+
+When you now run the application, it will retrieve content from your sample project.
+
+## Previewing content from your project
+
+To preview unpublished content in the sample application, follow these steps:
 
 1. In Kentico Cloud, choose Project settings from the app menu.
 2. Under Development, choose API keys.
@@ -58,9 +70,9 @@ You can find the Delivery and other SDKs at <https://github.com/Kentico>.
 
 ## Tracking visitors and their activity
 
-By default you can see sample visitor data in Kentico Cloud, even if you already feed the single-page application with your own content. Tracking real visitors needs to be set up separately and here's how to.
+By default, you can see sample visitor data in Kentico Cloud, even if you already feed the single-page application with your own content. Tracking real visitors needs to be set up separately and here's how to.
 
-In single-page applications you have to use custom activities to track visitor activity. This is how you set up tracking visits of About Us page:
+In single-page applications, you have to use custom activities to track visitor activity. This is how you set up tracking visits of About Us page:
 
 1. In Kentico Cloud, choose Project settings from the app menu.
 2. Under Development, choose API keys.
@@ -80,4 +92,4 @@ When you now run the application and visit the About Us page, you should be able
 
 ## Deployment
 
-You can use eg. [surge](http://surge.sh/) to deploy your app live. Check out the step-by-step guide on our [blog](https://kenticocloud.com/blog/3-steps-to-rapidly-deploy-headless-single-page-app).
+You can use, for example, [surge](http://surge.sh/) to deploy your app live. Check out the step-by-step guide on our [blog](https://kenticocloud.com/blog/3-steps-to-rapidly-deploy-headless-single-page-app).

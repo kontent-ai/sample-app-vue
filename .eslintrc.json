@@ -1,0 +1,48 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:vue/essential"
+  ],
+  "rules": {
+    "indent": [
+      "error",
+      2
+    ],
+    "vue/html-indent": [
+      "error",
+      4,
+      {
+        "attribute": 1,
+        "closeBracket": 0,
+        "alignAttributesVertically": true,
+        "ignores": []
+      }
+    ],
+    "vue/html-closing-bracket-newline": [
+      "error",
+      {
+        "singleline": "never",
+        "multiline": "always"
+      }
+    ],
+    "vue/max-attributes-per-line": [
+      2,
+      {
+        "singleline": 1,
+        "multiline": {
+          "max": 1,
+          "allowFirstLine": false
+        }
+      }
+    ]
+  }
+}

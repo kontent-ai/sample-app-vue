@@ -17,6 +17,10 @@
       "error",
       2
     ],
+    "quotes": [
+      "error",
+      "single"
+    ],
     "vue/html-indent": [
       "error",
       4,

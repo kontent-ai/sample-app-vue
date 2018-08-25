@@ -2,17 +2,29 @@
     <div class="container">
         <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="(ourCafe, index) in ourCafesData" class="col-md-6" :key="index">
-                <div class="cafe-image-tile js-scroll-to-map" :data-address="ourCafe.dataAddress">
-                    <div class="cafe-image-tile-image-wrapper"
-                         :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }">
+            <div 
+                v-for="(ourCafe, index) in ourCafesData" 
+                class="col-md-6" 
+                :key="index"
+            >
+                <div 
+                    class="cafe-image-tile js-scroll-to-map" 
+                    :data-address="ourCafe.dataAddress"
+                >
+                    <div 
+                        class="cafe-image-tile-image-wrapper"
+                        :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }"
+                    >
                     </div>
                     <div class="cafe-image-tile-content">
                         <h3 class="cafe-image-tile-name">{{ourCafe.name}}</h3>
                         <address class="cafe-tile-address">
-                <span :name="ourCafe.name" class="cafe-tile-address-anchor">
-                  {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
-                </span>
+                            <span 
+                                :name="ourCafe.name" 
+                                class="cafe-tile-address-anchor"
+                            >
+                                {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
+                            </span>
                         </address>
                         <p>{{ourCafe.phone}}</p>
                     </div>
@@ -21,11 +33,15 @@
         </div>
         <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
         <div class="row">
-            <div v-for="(location, index) in locations" :key="index">
+            <div 
+                v-for="(location, index) in locations" 
+                :key="index"
+            >
                 <h3>{{location}}</h3>
                 <p
-                        v-for="(partnerCafeModel, index) in partnerCafesData" :key="index"
-                        v-if="partnerCafeModel.location === location"
+                    v-for="(partnerCafeModel, index) in partnerCafesData" 
+                    :key="index"
+                    v-if="partnerCafeModel.location === location"
                 >
                     {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
                 </p>
@@ -35,11 +51,11 @@
 </template>
 
 <script>
-import { CafeStore } from "../Stores/Cafe";
+import { CafeStore } from '../Stores/Cafe';
 
 export default {
-  name: "Cafes",
-  props: ["language"],
+  name: 'Cafes',
+  props: ['language'],
   data: () => ({
     ourCafes: [],
     partnerCafes: []
@@ -73,7 +89,7 @@ export default {
     getModel: function(cafe) {
       let model = {
         name: cafe.system.name,
-        imageLink: "url(" + cafe.photo.value[0].url + ")",
+        imageLink: 'url(' + cafe.photo.value[0].url + ')',
         street: cafe.street.value,
         city: cafe.city.value,
         zipCode: cafe.zipCode.value,
@@ -81,10 +97,10 @@ export default {
         state: cafe.state.value,
         phone: cafe.phone.value
       };
-      model.dataAddress = model.city + ", " + model.street;
+      model.dataAddress = model.city + ', ' + model.street;
       model.countryWithState =
-        model.country + (model.state ? ", " + model.state : "");
-      model.location = model.city + ", " + model.countryWithState;
+        model.country + (model.state ? ', ' + model.state : '');
+      model.location = model.city + ', ' + model.countryWithState;
       return model;
     },
     onChange: function() {

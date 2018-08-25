@@ -7,6 +7,12 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
+  "lint-staged": {
+    "*.{js,vue}": ["vue-cli-service lint", "git add"]
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
   "dependencies": {
     "dateformat": "^3.0.3",
     "kentico-cloud-delivery": "^4.0.2",
@@ -28,6 +34,7 @@
     "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
     "@vue/cli-service": "^3.0.0-beta.3",
     "deepmerge": "^2.1.0",
+    "lint-staged": "^7.2.2",
     "vue-template-compiler": "^2.5.13"
   },
   "babel": {

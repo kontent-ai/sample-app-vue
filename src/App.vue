@@ -1,6 +1,14 @@
 <template>
-    <div v-if="this.$route.path !== projectConfigurationPath" id="app" class="application-content">
-        <Header :language="language" :changeLang="changeLang" :infoMessageText="infoMessageText"/>
+    <div 
+        v-if="this.$route.path !== projectConfigurationPath" 
+        id="app" 
+        class="application-content"
+    >
+        <Header 
+            :language="language" 
+            :changeLang="changeLang" 
+            :infoMessageText="infoMessageText"
+        />
         <router-view :language="language"/>
         <Footer :language="language"/>
     </div>
@@ -10,11 +18,11 @@
 </template>
 
 <script>
-import Cookies from "universal-cookie";
+import Cookies from 'universal-cookie';
 import qs from 'qs';
 
-import Header from "./components/Header.vue";
-import Footer from "./components/Footer.vue";
+import Header from './components/Header.vue';
+import Footer from './components/Footer.vue';
 
 import { selectedProjectCookieName, projectConfigurationPath } from './Utilities/SelectedProject';
 
@@ -22,10 +30,10 @@ import {
   languageCodes,
   languageCodesLowerCase,
   getLanguageCode
-} from "./Utilities/LanguageCodes";
+} from './Utilities/LanguageCodes';
 
 export default {
-  name: "app",
+  name: 'app',
   beforeCreate(){
     const cookies = new Cookies(document.cookie);
     const projectId = cookies.get(selectedProjectCookieName)
@@ -62,8 +70,8 @@ export default {
         return;
       }
 
-      const urlParts = this.$route.path.split("/");
-      const currentLanguage = this.$route.path.split("/")[1];
+      const urlParts = this.$route.path.split('/');
+      const currentLanguage = this.$route.path.split('/')[1];
       if (
         languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
       ) {
@@ -71,7 +79,7 @@ export default {
       } else {
         urlParts.splice(1, 0, newLanguage);
       }
-      this.$router.push(urlParts.join("/"));
+      this.$router.push(urlParts.join('/'));
       this.$i18n.locale = newLanguage;
     }
   },
@@ -80,7 +88,7 @@ export default {
       deep: true,
       handler: function() {
         this.infoMessageText = this.getInfoMessage();
-        const newLanguage = this.$route.path.split("/")[1];
+        const newLanguage = this.$route.path.split('/')[1];
         if (
           this.language === newLanguage ||
           languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0

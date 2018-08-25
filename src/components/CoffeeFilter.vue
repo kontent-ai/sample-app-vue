@@ -1,27 +1,47 @@
 <template>
     <aside class="col-md-4 col-lg-3 product-filter">
         <h4>{{$t('CoffeeFilter.coffeeProcessingTitle')}}</h4>
-        <div v-for="processing in processingsData" :key="processing.codename">
+        <div 
+            v-for="processing in processingsData" 
+            :key="processing.codename"
+        >
             <span class="checkbox js-postback">
-                <input :id="processing.codename" type="checkbox" :checked="processing.checked" />
-                <label :htmlFor="processing.codename" @click="processingOnChange(processing.codename)">{{processing.name}}</label>
+                <input 
+                    :id="processing.codename" 
+                    type="checkbox" 
+                    :checked="processing.checked"
+                />
+                <label 
+                    :htmlFor="processing.codename" 
+                    @click="processingOnChange(processing.codename)"
+                >{{processing.name}}</label>
             </span>
         </div>
         <h4>{{$t('CoffeeFilter.statusTitle')}}</h4>
-        <div v-for="productStatus in productStatusesData" :key="productStatus.codename">
+        <div 
+            v-for="productStatus in productStatusesData" 
+            :key="productStatus.codename"
+        >
             <span class="checkbox js-postback">
-            <input :id="productStatus.codename" type="checkbox" :checked="productStatus.checked" />
-            <label :htmlFor="productStatus.codename" @click="productStatusOnChange(productStatus.codename)">{{productStatus.name}}</label>
+                <input 
+                    :id="productStatus.codename" 
+                    type="checkbox" 
+                    :checked="productStatus.checked"
+                />
+                <label 
+                    :htmlFor="productStatus.codename" 
+                    @click="productStatusOnChange(productStatus.codename)"
+                >{{productStatus.name}}</label>
             </span>
         </div>
     </aside>
 </template>
 
 <script>
-import { CoffeeStore } from "../Stores/Coffee";
+import { CoffeeStore } from '../Stores/Coffee';
 
 export default {
-  name: "CoffeeFilter",
+  name: 'CoffeeFilter',
   data: () => ({
     filter: null,
     processings: [],

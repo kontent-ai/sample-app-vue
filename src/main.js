@@ -28,91 +28,91 @@ import './components/Admin/Admin.css';
 
 Vue.config.productionTip = false;
 Vue.use(VueGoogleMaps, {
-    load: {
-        key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
-    }
+  load: {
+    key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
+  }
 });
 Vue.use(VueI18n);
 Vue.use(Router);
 Vue.use(VueScrollTo, {
-    duration: 1000,
-    easing: "ease-in-out",
+  duration: 1000,
+  easing: 'ease-in-out',
 });
 
 let router = new Router({
-    mode: 'history',
-    routes: [
+  mode: 'history',
+  routes: [
+    {
+      path: projectConfigurationPath,
+      component: Configuration
+    },
+    {
+      path: '/:lang?/store',
+      component: Store,
+      children: [
         {
-            path: projectConfigurationPath,
-            component: Configuration
+          path: 'coffees',
+          component: CoffeeStore,
         },
         {
-            path: '/:lang?/store',
-            component: Store,
-            children: [
-                {
-                    path: "coffees",
-                    component: CoffeeStore,
-                },
-                {
-                    path: "brewers",
-                    component: BrewerStore,
-                },
-                {
-                    path: "",
-                    component: CoffeeStore,
-                }
-            ]
+          path: 'brewers',
+          component: BrewerStore,
         },
         {
-            path: "/:lang?/articles",
-            component: Articles,
-        },
-        {
-            path: "/:lang?/articles/:articleId",
-            component: Article,
-        },
-        {
-            path: '/:lang?/about',
-            component: About,
-        },
-        {
-            path: "/:lang?/cafes",
-            component: Cafes,
-        },
-        {
-            path: "/:lang?/contacts",
-            component: Contacts,
-        },
-        {
-            path: "/:lang?/coffees/:coffeeSlug",
-            component: Coffee,
-        },
-        {
-            path: "/:lang?/brewers/:brewerSlug",
-            component: Brewer,
-        },
-        {
-            path: '/:lang?',
-            component: Home,
-        },
-        {
-            path: "*",
-            redirect: "/",
+          path: '',
+          component: CoffeeStore,
         }
-    ]
+      ]
+    },
+    {
+      path: '/:lang?/articles',
+      component: Articles,
+    },
+    {
+      path: '/:lang?/articles/:articleId',
+      component: Article,
+    },
+    {
+      path: '/:lang?/about',
+      component: About,
+    },
+    {
+      path: '/:lang?/cafes',
+      component: Cafes,
+    },
+    {
+      path: '/:lang?/contacts',
+      component: Contacts,
+    },
+    {
+      path: '/:lang?/coffees/:coffeeSlug',
+      component: Coffee,
+    },
+    {
+      path: '/:lang?/brewers/:brewerSlug',
+      component: Brewer,
+    },
+    {
+      path: '/:lang?',
+      component: Home,
+    },
+    {
+      path: '*',
+      redirect: '/',
+    }
+  ]
 });
 
 let i18n = new VueI18n({
-    locale: 'en-US',
-    messages: {
-        'en-US': en,
-        'es-ES': es,
-    },
+  locale: 'en-US',
+  messages: {
+    'en-US': en,
+    'es-ES': es,
+  },
 });
 
 new Vue({
-    router,
-    i18n,
-    render: h => h(App)
+  router,
+  i18n,
+  render: h => h(App)
 }).$mount('#app');

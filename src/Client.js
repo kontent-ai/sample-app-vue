@@ -47,7 +47,7 @@ if (currentProjectId) {
   currentProjectId = defaultProjectId;
 }
 
-const isPreview = () => previewApiKey !== "";
+const isPreview = () => previewApiKey !== '';
 
 let Client = new DeliveryClient({
   projectId: currentProjectId,

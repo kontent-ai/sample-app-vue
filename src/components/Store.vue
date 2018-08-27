@@ -1,7 +1,10 @@
 <template>
     <div class="container">
         <div class="container product-page-container">
-            <nav role="navigation" class="sub-menu row">
+            <nav 
+                role="navigation" 
+                class="sub-menu row"
+            >
                 <div class="store-menu-list row">
                     <ul>
                         <li>
@@ -19,9 +22,9 @@
 </template>
 
 <script>
-    export default {
-        name: "Store",
-        props: ['language'],
-    }
+export default {
+  name: 'Store',
+  props: ['language'],
+}
 </script>
 

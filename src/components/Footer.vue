@@ -15,11 +15,29 @@
                         </div>
                         <div class="col-md-4 col-lg-4 footer-col">
                             <h3>{{$t('Footer.followUs')}}</h3>
-                            <a class="followus-link" href="https://www.facebook.com/Dancing.Goat" target="_blank">
-                            <img alt="Follow us on Facebook" class="" src="/Images/facebook-icon.png" :title="$t('Footer.followUsOnFacebook')" />
+                            <a 
+                                class="followus-link" 
+                                href="https://www.facebook.com/Dancing.Goat" 
+                                target="_blank"
+                            >
+                                <img 
+                                    alt="Follow us on Facebook" 
+                                    class="" 
+                                    src="/Images/facebook-icon.png" 
+                                    :title="$t('Footer.followUsOnFacebook')"
+                                />
                             </a>
-                            <a class="followus-link" href="https://twitter.com/DancingGoat78" target="_blank">
-                            <img alt="Follow us on Twitter" class="" src="/Images/twitter-icon.png" :title="$t('Footer.followUsOnTwitter')" />
+                            <a 
+                                class="followus-link" 
+                                href="https://twitter.com/DancingGoat78" 
+                                target="_blank"
+                            >
+                                <img 
+                                    alt="Follow us on Twitter" 
+                                    class="" 
+                                    src="/Images/twitter-icon.png" 
+                                    :title="$t('Footer.followUsOnTwitter')"
+                                />
                             </a>
                         </div>
                         <div class="col-md-4 col-lg-4 footer-col"></div>
@@ -34,10 +52,10 @@
 </template>
 
 <script>
-    export default {
-        name: "Footer",
-        data: () => ({
-            email: "dancinggoat@localhost.local",
-        }),
-    }
+export default {
+  name: 'Footer',
+  data: () => ({
+    email: 'dancinggoat@localhost.local',
+  }),
+}
 </script>

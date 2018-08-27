@@ -1,161 +1,169 @@
-import Client from "../Client.js";
+import { Client } from '../Client.js';
 
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
 
 let changeListeners = [];
-let coffees = initLanguageCodeObject();
-let processings = [];
-let productStatuses = [];
+const resetStore = () => ({
+  coffees: initLanguageCodeObject(),
+  processings: [],
+  productStatuses: []
+});
+let { coffees, processings, productStatuses } = resetStore();
 
 let notifyChange = () => {
-    changeListeners.forEach((listener) => {
-        listener();
-    });
+  changeListeners.forEach((listener) => {
+    listener();
+  });
 }
 
 let fetchCoffees = (language) => {
 
-    var query = Client.items()
-        .type('coffee')
-        .orderParameter('elements.product_name');
+  var query = Client.items()
+    .type('coffee')
+    .orderParameter('elements.product_name');
 
-    if (language) {
-        query.languageParameter(language);
-    }
+  if (language) {
+    query.languageParameter(language);
+  }
 
-    query.getObservable()
-        .subscribe(response => {
-            if (language) {
-                coffees[language] = response.items;
-            } else {
-                coffees[defaultLanguage] = response.items;
-            }
-            notifyChange();
-        });
+  query.getObservable()
+    .subscribe(response => {
+      if (language) {
+        coffees[language] = response.items;
+      } else {
+        coffees[defaultLanguage] = response.items;
+      }
+      notifyChange();
+    });
 }
 
 let fetchProcessings = () => {
-    Client.taxonomy("processing")
-        .getObservable()
-        .subscribe(response => {
-            processings = response.taxonomy.terms;
-            notifyChange();
-        });
+  Client.taxonomy('processing')
+    .getObservable()
+    .subscribe(response => {
+      processings = response.taxonomy.terms;
+      notifyChange();
+    });
 };
 
 let fetchProductStatuses = () => {
-    Client.taxonomy("product_status")
-        .getObservable()
-        .subscribe(response => {
-            productStatuses = response.taxonomy.terms;
-            notifyChange();
-        });
+  Client.taxonomy('product_status')
+    .getObservable()
+    .subscribe(response => {
+      productStatuses = response.taxonomy.terms;
+      notifyChange();
+    });
 }
 
 export class Filter {
-    constructor() {
-        this.processings = [];
-        this.productStatuses = [];
+  constructor() {
+    this.processings = [];
+    this.productStatuses = [];
+  }
+
+  matches(coffee) {
+    return this.matchesProcessings(coffee) && this.matchesProductStatuses(coffee);
+  }
+
+  matchesProcessings(coffee) {
+    if (this.processings.length === 0) {
+      return true;
     }
 
-    matches(coffee) {
-        return this.matchesProcessings(coffee) && this.matchesProductStatuses(coffee);
+    let processings = coffee.processing.value.map(x => x.codename);
+
+    return this.processings.some(x => processings.includes(x));
+  }
+
+  matchesProductStatuses(coffee) {
+    if (this.productStatuses.length === 0) {
+      return true;
     }
 
-    matchesProcessings(coffee) {
-        if (this.processings.length === 0) {
-            return true;
-        }
+    let statuses = coffee.productStatus.value.map(x => x.codename);
 
-        let processings = coffee.processing.value.map(x => x.codename);
+    return this.productStatuses.some(x => statuses.includes(x));
+  }
 
-        return this.processings.some(x => processings.includes(x));
-    }
+  toggleProcessing(processing) {
+    let index = this.processings.indexOf(processing);
 
-    matchesProductStatuses(coffee) {
-        if (this.productStatuses.length === 0) {
-            return true;
-        }
+    if (index < 0) this.processings.push(processing); else this.processings.splice(index, 1);
+  }
 
-        let statuses = coffee.productStatus.value.map(x => x.codename);
+  toggleProductStatus(status) {
+    let index = this.productStatuses.indexOf(status);
 
-        return this.productStatuses.some(x => statuses.includes(x));
-    }
-
-    toggleProcessing(processing) {
-        let index = this.processings.indexOf(processing);
-
-        if (index < 0) this.processings.push(processing); else this.processings.splice(index, 1);
-    }
-
-    toggleProductStatus(status) {
-        let index = this.productStatuses.indexOf(status);
-
-        if (index < 0) this.productStatuses.push(status); else this.productStatuses.splice(index, 1);
-    }
+    if (index < 0) this.productStatuses.push(status); else this.productStatuses.splice(index, 1);
+  }
 }
 
 let coffeeFilter = new Filter();
 
-class CoffeeStore {
+class Coffee {
 
-    // Actions
+  // Actions
 
-    provideCoffee(coffeeSlug, language) {
-        fetchCoffees(language);
-    }
+  provideCoffee(coffeeSlug, language) {
+    fetchCoffees(language);
+  }
 
-    provideCoffees(language) {
-        fetchCoffees(language);
-    }
+  provideCoffees(language) {
+    fetchCoffees(language);
+  }
 
-    provideProcessings() {
-        fetchProcessings();
-    }
+  provideProcessings() {
+    fetchProcessings();
+  }
 
-    provideProductStatuses() {
-        fetchProductStatuses();
-    }
+  provideProductStatuses() {
+    fetchProductStatuses();
+  }
 
-    // Methods
+  // Methods
 
-    getCoffee(coffeeSlug, language) {
-        return coffees[language || defaultLanguage].find((coffee) => coffee.urlPattern.value === coffeeSlug);
-    }
+  getCoffee(coffeeSlug, language) {
+    return coffees[language || defaultLanguage].find((coffee) => coffee.urlPattern.value === coffeeSlug);
+  }
 
-    getCoffees(language) {
-        return coffees[language];
-    }
+  getCoffees(language) {
+    return coffees[language];
+  }
 
-    getProcessings() {
-        return processings;
-    }
+  getProcessings() {
+    return processings;
+  }
 
-    getProductStatuses() {
-        return productStatuses;
-    }
+  getProductStatuses() {
+    return productStatuses;
+  }
 
-    getFilter() {
-        return coffeeFilter;
-    }
+  getFilter() {
+    return coffeeFilter;
+  }
 
-    setFilter(filter) {
-        coffeeFilter = filter;
-        notifyChange();
-    }
+  setFilter(filter) {
+    coffeeFilter = filter;
+    notifyChange();
+  }
 
-    // Listeners
+  // Listeners
 
-    addChangeListener(listener) {
-        changeListeners.push(listener);
-    }
+  addChangeListener(listener) {
+    changeListeners.push(listener);
+  }
 
-    removeChangeListener(listener) {
-        changeListeners = changeListeners.filter((element) => {
-            return element !== listener;
-        });
-    }
+  removeChangeListener(listener) {
+    changeListeners = changeListeners.filter((element) => {
+      return element !== listener;
+    });
+  }
 
 }
 
-export default new CoffeeStore();
+let CoffeeStore = new Coffee();
+
+export {
+  CoffeeStore,
+  resetStore
+};

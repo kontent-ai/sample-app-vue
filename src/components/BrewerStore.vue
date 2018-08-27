@@ -8,16 +8,16 @@
 </template>
 
 <script>
-    import BrewerFilter from './BrewerFilter.vue'
-    import Brewers from './Brewers.vue'
+import BrewerFilter from './BrewerFilter.vue'
+import Brewers from './Brewers.vue'
 
-    export default {
-        name: "BrewerStore",
-        props: ['language'],
-        components: {
-            BrewerFilter,
-            Brewers
-        },
-    }
+export default {
+  name: 'BrewerStore',
+  props: ['language'],
+  components: {
+    BrewerFilter,
+    Brewers
+  },
+}
 </script>
 

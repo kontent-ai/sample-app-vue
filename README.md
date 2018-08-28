@@ -2,7 +2,6 @@
 [![Build Status](https://api.travis-ci.org/Kentico/cloud-sample-app-vue.svg?branch=master)](https://travis-ci.org/Kentico/cloud-sample-app-vue)
 [![Live Demo](https://img.shields.io/badge/live-demo-brightgreen.svg)](http://kentico-cloud-sample-app-vue.surge.sh)
 [![Forums](https://img.shields.io/badge/chat-on%20forums-orange.svg)](https://forums.kenticocloud.com)
-[![Analytics](https://ga-beacon.appspot.com/UA-69014260-4/Kentico/cloud-sample-app-vue?pixel)](https://github.com/igrigorik/ga-beacon)
 
 This is a sample website written in JavaScript utilizing the Kentico Cloud Delivery API to manage and retrieve content. You can register your account for free at <https://app.kenticocloud.com>.
 
@@ -93,3 +92,5 @@ When you now run the application and visit the About Us page, you should be able
 ## Deployment
 
 You can use, for example, [surge](http://surge.sh/) to deploy your app live. Check out the step-by-step guide on our [blog](https://kenticocloud.com/blog/3-steps-to-rapidly-deploy-headless-single-page-app).
+
+![Analytics](https://kentico-ga-beacon.azurewebsites.net/api/UA-69014260-4/Kentico/cloud-sample-app-vue?pixel)

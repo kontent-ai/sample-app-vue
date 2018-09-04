@@ -1,6 +1,9 @@
 import { Client } from '../Client.js';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
+let unsubscribe = new Subject();
 
 let changeListeners = [];
 const resetStore = () => ({
@@ -27,6 +30,7 @@ let fetchCoffees = (language) => {
   }
 
   query.getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       if (language) {
         coffees[language] = response.items;
@@ -40,6 +44,7 @@ let fetchCoffees = (language) => {
 let fetchProcessings = () => {
   Client.taxonomy('processing')
     .getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       processings = response.taxonomy.terms;
       notifyChange();
@@ -49,6 +54,7 @@ let fetchProcessings = () => {
 let fetchProductStatuses = () => {
   Client.taxonomy('product_status')
     .getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       productStatuses = response.taxonomy.terms;
       notifyChange();
@@ -159,11 +165,13 @@ class Coffee {
     });
   }
 
+  unsubscribe() {
+    unsubscribe.next();
+    unsubscribe.complete();
+    unsubscribe = new Subject();
+  }
 }
 
 let CoffeeStore = new Coffee();
 
-export {
-  CoffeeStore,
-  resetStore
-};
+export { CoffeeStore, resetStore };

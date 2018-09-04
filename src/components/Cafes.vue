@@ -2,16 +2,16 @@
     <div class="container">
         <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
         <div class="row">
-            <div 
-                v-for="(ourCafe, index) in ourCafesData" 
-                class="col-md-6" 
+            <div
+                v-for="(ourCafe, index) in ourCafesData"
+                class="col-md-6"
                 :key="index"
             >
-                <div 
-                    class="cafe-image-tile js-scroll-to-map" 
+                <div
+                    class="cafe-image-tile js-scroll-to-map"
                     :data-address="ourCafe.dataAddress"
                 >
-                    <div 
+                    <div
                         class="cafe-image-tile-image-wrapper"
                         :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }"
                     >
@@ -19,8 +19,8 @@
                     <div class="cafe-image-tile-content">
                         <h3 class="cafe-image-tile-name">{{ourCafe.name}}</h3>
                         <address class="cafe-tile-address">
-                            <span 
-                                :name="ourCafe.name" 
+                            <span
+                                :name="ourCafe.name"
                                 class="cafe-tile-address-anchor"
                             >
                                 {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
@@ -33,13 +33,13 @@
         </div>
         <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
         <div class="row">
-            <div 
-                v-for="(location, index) in locations" 
+            <div
+                v-for="(location, index) in locations"
                 :key="index"
             >
                 <h3>{{location}}</h3>
                 <p
-                    v-for="(partnerCafeModel, index) in partnerCafesData" 
+                    v-for="(partnerCafeModel, index) in partnerCafesData"
                     :key="index"
                     v-if="partnerCafeModel.location === location"
                 >
@@ -114,6 +114,9 @@ export default {
     CafeStore.providePartnerCafes(this.language);
     this.ourCafes = CafeStore.getCompanyCafes(this.language);
     this.partnerCafes = CafeStore.getPartnerCafes(this.language);
+  },
+  beforeDestroy: function() {
+    CafeStore.unsubscribe();
   },
   destroyed: function() {
     CafeStore.removeChangeListener(this.onChange);

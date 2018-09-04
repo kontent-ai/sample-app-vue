@@ -1,26 +1,23 @@
 import { Client } from '../Client.js';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
-
+let unsubscribe = new Subject();
 
 let changeListeners = [];
 const resetStore = () => ({
-  brewers: initLanguageCodeObject()
+  brewers: initLanguageCodeObject(),
+  manufacturers: [],
+  productStatuses: []
 });
-let { brewers } = resetStore();
-
-let manufacturersInitialized = false;
-let manufacturers = [];
-
-let productStatusesInitialized = false;
-let productStatuses = [];
+let { brewers, manufacturers, productStatuses } = resetStore();
 
 let notifyChange = () => {
   changeListeners.forEach((listener) => {
     listener();
   });
 }
-
 let fetchBrewers = (language) => {
 
   var query = Client.items()
@@ -32,6 +29,7 @@ let fetchBrewers = (language) => {
   }
 
   query.getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       if (language) {
         brewers[language] = response.items;
@@ -43,30 +41,22 @@ let fetchBrewers = (language) => {
 }
 
 let fetchManufacturers = () => {
-  if (manufacturersInitialized) {
-    return;
-  }
-
   Client.taxonomy('manufacturer')
     .getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       manufacturers = response.taxonomy.terms;
       notifyChange();
-      manufacturersInitialized = true;
     });
 }
 
 let fetchProductStatuses = () => {
-  if (productStatusesInitialized) {
-    return;
-  }
-
   Client.taxonomy('product_status')
     .getObservable()
+    .pipe(takeUntil(unsubscribe))
     .subscribe(response => {
       productStatuses = response.taxonomy.terms;
       notifyChange();
-      productStatusesInitialized = true;
     });
 }
 
@@ -189,11 +179,13 @@ class Brewer {
     });
   }
 
+  unsubscribe() {
+    unsubscribe.next();
+    unsubscribe.complete();
+    unsubscribe = new Subject();
+  }
 }
 
 let BrewerStore = new Brewer();
 
-export {
-  BrewerStore,
-  resetStore
-}
+export { BrewerStore, resetStore }

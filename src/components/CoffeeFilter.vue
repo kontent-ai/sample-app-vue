@@ -1,35 +1,35 @@
 <template>
     <aside class="col-md-4 col-lg-3 product-filter">
         <h4>{{$t('CoffeeFilter.coffeeProcessingTitle')}}</h4>
-        <div 
-            v-for="processing in processingsData" 
+        <div
+            v-for="processing in processingsData"
             :key="processing.codename"
         >
             <span class="checkbox js-postback">
-                <input 
-                    :id="processing.codename" 
-                    type="checkbox" 
+                <input
+                    :id="processing.codename"
+                    type="checkbox"
                     :checked="processing.checked"
                 />
-                <label 
-                    :htmlFor="processing.codename" 
+                <label
+                    :htmlFor="processing.codename"
                     @click="processingOnChange(processing.codename)"
                 >{{processing.name}}</label>
             </span>
         </div>
         <h4>{{$t('CoffeeFilter.statusTitle')}}</h4>
-        <div 
-            v-for="productStatus in productStatusesData" 
+        <div
+            v-for="productStatus in productStatusesData"
             :key="productStatus.codename"
         >
             <span class="checkbox js-postback">
-                <input 
-                    :id="productStatus.codename" 
-                    type="checkbox" 
+                <input
+                    :id="productStatus.codename"
+                    type="checkbox"
                     :checked="productStatus.checked"
                 />
-                <label 
-                    :htmlFor="productStatus.codename" 
+                <label
+                    :htmlFor="productStatus.codename"
                     @click="productStatusOnChange(productStatus.codename)"
                 >{{productStatus.name}}</label>
             </span>
@@ -91,6 +91,9 @@ export default {
     this.processings = CoffeeStore.getProcessings();
     this.productStatuses = CoffeeStore.getProductStatuses();
     this.filter = CoffeeStore.getFilter();
+  },
+  beforeDestroy: function() {
+    CoffeeStore.unsubscribe();
   },
   destroyed: function() {
     CoffeeStore.removeChangeListener(this.onChange);

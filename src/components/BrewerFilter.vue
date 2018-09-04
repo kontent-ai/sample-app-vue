@@ -1,9 +1,9 @@
 <template>
     <aside class="col-md-4 col-lg-3 product-filter">
         <h4>{{$t('BrewerFilter.manufacturerTitle')}}</h4>
-        <span 
-            v-for="manufacturer in manufacturersData" 
-            class="checkbox js-postback" 
+        <span
+            v-for="manufacturer in manufacturersData"
+            class="checkbox js-postback"
             :key="manufacturer.id"
         >
             <input
@@ -18,33 +18,33 @@
             >{{manufacturer.name}} </label>
         </span>
         <h4>{{$t('BrewerFilter.priceTitle')}}</h4>
-        <span 
-            v-for="priceRange in priceRangesData" 
-            class="checkbox js-postback" 
+        <span
+            v-for="priceRange in priceRangesData"
+            class="checkbox js-postback"
             :key="priceRange.id"
         >
-            <input 
-                v-bind:id="priceRange.id" 
-                type="checkbox" 
+            <input
+                v-bind:id="priceRange.id"
+                type="checkbox"
                 :checked="priceRange.checked"
             />
-            <label 
+            <label
                 v-bind:htmlFor="priceRange.id"
                 @click="priceRangeOnChange(priceRange.rawPriceRange)"
             >{{priceRange.formattedPriceRange}}</label>
         </span>
         <h4>{{$t('BrewerFilter.statusTitle')}}</h4>
-        <span 
-            v-for="productStatus in productStatusesData" 
-            class="checkbox js-postback" 
+        <span
+            v-for="productStatus in productStatusesData"
+            class="checkbox js-postback"
             :key="productStatus.id"
         >
-            <input 
-                :id="productStatus.id" 
-                type="checkbox" 
+            <input
+                :id="productStatus.id"
+                type="checkbox"
                 :checked="productStatus.checked"
             />
-            <label 
+            <label
                 :htmlFor="productStatus.id"
                 @click="productStatusOnChange(productStatus.codename)"
             >{{productStatus.name}}</label>
@@ -134,6 +134,9 @@ export default {
     this.filter = BrewerStore.getFilter();
     this.manufacturers = BrewerStore.getManufacturers();
     this.productStatuses = BrewerStore.getProductStatuses();
+  },
+  beforeDestroy: function() {
+    BrewerStore.unsubscribe();
   },
   destroyed: function() {
     BrewerStore.removeChangeListener(this.onChange);

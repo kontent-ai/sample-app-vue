@@ -1,10 +1,10 @@
 <template>
-    <div 
-        v-if="!article" 
+    <div
+        v-if="!article"
         class="container"
     ></div>
-    <div 
-        v-else 
+    <div
+        v-else
         class="container"
     >
         <article class="article-detail col-lg-9 col-md-12 article-detail-related-box">
@@ -14,17 +14,17 @@
             </div>
             <div class="row">
                 <div class="article-detail-image col-md-push-2 col-md-8">
-                    <img 
-                        :alt="articleData.title" 
-                        class="img-responsive" 
-                        :src="articleData.imageLink" 
+                    <img
+                        :alt="articleData.title"
+                        class="img-responsive"
+                        :src="articleData.imageLink"
                         :title="articleData.title"
                     />
                 </div>
             </div>
             <div class="row">
-                <RichTextElement 
-                    styleClass="article-detail-content" 
+                <RichTextElement
+                    styleClass="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
             </div>
@@ -68,7 +68,7 @@ export default {
       this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
     }
   },
-  created: function(){
+  mounted: function(){
     ArticleStore.addChangeListener(this.onChange);
     ArticleStore.provideArticle(this.$route.params.articleId, this.language);
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
@@ -76,6 +76,9 @@ export default {
   },
   beforeUpdate: function(){
     this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
+  },
+  beforeDestroy: function() {
+    ArticleStore.unsubscribe();
   },
   destroyed: function(){
     ArticleStore.removeChangeListener(this.onChange);

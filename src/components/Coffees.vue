@@ -1,27 +1,27 @@
 <template>
-    <div 
-        id="product-list" 
+    <div
+        id="product-list"
         class="col-md-8 col-lg-9 product-list"
     >
-        <div 
-            v-for="(coffee, index) in coffeesData" 
-            class="col-md-6 col-lg-4" 
+        <div
+            v-for="(coffee, index) in coffeesData"
+            class="col-md-6 col-lg-4"
             :key="index"
         >
             <article class="product-tile">
                 <router-link :to="coffee.link">
                     <h1 class="product-heading">{{coffee.name}}</h1>
                     <span v-if="coffee.hasNoProductStatus"/>
-                    <span 
-                        v-else 
+                    <span
+                        v-else
                         class="product-tile-status"
                     >
                         {{coffee.productStatusText}}
                     </span>
                     <figure class="product-tile-image">
-                        <img 
-                            :alt="coffee.name" 
-                            class="" 
+                        <img
+                            :alt="coffee.name"
+                            class=""
                             :src="coffee.imageLink"
                             :title="coffee.name"
                         />
@@ -39,6 +39,7 @@
 
 <script>
 import { CoffeeStore } from '../Stores/Coffee'
+import { resolveContentLink } from '../Utilities/ContentLinks'
 
 export default {
   name: 'Coffees',
@@ -59,7 +60,7 @@ export default {
         price: this.formatPrice(coffee.price.value, this.language),
         name: coffee.productName.value,
         imageLink: coffee.image.value[0].url,
-        link: `/${this.language}/coffees/${coffee.urlPattern.value}`,
+        link: resolveContentLink({ type: 'coffee', urlSlug: coffee.urlPattern.value }, this.language),
         hasNoProductStatus: coffee.productStatus.value.length === 0,
         productStatusText: coffee.productStatus.value.map(x => x.name).join(', ')
       }))
@@ -75,11 +76,12 @@ export default {
       return price.toLocaleString(language, {
         style: 'currency',
         currency: 'USD'
-      })
+      });
     },
+    resolveContentLink,
     onChange: function () {
-      this.filter = CoffeeStore.getFilter();
       this.coffees = CoffeeStore.getCoffees(this.language);
+      this.filter = CoffeeStore.getFilter();
     }
   },
   created: function () {
@@ -87,12 +89,12 @@ export default {
     CoffeeStore.provideCoffees(this.language);
     this.filter = CoffeeStore.getFilter();
     this.coffees = CoffeeStore.getCoffees(this.language);
-
+  },
+  beforeDestroy: function() {
+    CoffeeStore.unsubscribe();
   },
   destroyed: function () {
     CoffeeStore.removeChangeListener(this.onChange);
   }
 }
 </script>
-
-

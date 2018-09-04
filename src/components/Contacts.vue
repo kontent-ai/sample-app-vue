@@ -2,18 +2,18 @@
     <div class="container">
         <div class="col-md-12">
             <h2 class="contact-title">{{$t('Contacts.roasteryTitle')}}</h2>
-            <ul 
-                v-if="firstCafe" 
+            <ul
+                v-if="firstCafe"
                 class="contact-info"
             >
                 <li>{{firstCafe.phone}}</li>
-                <li><a 
-                    :href="'mailto:' + firstCafe.email" 
+                <li><a
+                    :href="'mailto:' + firstCafe.email"
                     target="_top"
                 >{{firstCafe.email}}</a></li>
                 <li>
-                    <a 
-                        @click="handleRoasteryClick" 
+                    <a
+                        @click="handleRoasteryClick"
                         :data-address="firstCafe.dataAddress"
                         class="js-scroll-to-map"
                     >{{firstCafe.dataAddress}},<br/>
@@ -25,21 +25,21 @@
         <div>
             <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
             <div class="row">
-                <div 
-                    v-for="(model, index) in cafeModels" 
-                    class="col-md-6 col-lg-3" 
+                <div
+                    v-for="(model, index) in cafeModels"
+                    class="col-md-6 col-lg-3"
                     :key="index"
                 >
-                    <div 
-                        @click="handleAddressClick(model)" 
+                    <div
+                        @click="handleAddressClick(model)"
                         class="cafe-tile cursor-hand js-scroll-to-map"
                         :data-address="model.dataAddress"
                     >
                         <div class="cafe-tile-content">
                             <h3 class="cafe-tile-name">{{model.name}}</h3>
                             <address class="cafe-tile-address">
-                                <a 
-                                    :name="model.name" 
+                                <a
+                                    :name="model.name"
                                     class="cafe-tile-address-anchor"
                                 >
                                     {{model.street}}, {{model.city}}<br/>{{model.zipCode}}, {{model.countryWithState}}
@@ -52,8 +52,8 @@
             </div>
         </div>
         <h2 class="map-title">{{$t('Contacts.mapTitle')}}</h2>
-        <ContactMap 
-            :cafesAddresses="cafesAddresses" 
+        <ContactMap
+            :cafesAddresses="cafesAddresses"
             :focusOnAddress="selectedAddress"
         />
     </div>
@@ -133,7 +133,9 @@ export default {
     CafeStore.addChangeListener(this.onChange);
     CafeStore.provideCompanyCafes(this.language);
     this.cafes = CafeStore.getCompanyCafes(this.language);
-
+  },
+  beforeDestroy: function() {
+    CafeStore.unsubscribe();
   },
   destroyed: function(){
     CafeStore.removeChangeListener(this.onChange);

@@ -1,15 +1,17 @@
 import { Client } from '../Client.js';
 import { SortOrder } from 'kentico-cloud-delivery';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
+let unsubscribe = new Subject();
 
+let changeListeners = [];
 const resetStore = () => ({
   articleList: initLanguageCodeObject(),
   articleDetails: initLanguageCodeObject()
 });
 let { articleList, articleDetails } = resetStore();
-
-let changeListeners = [];
 
 let notifyChange = () => {
   changeListeners.forEach((listener) => {
@@ -22,7 +24,6 @@ class Article {
   // Actions
 
   provideArticle(articleId, language) {
-
     let query = Client.items()
       .type('article')
       .equalsFilter('system.id', articleId)
@@ -33,20 +34,18 @@ class Article {
     }
 
     query.getObservable()
+      .pipe(takeUntil(unsubscribe))
       .subscribe(response => {
-        if (!response.isEmpty) {
-          if (language) {
-            articleDetails[language][articleId] = response.items[0];
-          } else {
-            articleDetails[defaultLanguage][articleId] = response.items[0];
-          }
-          notifyChange();
+        if (language) {
+          articleDetails[language][articleId] = response.items[0];
+        } else {
+          articleDetails[defaultLanguage][articleId] = response.items[0];
         }
-      })
+        notifyChange();
+      });
   }
 
   provideArticles(count, language) {
-
     let query = Client.items()
       .type('article')
       .orderParameter('elements.post_date', SortOrder.desc);
@@ -56,6 +55,7 @@ class Article {
     }
 
     query.getObservable()
+      .pipe(takeUntil(unsubscribe))
       .subscribe(response => {
         if (language) {
           articleList[language] = response.items;
@@ -67,13 +67,12 @@ class Article {
   }
 
   // Methods
-  getArticle(articleSlug, language) {
+  getArticle(articleId, language) {
     if (language) {
-      return articleDetails[language][articleSlug];
+      return articleDetails[language][articleId];
     } else {
-      return articleDetails[defaultLanguage][articleSlug];
+      return articleDetails[defaultLanguage][articleId];
     }
-
   }
 
   getArticles(count, language) {
@@ -96,11 +95,13 @@ class Article {
     });
   }
 
+  unsubscribe() {
+    unsubscribe.next();
+    unsubscribe.complete();
+    unsubscribe = new Subject();
+  }
 }
 
 let ArticleStore = new Article();
 
-export {
-  ArticleStore,
-  resetStore
-}
+export { ArticleStore, resetStore }

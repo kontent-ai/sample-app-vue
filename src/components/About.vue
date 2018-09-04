@@ -1,47 +1,47 @@
 <template>
     <div class="container">
-        <div 
-            v-for="(fact, index) in factsData" 
+        <div
+            v-for="(fact, index) in factsData"
             :key="index"
         >
-            <section 
-                v-if="index % 2 === 0" 
-                class="row text-and-image" 
+            <section
+                v-if="index % 2 === 0"
+                class="row text-and-image"
                 :key="index"
             >
                 <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6">
-                    <RichTextElement 
-                        class="text-and-image-text" 
+                    <RichTextElement
+                        class="text-and-image-text"
                         :element="fact.descriptionElement"
                     />
                 </div>
                 <div class="col-md-6">
-                    <img 
-                        :alt="fact.title" 
-                        class="img-responsive" 
-                        :src="fact.imageLink" 
+                    <img
+                        :alt="fact.title"
+                        class="img-responsive"
+                        :src="fact.imageLink"
                         :title="fact.title"
                     />
                 </div>
             </section>
-            <section 
-                v-else 
-                class="row text-and-image" 
+            <section
+                v-else
+                class="row text-and-image"
                 :key="index"
             >
                 <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6 col-md-push-6">
-                    <RichTextElement 
-                        class="text-and-image-text-right" 
+                    <RichTextElement
+                        class="text-and-image-text-right"
                         :element="fact.descriptionElement"
                     />
                 </div>
                 <div class="col-md-6 col-md-pull-6">
-                    <img 
-                        :alt="fact.title" 
-                        class="img-responsive" 
-                        :src="fact.imageLink" 
+                    <img
+                        :alt="fact.title"
+                        class="img-responsive"
+                        :src="fact.imageLink"
                         :title="fact.title"
                     />
                 </div>
@@ -84,6 +84,9 @@ export default {
     FactStore.addChangeListener(this.onChange);
     FactStore.provideFacts(this.language);
     this.facts = FactStore.getFacts(this.language);
+  },
+  beforeDestroy: function() {
+    FactStore.unsubscribe();
   },
   destroyed: function () {
     FactStore.removeChangeListener(this.onChange);

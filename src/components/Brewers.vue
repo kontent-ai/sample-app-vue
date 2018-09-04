@@ -1,27 +1,27 @@
 <template>
-    <div 
-        id="product-list" 
+    <div
+        id="product-list"
         class="col-md-8 col-lg-9 product-list"
     >
-        <div 
-            v-for="(brewer, index) in brewersData" 
-            class="col-md-6 col-lg-4" 
+        <div
+            v-for="(brewer, index) in brewersData"
+            class="col-md-6 col-lg-4"
             :key="index"
         >
             <article class="product-tile">
                 <router-link :to="brewer.link">
                     <h1 class="product-heading">{{brewer.productName}}</h1>
                     <span v-if="brewer.hasNoProductStatus"/>
-                    <span 
-                        v-else 
+                    <span
+                        v-else
                         class="product-tile-status"
                     >
                         {{brewer.productStatusText}}
                     </span>
                     <figure class="product-tile-image">
-                        <img 
-                            v-bind:alt="brewer.productName" 
-                            class="" 
+                        <img
+                            v-bind:alt="brewer.productName"
+                            class=""
                             v-bind:src="brewer.imageLink"
                             v-bind:title="brewer.productName"
                         />
@@ -59,10 +59,10 @@ export default {
       return this.filteredBrewers.map(brewer => ({
         price: this.formatPrice(brewer.price.value, this.language),
         productName: brewer.productName.value,
-        link: resolveContentLink({ type: 'brewer', url_slug: brewer.urlPattern.value }, this.language),
+        link: resolveContentLink({ type: 'brewer', urlSlug: brewer.urlPattern.value }, this.language),
         hasNoProductStatus: brewer.productStatus.value.length === 0,
         productStatusText: brewer.productStatus.value.map((x) => x.name).join(', '),
-        imageLink: brewer.image.value[0].url,
+        imageLink: brewer.image.value[0].url
       }))
     }
   },
@@ -87,6 +87,11 @@ export default {
   created: function () {
     BrewerStore.addChangeListener(this.onChange);
     BrewerStore.provideBrewers(this.language);
+    this.brewers = BrewerStore.getBrewers(this.language);
+    this.filter = BrewerStore.getFilter();
+  },
+  beforeDestroy: function() {
+    BrewerStore.unsubscribe();
   },
   destroyed: function () {
     BrewerStore.removeChangeListener(this.onChange);

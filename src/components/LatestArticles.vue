@@ -101,6 +101,7 @@ export default {
     }
   },
   mounted: function(){
+    ArticleStore.subscribe();
     ArticleStore.addChangeListener(this.onChange);
     ArticleStore.provideArticles(this.articleCount, this.language);
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];

@@ -4,8 +4,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
-let unsubscribe = new Subject();
-
 let changeListeners = [];
 const resetStore = () => ({
   articleList: initLanguageCodeObject(),
@@ -20,6 +18,9 @@ let notifyChange = () => {
 }
 
 class Article {
+  constructor() {
+    this.subject;
+  }
 
   // Actions
 
@@ -34,7 +35,7 @@ class Article {
     }
 
     query.getObservable()
-      .pipe(takeUntil(unsubscribe))
+      .pipe(takeUntil(this.subject))
       .subscribe(response => {
         if (language) {
           articleDetails[language][articleId] = response.items[0];
@@ -55,7 +56,7 @@ class Article {
     }
 
     query.getObservable()
-      .pipe(takeUntil(unsubscribe))
+      .pipe(takeUntil(this.subject))
       .subscribe(response => {
         if (language) {
           articleList[language] = response.items;
@@ -95,10 +96,13 @@ class Article {
     });
   }
 
+  subscribe() {
+    this.subject = new Subject();
+  }
+
   unsubscribe() {
-    unsubscribe.next();
-    unsubscribe.complete();
-    unsubscribe = new Subject();
+    this.subject.next();
+    this.subject.complete();
   }
 }
 

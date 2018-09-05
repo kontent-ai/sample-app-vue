@@ -69,6 +69,7 @@ export default {
     }
   },
   mounted: function(){
+    ArticleStore.subscribe();
     ArticleStore.addChangeListener(this.onChange);
     ArticleStore.provideArticle(this.$route.params.articleId, this.language);
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];

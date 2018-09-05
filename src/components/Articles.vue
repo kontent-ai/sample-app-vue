@@ -76,6 +76,7 @@ export default {
     }
   },
   mounted: function() {
+    ArticleStore.subscribe();
     ArticleStore.addChangeListener(this.onChange);
     ArticleStore.provideArticles(this.articleCount, this.language);
     this.articles = ArticleStore.getArticles(this.articleCount, this.language);

@@ -1,8 +1,11 @@
-// kentico cloud
-import { DeliveryClient, DeliveryClientConfig, TypeResolver } from 'kentico-cloud-delivery-typescript-sdk';
+import Cookies from 'universal-cookie';
+import { selectedProjectCookieName, defaultProjectId } from './Utilities/SelectedProject';
 
-const projectId = '975bf280-fd91-488c-994c-2f04416e5ee3';
-const previewApiKey = "";
+// kentico cloud
+import { DeliveryClient, TypeResolver } from 'kentico-cloud-delivery';
+
+const projectId = '';
+const previewApiKey = '';
 
 // models
 import { AboutUs } from './Models/AboutUs'
@@ -36,16 +39,36 @@ let typeResolvers = [
   new TypeResolver('tweet', () => new Tweet())
 ];
 
-
-function isPreview() {
-  return previewApiKey !== "";
+const cookies = new Cookies(document.cookies);
+let currentProjectId = projectId || cookies.get(selectedProjectCookieName);
+if (currentProjectId) {
+  cookies.set(selectedProjectCookieName, currentProjectId, { path: '/' });
+} else {
+  currentProjectId = defaultProjectId;
 }
 
-export default new DeliveryClient(
-  new DeliveryClientConfig(projectId, typeResolvers,
-    {
-      enablePreviewMode: isPreview(),
-      previewApiKey: previewApiKey
-    }
-  )
-)
+const isPreview = () => previewApiKey !== '';
+
+let Client = new DeliveryClient({
+  projectId: currentProjectId,
+  typeResolvers: typeResolvers,
+  previewApiKey: previewApiKey,
+  enablePreviewMode: isPreview()
+});
+
+
+const resetClient = (newProjectId) => {
+  Client = new DeliveryClient({
+    projectId: newProjectId,
+    typeResolvers: typeResolvers,
+    previewApiKey: previewApiKey,
+    enablePreviewMode: isPreview()
+  });
+  const cookies = new Cookies(document.cookies);
+  cookies.set(selectedProjectCookieName, newProjectId, { path: '/' });
+}
+
+export {
+  Client,
+  resetClient
+};

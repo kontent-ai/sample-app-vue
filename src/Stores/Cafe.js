@@ -1,80 +1,92 @@
-import Client from "../Client.js";
+import { Client } from '../Client.js';
 
 import { initLanguageCodeObject, defaultLanguage, languageCodes } from '../Utilities/LanguageCodes'
 
 let changeListeners = [];
-let cafes = initLanguageCodeObject();
-let languageInitialized = {};
-languageCodes.forEach((language) => {
+const resetStore = () => {
+  let languageInitialized = {};
+  languageCodes.forEach((language) => {
     languageInitialized[language] = false;
-})
+  });
+
+  return {
+    cafes: initLanguageCodeObject(),
+    languageInitialized: languageInitialized
+  }
+};
+let { cafes, languageInitialized } = resetStore();
 
 
 let notifyChange = (newlanguage) => {
-    changeListeners.forEach((listener) => {
-        listener(newlanguage);
-    });
+  changeListeners.forEach((listener) => {
+    listener(newlanguage);
+  });
 }
 
 let fetchCafes = (language) => {
-    if(languageInitialized[language]){
-        notifyChange(language);
-        return;
-    }
+  if (languageInitialized[language]) {
+    notifyChange(language);
+    return;
+  }
 
-    let query = Client.items()
-        .type('cafe')
-        .orderParameter('system.name')
-    if (language) {
-        query.languageParameter(language);
-    }
+  let query = Client.items()
+    .type('cafe')
+    .orderParameter('system.name')
+  if (language) {
+    query.languageParameter(language);
+  }
 
-    query.get()
-        .subscribe(response => {
-            if (language) {
-                cafes[language] = response.items;
-            } else {
-                cafes[defaultLanguage] = response.items;
-            }
-            notifyChange(language);
-            languageInitialized[language] = true;
-        });
+  query.getObservable()
+    .subscribe(response => {
+      if (language) {
+        cafes[language] = response.items;
+      } else {
+        cafes[defaultLanguage] = response.items;
+      }
+      notifyChange(language);
+      languageInitialized[language] = true;
+    });
 }
 
-class CafeStore {
+class Cafe {
 
-    // Actions
+  // Actions
 
-    providePartnerCafes(language) {
-        fetchCafes(language);
-    }
+  providePartnerCafes(language) {
+    fetchCafes(language);
+  }
 
-    provideCompanyCafes(language) {
-        fetchCafes(language);
-    }
+  provideCompanyCafes(language) {
+    fetchCafes(language);
+  }
 
-    // Methods
+  // Methods
 
-    getPartnerCafes(language) {
-        return cafes[language].filter((cafe) => cafe.country.value !== "USA");
-    }
+  getPartnerCafes(language) {
+    return cafes[language].filter((cafe) => cafe.country.value !== 'USA');
+  }
 
-    getCompanyCafes(language) {
-        return cafes[language].filter((cafe) => cafe.country.value === "USA");
-    }
+  getCompanyCafes(language) {
+    return cafes[language].filter((cafe) => cafe.country.value === 'USA');
+  }
 
-    // Listeners
+  // Listeners
 
-    addChangeListener(listener) {
-        changeListeners.push(listener);
-    }
+  addChangeListener(listener) {
+    changeListeners.push(listener);
+  }
 
-    removeChangeListener(listener) {
-        changeListeners = changeListeners.filter((element) => {
-            return element !== listener;
-        });
-    }
+  removeChangeListener(listener) {
+    changeListeners = changeListeners.filter((element) => {
+      return element !== listener;
+    });
+  }
 
 }
 
-export default new CafeStore();
+let CafeStore = new Cafe();
+
+export {
+  CafeStore,
+  resetStore
+};

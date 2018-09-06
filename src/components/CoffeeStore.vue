@@ -8,17 +8,17 @@
 </template>
 
 <script>
-    import CoffeeFilter from './CoffeeFilter.vue'
-    import Coffees from './Coffees.vue'
+import CoffeeFilter from './CoffeeFilter.vue'
+import Coffees from './Coffees.vue'
 
-    export default {
-        name: "CoffeeStore",
-        props: ['language'],
-        components: {
-            CoffeeFilter,
-            Coffees
-        },
+export default {
+  name: 'CoffeeStore',
+  props: ['language'],
+  components: {
+    CoffeeFilter,
+    Coffees
+  },
 
-    }
+}
 </script>
 

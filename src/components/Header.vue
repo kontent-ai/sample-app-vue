@@ -1,5 +1,8 @@
 <template>
-    <header class="header" role="banner">
+    <header 
+        class="header" 
+        role="banner"
+    >
         <div class="menu">
             <div class="container">
                 <nav role="navigation">
@@ -14,7 +17,10 @@
                             <router-link :to="articlesRoute">{{$t('Header.articlesLinkTitle')}}</router-link>
                         </li>
                         <li >
-                            <router-link @click.native="LogAboutUs" :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
+                            <router-link 
+                                @click.native="LogAboutUs" 
+                                :to="aboutRoute"
+                            >{{$t('Header.aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
                             <router-link :to="cafesRoute">{{$t('Header.cafesLinkTitle')}}</router-link>
@@ -38,11 +44,18 @@
                 </div>
             </div>
         </div>
+        <MessageBox 
+            v-if="infoMessageText" 
+            :message="infoMessageText"
+        />
         <div class="header-row">
             <div class="container">
                 <div class="col-xs-8 col-md-8 col-lg-4 logo">
                     <h1 class="logo">
-                        <router-link class='logo-link' :to="homeRoute">Dancing Goat</router-link>
+                        <router-link 
+                            class='logo-link' 
+                            :to="homeRoute"
+                        >Dancing Goat</router-link>
                     </h1>
                 </div>
             </div>
@@ -51,33 +64,37 @@
 </template>
 
 <script>
-    import { LogAboutUs }from '../Utilities/ActivityLogging'
+import { LogAboutUs }from '../Utilities/ActivityLogging'
+import MessageBox from './MessageBox'    
 
-    export default {
-        name: 'Header',
-        props: ['language', 'changeLang'],
-        computed: {
-            homeRoute: function(){
-                return '/' + this.language;
-            },
-            storeRoute: function(){
-                return '/' + this.language + '/' + 'store';
-            },
-            articlesRoute: function(){
-                return '/' + this.language + '/' + 'articles';
-            },
-            aboutRoute: function(){
-                return '/' + this.language + '/' + 'about';
-            },
-            cafesRoute: function(){
-                return '/' + this.language + '/' + 'cafes';
-            },
-            contactsRoute: function(){
-                return '/' + this.language + '/' + 'contacts';
-            },
-        },
-        methods: {
-            LogAboutUs,
-        }
+export default {
+  name: 'Header',
+  props: ['language', 'changeLang', 'infoMessageText'],
+  computed: {
+    homeRoute: function(){
+      return '/' + this.language;
+    },
+    storeRoute: function(){
+      return '/' + this.language + '/' + 'store';
+    },
+    articlesRoute: function(){
+      return '/' + this.language + '/' + 'articles';
+    },
+    aboutRoute: function(){
+      return '/' + this.language + '/' + 'about';
+    },
+    cafesRoute: function(){
+      return '/' + this.language + '/' + 'cafes';
+    },
+    contactsRoute: function(){
+      return '/' + this.language + '/' + 'contacts';
     }
+  },
+  methods: {
+    LogAboutUs,
+  },
+  components: {
+    MessageBox
+  }
+}
 </script>

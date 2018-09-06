@@ -1,10 +1,13 @@
-import Client from "../Client.js";
+import { Client } from '../Client.js';
 
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
 
 
 let changeListeners = [];
-let brewers = initLanguageCodeObject();
+const resetStore = () => ({
+  brewers: initLanguageCodeObject()
+});
+let { brewers } = resetStore();
 
 let manufacturersInitialized = false;
 let manufacturers = [];
@@ -13,179 +16,184 @@ let productStatusesInitialized = false;
 let productStatuses = [];
 
 let notifyChange = () => {
-    changeListeners.forEach((listener) => {
-        listener();
-    });
+  changeListeners.forEach((listener) => {
+    listener();
+  });
 }
 
 let fetchBrewers = (language) => {
 
-    var query = Client.items()
-        .type('brewer')
-        .orderParameter('elements.product_name');
+  var query = Client.items()
+    .type('brewer')
+    .orderParameter('elements.product_name');
 
-    if (language) {
-        query.languageParameter(language);
-    }
+  if (language) {
+    query.languageParameter(language);
+  }
 
-    query.get()
-        .subscribe(response => {
-            if (language) {
-                brewers[language] = response.items;
-            } else {
-                brewers[defaultLanguage] = response.items;
-            }
-            notifyChange();
-        });
+  query.getObservable()
+    .subscribe(response => {
+      if (language) {
+        brewers[language] = response.items;
+      } else {
+        brewers[defaultLanguage] = response.items;
+      }
+      notifyChange();
+    });
 }
 
 let fetchManufacturers = () => {
-    if (manufacturersInitialized) {
-        return;
-    }
+  if (manufacturersInitialized) {
+    return;
+  }
 
-    Client.taxonomy("manufacturer")
-        .get()
-        .subscribe(response => {
-            manufacturers = response.taxonomy.terms;
-            notifyChange();
-            manufacturersInitialized = true;
-        });
+  Client.taxonomy('manufacturer')
+    .getObservable()
+    .subscribe(response => {
+      manufacturers = response.taxonomy.terms;
+      notifyChange();
+      manufacturersInitialized = true;
+    });
 }
 
 let fetchProductStatuses = () => {
-    if (productStatusesInitialized) {
-        return;
-    }
+  if (productStatusesInitialized) {
+    return;
+  }
 
-    Client.taxonomy("product_status")
-        .get()
-        .subscribe(response => {
-            productStatuses = response.taxonomy.terms;
-            notifyChange();
-            productStatusesInitialized = true;
-        });
+  Client.taxonomy('product_status')
+    .getObservable()
+    .subscribe(response => {
+      productStatuses = response.taxonomy.terms;
+      notifyChange();
+      productStatusesInitialized = true;
+    });
 }
 
 export class Filter {
-    constructor() {
-        this.manufacturers = [];
-        this.priceRanges = [];
-        this.productStatuses = [];
+  constructor() {
+    this.manufacturers = [];
+    this.priceRanges = [];
+    this.productStatuses = [];
+  }
+
+  matches(brewer) {
+    return this.matchesManufacturers(brewer) && this.matchesPriceRanges(brewer) && this.matchesProductStatuses(brewer);
+  }
+
+  matchesManufacturers(brewer) {
+    if (this.manufacturers.length === 0) {
+      return true;
     }
 
-    matches(brewer) {
-        return this.matchesManufacturers(brewer) && this.matchesPriceRanges(brewer) && this.matchesProductStatuses(brewer);
+    let manufacturerCodenames = brewer.manufacturer.value.map(x => x.codename);
+    return manufacturerCodenames.some(x => this.manufacturers.includes(x));
+  }
+
+  matchesPriceRanges(brewer) {
+    if (this.priceRanges.length === 0) {
+      return true;
     }
 
-    matchesManufacturers(brewer) {
-        if (this.manufacturers.length === 0) {
-            return true;
-        }
+    let price = brewer.price.value;
 
-        let manufacturerCodenames = brewer.manufacturer.value.map(x => x.codename);
-        return manufacturerCodenames.some(x => this.manufacturers.includes(x));
+    return this.priceRanges.some((priceRange) => priceRange.min <= price && price <= priceRange.max);
+  }
+
+  matchesProductStatuses(brewer) {
+    if (this.productStatuses.length === 0) {
+      return true;
     }
 
-    matchesPriceRanges(brewer) {
-        if (this.priceRanges.length === 0) {
-            return true;
-        }
+    let statusCodenames = brewer.productStatus.value.map(x => x.codename);
+    return statusCodenames.some((x) => this.productStatuses.includes(x));
+  }
 
-        let price = brewer.price.value;
+  toggleManufacturer(manufacturer) {
+    let index = this.manufacturers.indexOf(manufacturer);
 
-        return this.priceRanges.some((priceRange) => priceRange.min <= price && price <= priceRange.max);
-    }
+    if (index < 0) this.manufacturers.push(manufacturer); else this.manufacturers.splice(index, 1);
+  }
 
-    matchesProductStatuses(brewer) {
-        if (this.productStatuses.length === 0) {
-            return true;
-        }
+  togglePriceRange(priceRange) {
+    let index = this.priceRanges.findIndex((x) => x.min === priceRange.min && x.max === priceRange.max);
 
-        let statusCodenames = brewer.productStatus.value.map(x => x.codename);
-        return statusCodenames.some((x) => this.productStatuses.includes(x));
-    }
+    if (index < 0) this.priceRanges.push(priceRange); else this.priceRanges.splice(index, 1);
+  }
 
-    toggleManufacturer(manufacturer) {
-        let index = this.manufacturers.indexOf(manufacturer);
+  toggleProductStatus(productStatus) {
+    let index = this.productStatuses.indexOf(productStatus);
 
-        if (index < 0) this.manufacturers.push(manufacturer); else this.manufacturers.splice(index, 1);
-    }
-
-    togglePriceRange(priceRange) {
-        let index = this.priceRanges.findIndex((x) => x.min === priceRange.min && x.max === priceRange.max);
-
-        if (index < 0) this.priceRanges.push(priceRange); else this.priceRanges.splice(index, 1);
-    }
-
-    toggleProductStatus(productStatus) {
-        let index = this.productStatuses.indexOf(productStatus);
-
-        if (index < 0) this.productStatuses.push(productStatus); else this.productStatuses.splice(index, 1);
-    }
+    if (index < 0) this.productStatuses.push(productStatus); else this.productStatuses.splice(index, 1);
+  }
 }
 
 let brewerFilter = new Filter();
 
-class BrewerStore {
+class Brewer {
 
-    // Actions
+  // Actions
 
-    provideBrewer(brewerSlug, language) {
-        fetchBrewers(language);
-    }
+  provideBrewer(brewerSlug, language) {
+    fetchBrewers(language);
+  }
 
-    provideBrewers(language) {
-        fetchBrewers(language);
-    }
+  provideBrewers(language) {
+    fetchBrewers(language);
+  }
 
-    provideManufacturers() {
-        fetchManufacturers();
-    }
+  provideManufacturers() {
+    fetchManufacturers();
+  }
 
-    provideProductStatuses() {
-        fetchProductStatuses();
-    }
+  provideProductStatuses() {
+    fetchProductStatuses();
+  }
 
-    // Methods
+  // Methods
 
-    getBrewer(brewerSlug, language) {
-        return brewers[language || defaultLanguage].find((brewer) => brewer.urlPattern.value === brewerSlug);
-    }
+  getBrewer(brewerSlug, language) {
+    return brewers[language || defaultLanguage].find((brewer) => brewer.urlPattern.value === brewerSlug);
+  }
 
-    getBrewers(language) {
-        return brewers[language];
-    }
+  getBrewers(language) {
+    return brewers[language];
+  }
 
-    getManufacturers() {
-        return manufacturers;
-    }
+  getManufacturers() {
+    return manufacturers;
+  }
 
-    getProductStatuses() {
-        return productStatuses;
-    }
+  getProductStatuses() {
+    return productStatuses;
+  }
 
-    getFilter() {
-        return brewerFilter;
-    }
+  getFilter() {
+    return brewerFilter;
+  }
 
-    setFilter(filter) {
-        brewerFilter = filter;
-        notifyChange();
-    }
+  setFilter(filter) {
+    brewerFilter = filter;
+    notifyChange();
+  }
 
-    // Listeners
+  // Listeners
 
-    addChangeListener(listener) {
-        changeListeners.push(listener);
-    }
+  addChangeListener(listener) {
+    changeListeners.push(listener);
+  }
 
-    removeChangeListener(listener) {
-        changeListeners = changeListeners.filter((element) => {
-            return element !== listener;
-        });
-    }
+  removeChangeListener(listener) {
+    changeListeners = changeListeners.filter((element) => {
+      return element !== listener;
+    });
+  }
 
 }
 
-export default new BrewerStore();
+let BrewerStore = new Brewer();
+
+export {
+  BrewerStore,
+  resetStore
+}

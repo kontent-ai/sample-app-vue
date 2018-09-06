@@ -1,0 +1,14 @@
+dist: trusty
+language: node_js
+node_js:
+- "stable"
+before_script:
+- npm install
+script:
+- npm run build
+deploy:
+  provider: surge
+  project: ./dist/
+  domain: kentico-cloud-sample-app-vue.surge.sh 
+  skip_cleanup: true
+

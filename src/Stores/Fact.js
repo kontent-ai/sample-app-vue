@@ -1,60 +1,68 @@
-import Client from "../Client.js";
+import { Client } from '../Client.js';
 
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
 
 let changeListeners = [];
-let facts = initLanguageCodeObject();
+const resetStore = () => ({
+  facts: initLanguageCodeObject()
+});
+let { facts } = resetStore();
 
 let notifyChange = () => {
-    changeListeners.forEach((listener) => {
-        listener();
-    });
+  changeListeners.forEach((listener) => {
+    listener();
+  });
 }
 
 let fetchFacts = (language) => {
-    var query = Client.item('about_us')
+  var query = Client.item('about_us')
 
-    if (language) {
-        query.languageParameter(language);
-    }
+  if (language) {
+    query.languageParameter(language);
+  }
 
-    query.get()
-        .subscribe(response => {
-            if(language){
-                facts[language] = response.item.facts;
-            } else {
-                facts[defaultLanguage] = response.item.facts;
-            }
-            notifyChange();
-        });
+  query.getObservable()
+    .subscribe(response => {
+      if (language) {
+        facts[language] = response.item.facts;
+      } else {
+        facts[defaultLanguage] = response.item.facts;
+      }
+      notifyChange();
+    });
 }
 
-class FactStore {
+class Fact {
 
-    // Actions
+  // Actions
 
-    provideFacts(language) {
-        fetchFacts(language);
-    }
+  provideFacts(language) {
+    fetchFacts(language);
+  }
 
-    // Methods
+  // Methods
 
-    getFacts(language) {
-        return facts[language];
-    }
+  getFacts(language) {
+    return facts[language];
+  }
 
-    // Listeners
+  // Listeners
 
-    addChangeListener(listener) {
-        changeListeners.push(listener);
-    }
+  addChangeListener(listener) {
+    changeListeners.push(listener);
+  }
 
-    removeChangeListener(listener) {
-        changeListeners = changeListeners.filter((element) => {
-            return element !== listener;
-        });
-    }
+  removeChangeListener(listener) {
+    changeListeners = changeListeners.filter((element) => {
+      return element !== listener;
+    });
+  }
 
 }
 
-export default new FactStore();
+let FactStore = new Fact();
+
+export {
+  FactStore,
+  resetStore
+}

@@ -1,65 +1,14 @@
 import { Client } from '../Client.js';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import BaseStore from './Base';
 
-let unsubscribe = new Subject();
-
-let changeListeners = [];
 const resetStore = () => ({
   coffees: initLanguageCodeObject(),
   processings: [],
   productStatuses: []
 });
 let { coffees, processings, productStatuses } = resetStore();
-
-let notifyChange = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
-}
-
-let fetchCoffees = (language) => {
-
-  var query = Client.items()
-    .type('coffee')
-    .orderParameter('elements.product_name');
-
-  if (language) {
-    query.languageParameter(language);
-  }
-
-  query.getObservable()
-    .pipe(takeUntil(unsubscribe))
-    .subscribe(response => {
-      if (language) {
-        coffees[language] = response.items;
-      } else {
-        coffees[defaultLanguage] = response.items;
-      }
-      notifyChange();
-    });
-}
-
-let fetchProcessings = () => {
-  Client.taxonomy('processing')
-    .getObservable()
-    .pipe(takeUntil(unsubscribe))
-    .subscribe(response => {
-      processings = response.taxonomy.terms;
-      notifyChange();
-    });
-};
-
-let fetchProductStatuses = () => {
-  Client.taxonomy('product_status')
-    .getObservable()
-    .pipe(takeUntil(unsubscribe))
-    .subscribe(response => {
-      productStatuses = response.taxonomy.terms;
-      notifyChange();
-    });
-}
 
 export class Filter {
   constructor() {
@@ -106,28 +55,62 @@ export class Filter {
 
 let coffeeFilter = new Filter();
 
-class Coffee {
+class Coffee extends BaseStore {
+  constructor() {
+    super();
+  }
+
+  fetchCoffees(language) {
+    var query = Client.items()
+      .type('coffee')
+      .orderParameter('elements.product_name');
+
+    if (language) {
+      query.languageParameter(language);
+    }
+
+    query.getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        if (language) {
+          coffees[language] = response.items;
+        } else {
+          coffees[defaultLanguage] = response.items;
+        }
+        this.notifyChange();
+      });
+  }
 
   // Actions
-
   provideCoffee(coffeeSlug, language) {
-    fetchCoffees(language);
+    this.fetchCoffees(language);
   }
 
   provideCoffees(language) {
-    fetchCoffees(language);
+    this.fetchCoffees(language);
   }
 
   provideProcessings() {
-    fetchProcessings();
+    Client.taxonomy('processing')
+      .getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        processings = response.taxonomy.terms;
+        this.notifyChange();
+      });
   }
 
   provideProductStatuses() {
-    fetchProductStatuses();
+    Client.taxonomy('product_status')
+      .getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        productStatuses = response.taxonomy.terms;
+        this.notifyChange();
+      });
   }
 
   // Methods
-
   getCoffee(coffeeSlug, language) {
     return coffees[language || defaultLanguage].find((coffee) => coffee.urlPattern.value === coffeeSlug);
   }
@@ -150,25 +133,7 @@ class Coffee {
 
   setFilter(filter) {
     coffeeFilter = filter;
-    notifyChange();
-  }
-
-  // Listeners
-
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
-
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
-
-  unsubscribe() {
-    unsubscribe.next();
-    unsubscribe.complete();
-    unsubscribe = new Subject();
+    this.notifyChange();
   }
 }
 

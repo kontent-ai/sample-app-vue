@@ -55,7 +55,8 @@ export default {
       this.cafes = CafeStore.getCompanyCafes(this.language);
     }
   },
-  created: function(){
+  mounted: function() {
+    CafeStore.subscribe();
     CafeStore.addChangeListener(this.onChange);
     CafeStore.provideCompanyCafes(this.language);
     this.cafes = CafeStore.getCompanyCafes(this.language);

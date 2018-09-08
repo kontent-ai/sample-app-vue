@@ -97,7 +97,8 @@ export default {
       this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
     }
   },
-  created: function () {
+  mounted: function() {
+    CoffeeStore.subscribe();
     CoffeeStore.addChangeListener(this.onChange);
     CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
     this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);

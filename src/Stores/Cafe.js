@@ -1,7 +1,7 @@
 import { Client } from '../Client.js';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { initLanguageCodeObject, defaultLanguage, languageCodes } from '../Utilities/LanguageCodes'
+import { initLanguageCodeObject, defaultLanguage, languageCodes } from '../Utilities/LanguageCodes';
+import BaseStore from './Base';
 
 const resetStore = () => {
   let languageInitialized = {};
@@ -16,80 +16,54 @@ const resetStore = () => {
 };
 let { cafes, languageInitialized } = resetStore();
 
-let unsubscribe = new Subject();
-
-let changeListeners = [];
-
-let notifyChange = (newlanguage) => {
-  changeListeners.forEach((listener) => {
-    listener(newlanguage);
-  });
-}
-
-let fetchCafes = (language) => {
-  if (languageInitialized[language]) {
-    notifyChange(language);
-    return;
+class Cafe extends BaseStore {
+  constructor() {
+    super();
   }
 
-  let query = Client.items()
-    .type('cafe')
-    .orderParameter('system.name')
-  if (language) {
-    query.languageParameter(language);
+  fetchCafes(language) {
+    if (languageInitialized[language]) {
+      this.notifyChange(language);
+      return;
+    }
+
+    let query = Client.items()
+      .type('cafe')
+      .orderParameter('system.name');
+
+    if (language) {
+      query.languageParameter(language);
+    }
+
+    query.getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        if (language) {
+          cafes[language] = response.items;
+        } else {
+          cafes[defaultLanguage] = response.items;
+        }
+        this.notifyChange(language);
+        languageInitialized[language] = true;
+      });
   }
-
-  query.getObservable()
-    .pipe(takeUntil(unsubscribe))
-    .subscribe(response => {
-      if (language) {
-        cafes[language] = response.items;
-      } else {
-        cafes[defaultLanguage] = response.items;
-      }
-      notifyChange(language);
-      languageInitialized[language] = true;
-    });
-}
-
-class Cafe {
 
   // Actions
-
   providePartnerCafes(language) {
-    fetchCafes(language);
+    this.fetchCafes(language);
   }
 
   provideCompanyCafes(language) {
-    fetchCafes(language);
+    this.fetchCafes(language);
   }
 
   // Methods
-
   getPartnerCafes(language) {
     return cafes[language].filter((cafe) => cafe.country.value !== 'USA');
   }
 
   getCompanyCafes(language) {
     return cafes[language].filter((cafe) => cafe.country.value === 'USA');
-  }
-
-  // Listeners
-
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
-
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
-
-  unsubscribe() {
-    unsubscribe.next();
-    unsubscribe.complete();
-    unsubscribe = new Subject();
   }
 }
 

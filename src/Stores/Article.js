@@ -1,29 +1,21 @@
 import { Client } from '../Client.js';
 import { SortOrder } from 'kentico-cloud-delivery';
 import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import BaseStore from './Base';
 
-let changeListeners = [];
 const resetStore = () => ({
   articleList: initLanguageCodeObject(),
   articleDetails: initLanguageCodeObject()
 });
 let { articleList, articleDetails } = resetStore();
 
-let notifyChange = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
-}
-
-class Article {
+class Article extends BaseStore {
   constructor() {
-    this.subject;
+    super();
   }
 
   // Actions
-
   provideArticle(articleId, language) {
     let query = Client.items()
       .type('article')
@@ -35,14 +27,14 @@ class Article {
     }
 
     query.getObservable()
-      .pipe(takeUntil(this.subject))
+      .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
           articleDetails[language][articleId] = response.items[0];
         } else {
           articleDetails[defaultLanguage][articleId] = response.items[0];
         }
-        notifyChange();
+        this.notifyChange();
       });
   }
 
@@ -56,14 +48,14 @@ class Article {
     }
 
     query.getObservable()
-      .pipe(takeUntil(this.subject))
+      .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
           articleList[language] = response.items;
         } else {
           articleList[defaultLanguage] = response.items
         }
-        notifyChange();
+        this.notifyChange();
       });
   }
 
@@ -83,26 +75,6 @@ class Article {
     else {
       return articleList[defaultLanguage].slice(0, count);
     }
-  }
-
-  // Listeners
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
-
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
-
-  subscribe() {
-    this.subject = new Subject();
-  }
-
-  unsubscribe() {
-    this.subject.next();
-    this.subject.complete();
   }
 }
 

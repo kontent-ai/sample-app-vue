@@ -84,7 +84,8 @@ export default {
       this.filter = CoffeeStore.getFilter();
     }
   },
-  created: function() {
+  mounted: function() {
+    CoffeeStore.subscribe();
     CoffeeStore.addChangeListener(this.onChange);
     CoffeeStore.provideProcessings();
     CoffeeStore.provideProductStatuses();

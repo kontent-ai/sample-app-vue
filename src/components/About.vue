@@ -80,7 +80,8 @@ export default {
       this.facts = FactStore.getFacts(this.language);
     }
   },
-  created: function () {
+  mounted: function () {
+    FactStore.subscribe();
     FactStore.addChangeListener(this.onChange);
     FactStore.provideFacts(this.language);
     this.facts = FactStore.getFacts(this.language);

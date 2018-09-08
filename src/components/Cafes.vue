@@ -108,7 +108,8 @@ export default {
       this.partnerCafes = CafeStore.getPartnerCafes(this.language);
     }
   },
-  created: function() {
+  mounted: function() {
+    CafeStore.subscribe();
     CafeStore.addChangeListener(this.onChange);
     CafeStore.provideCompanyCafes(this.language);
     CafeStore.providePartnerCafes(this.language);

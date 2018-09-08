@@ -69,7 +69,8 @@ export default {
       this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
     }
   },
-  created: function(){
+  mounted: function(){
+    BrewerStore.subscribe();
     BrewerStore.addChangeListener(this.onChange);
     BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
     this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);

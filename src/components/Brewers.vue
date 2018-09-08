@@ -84,7 +84,8 @@ export default {
       this.filter = BrewerStore.getFilter();
     }
   },
-  created: function () {
+  mounted: function () {
+    BrewerStore.subscribe();
     BrewerStore.addChangeListener(this.onChange);
     BrewerStore.provideBrewers(this.language);
     this.brewers = BrewerStore.getBrewers(this.language);

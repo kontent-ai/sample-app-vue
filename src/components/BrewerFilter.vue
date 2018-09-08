@@ -127,13 +127,13 @@ export default {
     }
   },
   created: function() {
+    BrewerStore.subscribe();
     BrewerStore.addChangeListener(this.onChange);
-    BrewerStore.provideBrewers();
     BrewerStore.provideManufacturers();
     BrewerStore.provideProductStatuses();
-    this.filter = BrewerStore.getFilter();
     this.manufacturers = BrewerStore.getManufacturers();
     this.productStatuses = BrewerStore.getProductStatuses();
+    this.filter = BrewerStore.getFilter();
   },
   beforeDestroy: function() {
     BrewerStore.unsubscribe();

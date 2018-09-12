@@ -2,18 +2,18 @@
     <div class="container">
         <template  v-for="(article, index) in articlesData">
             <div :key="article.id">
-                <div 
-                    v-if="index % 4 === 0" 
+                <div
+                    v-if="index % 4 === 0"
                     class="clear"
                 >
                 </div>
                 <div class="col-md-3" >
                     <div class="article-tile">
                         <router-link :to="article.link">
-                            <img 
-                                :alt="'Article '  + article.title" 
-                                class="article-tile-image" 
-                                :src="article.imageLink" 
+                            <img
+                                :alt="'Article '  + article.title"
+                                class="article-tile-image"
+                                :src="article.imageLink"
                                 :title="'Article ' + article.title"
                             />
                         </router-link>
@@ -75,15 +75,18 @@ export default {
       );
     }
   },
-  created: function() {
+  mounted: function() {
+    ArticleStore.subscribe();
     ArticleStore.addChangeListener(this.onChange);
     ArticleStore.provideArticles(this.articleCount, this.language);
     this.articles = ArticleStore.getArticles(this.articleCount, this.language);
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+  },
+  beforeDestroy: function() {
+    ArticleStore.unsubscribe();
   },
   destroyed: function() {
     ArticleStore.removeChangeListener(this.onChange);
   }
 };
 </script>
-

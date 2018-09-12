@@ -1,11 +1,11 @@
 <template>
-    <div 
-        class="container" 
+    <div
+        class="container"
         v-if="!brewer"
     >
     </div>
-    <div 
-        class="container" 
+    <div
+        class="container"
         v-else
     >
         <article class="product-detail">
@@ -19,16 +19,16 @@
             <div class="row-fluid">
                 <div class="col-lg-7 col-md-6">
                     <figure class="image">
-                        <img 
-                            :alt="name" 
-                            class="" 
-                            :src="imageLink" 
+                        <img
+                            :alt="name"
+                            class=""
+                            :src="imageLink"
                             :title="name"
                         />
                     </figure>
                     <div class="description">
-                        <RichTextElement 
-                            v-if="descriptionElement" 
+                        <RichTextElement
+                            v-if="descriptionElement"
                             :element="descriptionElement"
                         />
                     </div>
@@ -69,10 +69,14 @@ export default {
       this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
     }
   },
-  created: function(){
+  mounted: function(){
+    BrewerStore.subscribe();
     BrewerStore.addChangeListener(this.onChange);
     BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
     this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
+  },
+  beforeDestroy: function() {
+    BrewerStore.unsubscribe();
   },
   destroyed: function(){
     BrewerStore.removeChangeListener(this.onChange);

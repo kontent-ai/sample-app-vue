@@ -1,74 +1,14 @@
 import { Client } from '../Client.js';
+import { takeUntil } from 'rxjs/operators';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import BaseStore from './Base';
 
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
-
-
-let changeListeners = [];
 const resetStore = () => ({
-  brewers: initLanguageCodeObject()
+  brewers: initLanguageCodeObject(),
+  manufacturers: [],
+  productStatuses: []
 });
-let { brewers } = resetStore();
-
-let manufacturersInitialized = false;
-let manufacturers = [];
-
-let productStatusesInitialized = false;
-let productStatuses = [];
-
-let notifyChange = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
-}
-
-let fetchBrewers = (language) => {
-
-  var query = Client.items()
-    .type('brewer')
-    .orderParameter('elements.product_name');
-
-  if (language) {
-    query.languageParameter(language);
-  }
-
-  query.getObservable()
-    .subscribe(response => {
-      if (language) {
-        brewers[language] = response.items;
-      } else {
-        brewers[defaultLanguage] = response.items;
-      }
-      notifyChange();
-    });
-}
-
-let fetchManufacturers = () => {
-  if (manufacturersInitialized) {
-    return;
-  }
-
-  Client.taxonomy('manufacturer')
-    .getObservable()
-    .subscribe(response => {
-      manufacturers = response.taxonomy.terms;
-      notifyChange();
-      manufacturersInitialized = true;
-    });
-}
-
-let fetchProductStatuses = () => {
-  if (productStatusesInitialized) {
-    return;
-  }
-
-  Client.taxonomy('product_status')
-    .getObservable()
-    .subscribe(response => {
-      productStatuses = response.taxonomy.terms;
-      notifyChange();
-      productStatusesInitialized = true;
-    });
-}
+let { brewers, manufacturers, productStatuses } = resetStore();
 
 export class Filter {
   constructor() {
@@ -130,28 +70,62 @@ export class Filter {
 
 let brewerFilter = new Filter();
 
-class Brewer {
+class Brewer extends BaseStore {
+  constructor() {
+    super();
+  }
+
+  fetchBrewers(language) {
+    var query = Client.items()
+      .type('brewer')
+      .orderParameter('elements.product_name');
+
+    if (language) {
+      query.languageParameter(language);
+    }
+
+    query.getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        if (language) {
+          brewers[language] = response.items;
+        } else {
+          brewers[defaultLanguage] = response.items;
+        }
+        this.notifyChange();
+      });
+  }
 
   // Actions
-
   provideBrewer(brewerSlug, language) {
-    fetchBrewers(language);
+    this.fetchBrewers(language);
   }
 
   provideBrewers(language) {
-    fetchBrewers(language);
+    this.fetchBrewers(language);
   }
 
   provideManufacturers() {
-    fetchManufacturers();
+    Client.taxonomy('manufacturer')
+      .getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        manufacturers = response.taxonomy.terms;
+        this.notifyChange();
+      });
   }
 
   provideProductStatuses() {
-    fetchProductStatuses();
+    Client.taxonomy('product_status')
+      .getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        productStatuses = response.taxonomy.terms;
+        this.notifyChange();
+      });
   }
 
   // Methods
-
   getBrewer(brewerSlug, language) {
     return brewers[language || defaultLanguage].find((brewer) => brewer.urlPattern.value === brewerSlug);
   }
@@ -174,26 +148,10 @@ class Brewer {
 
   setFilter(filter) {
     brewerFilter = filter;
-    notifyChange();
+    this.notifyChange();
   }
-
-  // Listeners
-
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
-
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
-
 }
 
 let BrewerStore = new Brewer();
 
-export {
-  BrewerStore,
-  resetStore
-}
+export { BrewerStore, resetStore }

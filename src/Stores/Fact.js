@@ -1,68 +1,48 @@
 import { Client } from '../Client.js';
+import { takeUntil } from 'rxjs/operators';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import BaseStore from './Base';
 
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes'
-
-let changeListeners = [];
 const resetStore = () => ({
   facts: initLanguageCodeObject()
 });
 let { facts } = resetStore();
 
-let notifyChange = () => {
-  changeListeners.forEach((listener) => {
-    listener();
-  });
-}
-
-let fetchFacts = (language) => {
-  var query = Client.item('about_us')
-
-  if (language) {
-    query.languageParameter(language);
+class Fact extends BaseStore {
+  constructor() {
+    super();
   }
 
-  query.getObservable()
-    .subscribe(response => {
-      if (language) {
-        facts[language] = response.item.facts;
-      } else {
-        facts[defaultLanguage] = response.item.facts;
-      }
-      notifyChange();
-    });
-}
+  fetchFacts(language) {
+    var query = Client.item('about_us');
 
-class Fact {
+    if (language) {
+      query.languageParameter(language);
+    }
+
+    query.getObservable()
+      .pipe(takeUntil(this.observableUnsubscribe))
+      .subscribe(response => {
+        if (language) {
+          facts[language] = response.item.facts;
+        } else {
+          facts[defaultLanguage] = response.item.facts;
+        }
+        this.notifyChange();
+      });
+  }
 
   // Actions
-
   provideFacts(language) {
-    fetchFacts(language);
+    this.fetchFacts(language);
   }
 
   // Methods
-
   getFacts(language) {
     return facts[language];
   }
-
-  // Listeners
-
-  addChangeListener(listener) {
-    changeListeners.push(listener);
-  }
-
-  removeChangeListener(listener) {
-    changeListeners = changeListeners.filter((element) => {
-      return element !== listener;
-    });
-  }
-
 }
 
 let FactStore = new Fact();
 
-export {
-  FactStore,
-  resetStore
-}
+export { FactStore, resetStore }

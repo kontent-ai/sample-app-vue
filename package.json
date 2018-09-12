@@ -8,14 +8,17 @@
     "lint": "vue-cli-service lint"
   },
   "lint-staged": {
-    "*.{js,vue}": ["vue-cli-service lint", "git add"]
+    "*.{js,vue}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "kentico-cloud-delivery": "^4.0.2",
+    "kentico-cloud-delivery": "^5.0.0-beta.2",
     "lodash": "^4.17.5",
     "qs": "^6.5.2",
     "rxjs": "^6.2.0",

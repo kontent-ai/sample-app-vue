@@ -1,15 +1,15 @@
 <template>
-    <div 
-        class="container" 
+    <div
+        class="container"
         v-if="!coffee"
     >
     </div>
-    <div 
-        class="container" 
+    <div
+        class="container"
         v-else
     >
-        <article 
-            v-if="coffee" 
+        <article
+            v-if="coffee"
             class="product-detail"
         >
             <div class="row">
@@ -22,16 +22,16 @@
             <div class="row-fluid">
                 <div class="col-lg-7 col-md-6">
                     <figure class="image">
-                        <img 
-                            :alt="name" 
-                            class="" 
-                            :src="imageLink" 
+                        <img
+                            :alt="name"
+                            class=""
+                            :src="imageLink"
                             :title="name"
                         />
                     </figure>
                     <div class="description">
-                        <RichTextElement 
-                            v-if="descriptionElement" 
+                        <RichTextElement
+                            v-if="descriptionElement"
                             :element="descriptionElement"
                         />
                         <div class="product-detail-properties">
@@ -97,10 +97,14 @@ export default {
       this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
     }
   },
-  created: function () {
+  mounted: function() {
+    CoffeeStore.subscribe();
     CoffeeStore.addChangeListener(this.onChange);
     CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
     this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
+  },
+  beforeDestroy: function() {
+    CoffeeStore.unsubscribe();
   },
   destroyed: function () {
     CoffeeStore.removeChangeListener(this.onChange);

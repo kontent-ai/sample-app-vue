@@ -1,6 +1,6 @@
 <template>
-    <header 
-        class="header" 
+    <header
+        class="header"
         role="banner"
     >
         <div class="menu">
@@ -17,10 +17,7 @@
                             <router-link :to="articlesRoute">{{$t('Header.articlesLinkTitle')}}</router-link>
                         </li>
                         <li >
-                            <router-link 
-                                @click.native="LogAboutUs" 
-                                :to="aboutRoute"
-                            >{{$t('Header.aboutLinkTitle')}}</router-link>
+                            <router-link :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
                             <router-link :to="cafesRoute">{{$t('Header.cafesLinkTitle')}}</router-link>
@@ -44,16 +41,16 @@
                 </div>
             </div>
         </div>
-        <MessageBox 
-            v-if="infoMessageText" 
+        <MessageBox
+            v-if="infoMessageText"
             :message="infoMessageText"
         />
         <div class="header-row">
             <div class="container">
                 <div class="col-xs-8 col-md-8 col-lg-4 logo">
                     <h1 class="logo">
-                        <router-link 
-                            class='logo-link' 
+                        <router-link
+                            class='logo-link'
                             :to="homeRoute"
                         >Dancing Goat</router-link>
                     </h1>
@@ -64,8 +61,7 @@
 </template>
 
 <script>
-import { LogAboutUs }from '../Utilities/ActivityLogging'
-import MessageBox from './MessageBox'    
+import MessageBox from './MessageBox'
 
 export default {
   name: 'Header',
@@ -89,9 +85,6 @@ export default {
     contactsRoute: function(){
       return '/' + this.language + '/' + 'contacts';
     }
-  },
-  methods: {
-    LogAboutUs,
   },
   components: {
     MessageBox

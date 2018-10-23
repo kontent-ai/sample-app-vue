@@ -10,12 +10,14 @@
                 <div class="col-md-3" >
                     <div class="article-tile">
                         <router-link :to="article.link">
-                            <img
+                            <img 
+                                v-if="article.imageLink"
                                 :alt="'Article '  + article.title"
                                 class="article-tile-image"
                                 :src="article.imageLink"
                                 :title="'Article ' + article.title"
                             />
+                            <span v-else>Article {{ article.title }}</span>
                         </router-link>
                         <div class="article-tile-date">
                             {{article.postDate}}
@@ -39,6 +41,7 @@
 import dateFormat from 'dateformat';
 import { ArticleStore } from '../Stores/Article';
 import { dateFormats } from '../Utilities/LanguageCodes';
+import { mapArticle } from '../Utilities/MapArticle';
 
 export default {
   name: 'Articles',
@@ -49,13 +52,7 @@ export default {
   }),
   computed: {
     articlesData: function() {
-      return this.articles.map(article => ({
-        title: article.title.value,
-        imageLink: article.teaserImage.value[0].url,
-        postDate: this.formatDate(article.postDate.value),
-        summary: article.summary.value,
-        link: `/${this.language}/articles/${article.system.id}`
-      }));
+      return this.articles.map(mapArticle);
     }
   },
   watch: {
@@ -66,7 +63,7 @@ export default {
   },
   methods: {
     formatDate: function(value) {
-      return dateFormat(value, 'mmmm d');
+      return value ? dateFormat(value, 'mmmm d') : undefined;
     },
     onChange: function() {
       this.articles = ArticleStore.getArticles(

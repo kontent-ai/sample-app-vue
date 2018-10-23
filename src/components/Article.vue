@@ -37,6 +37,7 @@ import { ArticleStore } from '../Stores/Article'
 import dateFormat from 'dateformat';
 import { dateFormats } from '../Utilities/LanguageCodes'
 import RichTextElement from './RichTextElement.vue'
+import { mapArticle } from '../Utilities/MapArticle';
 
 export default {
   name: 'Article',
@@ -46,12 +47,7 @@ export default {
   }),
   computed: {
     articleData: function(){
-      return ({
-        title: this.article.title.value,
-        imageLink: this.article.teaserImage.value[0].url,
-        postDate: this.formatDate(this.article.postDate.value),
-        bodyCopyElement: this.article.bodyCopy,
-      })
+      return mapArticle(this.article);
     }
   },
   watch: {

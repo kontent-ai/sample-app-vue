@@ -20,7 +20,6 @@
     "dateformat": "^3.0.3",
     "kentico-cloud-delivery": "^5.1.0",
     "lodash": "^4.17.5",
-    "npm": "^6.4.1",
     "qs": "^6.5.2",
     "rxjs": "^6.2.0",
     "twitter-widgets": "^1.0.0",

@@ -10,7 +10,7 @@
                 <div class="col-md-3" >
                     <div class="article-tile">
                         <router-link :to="article.link">
-                            <img 
+                            <img
                                 v-if="article.imageLink"
                                 :alt="'Article '  + article.title"
                                 class="article-tile-image"
@@ -52,7 +52,7 @@ export default {
   }),
   computed: {
     articlesData: function() {
-      return this.articles.map(mapArticle);
+      return this.articles.map(mapArticle, this.formatDate.bind(this), this.$t.bind(this));
     }
   },
   watch: {

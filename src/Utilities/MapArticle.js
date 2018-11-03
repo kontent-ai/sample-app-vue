@@ -1,11 +1,12 @@
 import _ from 'lodash';
 
-export function mapArticle(article) {
+export function mapArticle(
+  article, formatDateFn, i18nFn) {
   return {
-    title: _.get(article, 'title.value') || '(Article has no title)',
+    title: _.get(article, 'title.value', i18nFn('noArticleValue')),
     imageLink: _.get(article, 'teaserImage.value[0].url'),
-    postDate: this.formatDate(_.get(article, 'postDate.value')),
-    summary: _.get(article, 'summary.value') || 'No summary yet',
+    postDate: formatDateFn(_.get(article, 'postDate.value')),
+    summary: _.get(article, 'summary.value', i18nFn('noSummaryValue')),
     link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
     bodyCopyElement: _.get(article, 'bodyCopy')
   };

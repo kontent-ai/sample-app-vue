@@ -56,5 +56,9 @@
       "contact": "Contact",
       "cityStateZip": "Illinois 60601, USA",
       "allRightsReserved": "All rights reserved."
+    },
+    "Articles": {
+        "noTitleValue": "(Article  has no title)",
+        "noSummaryValue": "No summary yet"
     }
 }

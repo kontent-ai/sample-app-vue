@@ -52,7 +52,9 @@ export default {
   }),
   computed: {
     articlesData: function() {
-      return this.articles.map(mapArticle, this.formatDate.bind(this), this.$t.bind(this));
+      const formatDat = this.formatDate.bind(this);
+      const $t = this.$t.bind(this);
+      return this.articles.map(article => mapArticle(article, formatDate, $t));
     }
   },
   watch: {

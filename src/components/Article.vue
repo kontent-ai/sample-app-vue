@@ -47,7 +47,11 @@ export default {
   }),
   computed: {
     articleData: function(){
-      return mapArticle(this.article, this.formatDate.bind(this), this.$t.bind(this));
+      return mapArticle(
+        this.article,
+        this.formatDate.bind(this),
+        this.$t.bind(this),
+        this.language);
     }
   },
   watch: {

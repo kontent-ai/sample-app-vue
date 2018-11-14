@@ -16,7 +16,9 @@ This is a sample website written in JavaScript utilizing the Kentico Cloud Deliv
 
 ### Connecting to your sample project
 
-At the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kentico Cloud sample project or create a new one. You'll also be able to start a trial and convert to a free plan when the trial expires. 
+At the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kentico Cloud sample project or create a new one. You'll also be able to start a trial and convert to a free plan when the trial expires.
+
+* If you want to open the configuration page after the project is already connected to the app. Just open url <http://localhost:8080/Admin/Configuration>.
 
 Alternatively, you can connect your project manually as per the chapter below.
 

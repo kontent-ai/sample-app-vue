@@ -1,6 +1,6 @@
 <template>
     <div 
-        v-if="this.$route.path !== projectConfigurationPath" 
+        v-if="this.$route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()" 
         id="app" 
         class="application-content"
     >

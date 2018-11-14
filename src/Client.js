@@ -4,8 +4,8 @@ import { selectedProjectCookieName, defaultProjectId } from './Utilities/Selecte
 // kentico cloud
 import { DeliveryClient, TypeResolver } from 'kentico-cloud-delivery';
 
-const projectId = '';
-const previewApiKey = '';
+const projectId = 'dbb5068c-9ed9-00f3-7898-d3b46e31f9ed';
+const previewApiKey = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5Y2YxNzFjYTFjOWM0ODgwOGZkNzdhOTI2MzI5Njg4YSIsImlhdCI6IjE1NDE1MzMxNTciLCJleHAiOiIxODg3MTMzMTU3IiwicHJvamVjdF9pZCI6ImRiYjUwNjhjOWVkOTAwZjM3ODk4ZDNiNDZlMzFmOWVkIiwidmVyIjoiMS4wLjAiLCJhdWQiOiJwcmV2aWV3LmRlbGl2ZXIua2VudGljb2Nsb3VkLmNvbSJ9.GEvEf_9u3vZEOJGQIoi0ps_TWeC5YbEPg5gGDrTMM1Y';
 
 // models
 import { AboutUs } from './Models/AboutUs'

@@ -41,7 +41,7 @@
 import dateFormat from 'dateformat';
 import { ArticleStore } from '../Stores/Article';
 import { dateFormats } from '../Utilities/LanguageCodes';
-import { mapArticle } from '../Utilities/MapArticle';
+import _ from 'lodash';
 
 export default {
   name: 'Articles',
@@ -52,11 +52,13 @@ export default {
   }),
   computed: {
     articlesData: function() {
-      const formatDate = this.formatDate.bind(this);
-      const $t = this.$t.bind(this);
-      return this.articles.map(article =>
-        mapArticle(article, formatDate, $t, this.language)
-      );
+      return this.articles.map(article => ({
+        title: _.get(article, 'title.value', this.$t('Articles.noTitleValue')),
+        imageLink: _.get(article, 'teaserImage.value[0].url'),
+        link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
+        postDate: this.formatDate(_.get(article, 'postDate.value')),
+        summary: _.get(article, 'summary.value', this.$t('Articles.noSummaryValue'))
+      }));
     }
   },
   watch: {

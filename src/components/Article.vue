@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import { ArticleStore } from '../Stores/Article'
+import { ArticleStore } from '../Stores/Article';
 import dateFormat from 'dateformat';
-import { dateFormats } from '../Utilities/LanguageCodes'
-import RichTextElement from './RichTextElement.vue'
-import { mapArticle } from '../Utilities/MapArticle';
+import { dateFormats } from '../Utilities/LanguageCodes';
+import RichTextElement from './RichTextElement.vue';
+import _ from 'lodash';
 
 export default {
   name: 'Article',
@@ -46,12 +46,13 @@ export default {
     article: null,
   }),
   computed: {
-    articleData: function(){
-      return mapArticle(
-        this.article,
-        this.formatDate.bind(this),
-        this.$t.bind(this),
-        this.language);
+    articleData: function() {
+      return {
+        title: _.get(this.article, 'title.value', this.$t('Articles.noTitleValue')),
+        imageLink: _.get(this.article, 'teaserImage.value[0].url'),
+        postDate: this.formatDate(_.get(this.article, 'postDate.value')),
+        bodyCopyElement: _.get(this.article, 'bodyCopy')
+      };
     }
   },
   watch: {
@@ -86,7 +87,6 @@ export default {
   },
   components: {
     RichTextElement
-  },
-
+  }
 }
 </script>

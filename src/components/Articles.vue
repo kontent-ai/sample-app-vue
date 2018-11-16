@@ -17,7 +17,10 @@
                                 :src="article.imageLink"
                                 :title="'Article ' + article.title"
                             />
-                            <span v-else>Article {{ article.title }}</span>
+                            <span 
+                                v-else 
+                                class="article-tile-image"
+                            >{{ $t('Article.noTeaserValue') }}</span>
                         </router-link>
                         <div class="article-tile-date">
                             {{article.postDate}}
@@ -53,11 +56,11 @@ export default {
   computed: {
     articlesData: function() {
       return this.articles.map(article => ({
-        title: _.get(article, 'title.value', this.$t('Articles.noTitleValue')),
+        title: _.get(article, 'title.value') || this.$t('Article.noTitleValue'),
         imageLink: _.get(article, 'teaserImage.value[0].url'),
         link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
         postDate: this.formatDate(_.get(article, 'postDate.value')),
-        summary: _.get(article, 'summary.value', this.$t('Articles.noSummaryValue'))
+        summary: _.get(article, 'summary.value') || this.$t('Article.noSummaryValue')
       }));
     }
   },
@@ -69,7 +72,7 @@ export default {
   },
   methods: {
     formatDate: function(value) {
-      return value ? dateFormat(value, 'mmmm d') : undefined;
+      return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
     },
     onChange: function() {
       this.articles = ArticleStore.getArticles(

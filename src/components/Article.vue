@@ -15,18 +15,25 @@
             <div class="row">
                 <div class="article-detail-image col-md-push-2 col-md-8">
                     <img
+                        v-if="articleData.imageLink"
                         :alt="articleData.title"
                         class="img-responsive"
                         :src="articleData.imageLink"
                         :title="articleData.title"
                     />
+                    <span 
+                        v-else 
+                        class="img-responsive"
+                    >{{ $t('Article.noTeaserValue') }}</span>
                 </div>
             </div>
             <div class="row">
                 <RichTextElement
+                    v-if="articleData.bodyCopyElement.getHtml()"
                     styleClass="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
+                <span class="article-detail-content">{{ $t('Article.noBodyCopyValue')}}</span>
             </div>
         </article>
     </div>
@@ -48,10 +55,10 @@ export default {
   computed: {
     articleData: function() {
       return {
-        title: _.get(this.article, 'title.value', this.$t('Articles.noTitleValue')),
+        title: _.get(this.article, 'title.value') || this.$t('Article.noTitleValue'),
         imageLink: _.get(this.article, 'teaserImage.value[0].url'),
         postDate: this.formatDate(_.get(this.article, 'postDate.value')),
-        bodyCopyElement: _.get(this.article, 'bodyCopy')
+        bodyCopyElement: _.get(this.article, 'bodyCopy') || this.$t('Article.noBodyCopyValue')
       };
     }
   },
@@ -63,7 +70,7 @@ export default {
   },
   methods: {
     formatDate: function(value){
-      return dateFormat(value, 'dddd, mmmm d, yyyy');
+      return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('Article.noPostDateValue');
     },
     onChange: function(){
       this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);

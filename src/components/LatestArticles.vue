@@ -13,7 +13,7 @@
             <div class="col-md-12 col-lg-6">
                 <router-link :to="articlesData[0].link">
                     <img
-                        v-if="articlesData.imageLink"
+                        v-if="articlesData[0].imageLink"
                         v-bind:alt="articlesData[0].title"
                         class="article-tile-image"
                         v-bind:src="articlesData[0].imageLink"

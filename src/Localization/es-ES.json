@@ -56,5 +56,13 @@
       "contact": "Contacto",
       "cityStateZip": "Illinois 60601, EE.UU.",
       "allRightsReserved": "Todos los derechos reservados."
+    },
+    "Article": {
+        "noTitleValue": "(El artículo no tiene título)",
+        "noTeaserValue": "(El artículo no tiene imagen teaser)",
+        "noSummaryValue": "Sin resumen lleno",
+        "noBodyCopyValue" : "Ningún elemento body copy lleno",
+        "noPostDateValue": "Ningún elemento post date lleno"
     }
+
 }

@@ -15,28 +15,36 @@
             <div class="row">
                 <div class="article-detail-image col-md-push-2 col-md-8">
                     <img
+                        v-if="articleData.imageLink"
                         :alt="articleData.title"
                         class="img-responsive"
                         :src="articleData.imageLink"
                         :title="articleData.title"
                     />
+                    <span 
+                        v-else 
+                        class="img-responsive"
+                    >{{ $t('Article.noTeaserValue') }}</span>
                 </div>
             </div>
             <div class="row">
                 <RichTextElement
+                    v-if="articleData.bodyCopyElement.getHtml()"
                     styleClass="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
+                <span class="article-detail-content">{{ $t('Article.noBodyCopyValue')}}</span>
             </div>
         </article>
     </div>
 </template>
 
 <script>
-import { ArticleStore } from '../Stores/Article'
+import { ArticleStore } from '../Stores/Article';
 import dateFormat from 'dateformat';
-import { dateFormats } from '../Utilities/LanguageCodes'
-import RichTextElement from './RichTextElement.vue'
+import { dateFormats } from '../Utilities/LanguageCodes';
+import RichTextElement from './RichTextElement.vue';
+import _ from 'lodash';
 
 export default {
   name: 'Article',
@@ -45,13 +53,13 @@ export default {
     article: null,
   }),
   computed: {
-    articleData: function(){
-      return ({
-        title: this.article.title.value,
-        imageLink: this.article.teaserImage.value[0].url,
-        postDate: this.formatDate(this.article.postDate.value),
-        bodyCopyElement: this.article.bodyCopy,
-      })
+    articleData: function() {
+      return {
+        title: _.get(this.article, 'title.value') || this.$t('Article.noTitleValue'),
+        imageLink: _.get(this.article, 'teaserImage.value[0].url'),
+        postDate: this.formatDate(_.get(this.article, 'postDate.value')),
+        bodyCopyElement: _.get(this.article, 'bodyCopy') || this.$t('Article.noBodyCopyValue')
+      };
     }
   },
   watch: {
@@ -62,7 +70,7 @@ export default {
   },
   methods: {
     formatDate: function(value){
-      return dateFormat(value, 'dddd, mmmm d, yyyy');
+      return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('Article.noPostDateValue');
     },
     onChange: function(){
       this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
@@ -86,7 +94,6 @@ export default {
   },
   components: {
     RichTextElement
-  },
-
+  }
 }
 </script>

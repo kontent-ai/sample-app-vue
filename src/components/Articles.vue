@@ -11,11 +11,16 @@
                     <div class="article-tile">
                         <router-link :to="article.link">
                             <img
+                                v-if="article.imageLink"
                                 :alt="'Article '  + article.title"
                                 class="article-tile-image"
                                 :src="article.imageLink"
                                 :title="'Article ' + article.title"
                             />
+                            <span 
+                                v-else 
+                                class="article-tile-image"
+                            >{{ $t('Article.noTeaserValue') }}</span>
                         </router-link>
                         <div class="article-tile-date">
                             {{article.postDate}}
@@ -39,6 +44,7 @@
 import dateFormat from 'dateformat';
 import { ArticleStore } from '../Stores/Article';
 import { dateFormats } from '../Utilities/LanguageCodes';
+import _ from 'lodash';
 
 export default {
   name: 'Articles',
@@ -50,11 +56,11 @@ export default {
   computed: {
     articlesData: function() {
       return this.articles.map(article => ({
-        title: article.title.value,
-        imageLink: article.teaserImage.value[0].url,
-        postDate: this.formatDate(article.postDate.value),
-        summary: article.summary.value,
-        link: `/${this.language}/articles/${article.system.id}`
+        title: _.get(article, 'title.value') || this.$t('Article.noTitleValue'),
+        imageLink: _.get(article, 'teaserImage.value[0].url'),
+        link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
+        postDate: this.formatDate(_.get(article, 'postDate.value')),
+        summary: _.get(article, 'summary.value') || this.$t('Article.noSummaryValue')
       }));
     }
   },
@@ -66,7 +72,7 @@ export default {
   },
   methods: {
     formatDate: function(value) {
-      return dateFormat(value, 'mmmm d');
+      return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
     },
     onChange: function() {
       this.articles = ArticleStore.getArticles(

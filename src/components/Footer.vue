@@ -7,7 +7,7 @@
                         <div class="col-md-4 col-lg-4 footer-col">
                             <h3 class="contact-title">{{$t('Footer.contact')}}</h3>
                             <p>
-                                (+1) 617-632-4520<br />
+                                (+0) 000-000-0000<br />
                                 <router-link to="mailto:dancinggoat@localhost.local">{{email}}</router-link>
                                 <br />
                                 <br /> Dancing Goat Ltd<br /> 62 E Lake St Chicago,<br /> {{$t('Footer.cityStateZip')}}

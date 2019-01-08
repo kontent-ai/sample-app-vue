@@ -34,7 +34,7 @@ If you want to change the source Kentico Cloud project, follow these steps:
 6. Change the values of the constants using the Project ID key you copied.
 7. Save the file.
 
-When you now run the application, it will retrieve content from your sample project.
+When you now run the application, it will retrieve the content from your sample project. This set up has higher priority then [setting your sample project by the Configuration page](#connecting-to-your-sample-project).
 
 ## Previewing content from your project
 

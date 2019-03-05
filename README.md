@@ -1,6 +1,7 @@
 # Kentico Cloud sample Vue.js single-page application
 [![Build Status](https://api.travis-ci.org/Kentico/cloud-sample-app-vue.svg?branch=master)](https://travis-ci.org/Kentico/cloud-sample-app-vue)
 [![Live Demo](https://img.shields.io/badge/live-demo-brightgreen.svg)](http://kentico-cloud-sample-app-vue.surge.sh)
+[![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kentico-cloud)
 
 This is a sample website written in JavaScript utilizing the Kentico Cloud Delivery API to manage and retrieve content. You can register your account for free at <https://app.kenticocloud.com>.
 

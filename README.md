@@ -28,11 +28,10 @@ If you want to change the source Kentico Cloud project, follow these steps:
 
 1. In Kentico Cloud, choose Project settings from the app menu.
 2. Under Development, choose API keys.
-3. Copy your Project ID and Preview API key.
-4. Open the `src\Client.js` file in the sample application folder.
-5. Find the `projectId` constant.
-6. Change the values of the constants using the Project ID key you copied.
-7. Save the file.
+3. Copy your Project ID.
+4. Create and open a `.env.local` file in the sample application folder.
+5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
+6. Save the file.
 
 When you now run the application, it will retrieve the content from your sample project. This set up has higher priority then [setting your sample project by the Configuration page](#connecting-to-your-sample-project).
 
@@ -43,9 +42,9 @@ To preview unpublished content in the sample application, follow these steps:
 1. In Kentico Cloud, choose Project settings from the app menu.
 2. Under Development, choose API keys.
 3. Copy your Project ID and Preview API key.
-4. Open the `src\Client.js` file in the sample application folder.
-5. Find the `projectId` and `previewApiKey` constants.
-6. Change the values of the constants using the Project ID and Preview API key you copied.
+4. Create and open a `.env.local` file in the sample application folder.
+5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
+6. On the next line, add your Preview API key using the format `VUE_APP_PREVIEW_API_KEY=00000000-0000-0000-0000-000000000000`.
 7. Save the file.
 
 When you now run the application, you will see all project content including the unpublished version of content items.

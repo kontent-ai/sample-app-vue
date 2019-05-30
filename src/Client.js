@@ -4,8 +4,8 @@ import { selectedProjectCookieName, defaultProjectId } from './Utilities/Selecte
 // kentico cloud
 import { DeliveryClient, TypeResolver } from 'kentico-cloud-delivery';
 
-const projectId = '';
-const previewApiKey = '';
+const projectId = process.env.VUE_APP_PROJECT_ID || '';
+const previewApiKey = process.env.VUE_APP_PREVIEW_API_KEY || '';
 
 // models
 import { AboutUs } from './Models/AboutUs'

@@ -20,8 +20,8 @@ import Article from './components/Article.vue'
 
 import { projectConfigurationPath } from './Utilities/SelectedProject'
 
-import * as en from './Localization/en-US.json'
-import * as es from './Localization/es-ES.json'
+import en from './Localization/en-US.json'
+import es from './Localization/es-ES.json'
 
 import './index.css';
 import './components/Admin/Admin.css';

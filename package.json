@@ -18,27 +18,27 @@
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "kentico-cloud-delivery": "^5.1.0",
-    "lodash": "^4.17.5",
-    "qs": "^6.5.2",
-    "rxjs": "^6.2.0",
+    "kentico-cloud-delivery": "^5.7.2",
+    "lodash": "^4.17.11",
+    "qs": "^6.7.0",
+    "rxjs": "^6.5.2",
     "twitter-widgets": "^1.0.0",
     "universal-cookie": "^2.2.0",
-    "validator": "^10.4.0",
-    "vue": "^2.5.13",
-    "vue-i18n": "^7.6.0",
+    "validator": "^10.11.0",
+    "vue": "^2.6.10",
+    "vue-i18n": "^7.8.1",
     "vue-i18n-loader": "^1.0.0",
-    "vue-router": "^3.0.1",
-    "vue-scrollto": "^2.11.0",
-    "vue2-google-maps": "^0.8.11"
+    "vue-router": "^3.0.6",
+    "vue-scrollto": "^2.15.0",
+    "vue2-google-maps": "^0.8.12"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.0-beta.3",
-    "@vue/cli-plugin-eslint": "^3.0.0-beta.3",
-    "@vue/cli-service": "^3.0.0-beta.3",
-    "deepmerge": "^2.1.0",
-    "lint-staged": "^7.2.2",
-    "vue-template-compiler": "^2.5.13"
+    "@vue/cli-plugin-babel": "^3.8.0",
+    "@vue/cli-plugin-eslint": "^3.8.0",
+    "@vue/cli-service": "^3.8.0",
+    "deepmerge": "^2.2.1",
+    "lint-staged": "^7.3.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "babel": {
     "presets": [

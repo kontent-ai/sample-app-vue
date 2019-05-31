@@ -33,10 +33,12 @@ import { CafeStore } from '../Stores/Cafe'
 export default {
   name: 'taste-our-coffee',
   props: ['language'],
-  data: () => ({
-    cafes: [],
-    cafesLink: `${this.language}/cafes`,
-  }),
+  data: function () {
+    return {
+      cafes: [],
+      cafesLink: `${this.language}/cafes`,
+    }
+  },
   computed: {
     cafesData: function(){
       return this.cafes.map(cafe => ({

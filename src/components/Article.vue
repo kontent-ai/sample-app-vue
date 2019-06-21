@@ -33,7 +33,10 @@
                     styleClass="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
-                <span class="article-detail-content">{{ $t('Article.noBodyCopyValue')}}</span>
+                <span
+                    v-else
+                    class="article-detail-content"
+                >{{ $t('Article.noBodyCopyValue')}}</span>
             </div>
         </article>
     </div>

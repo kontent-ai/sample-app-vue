@@ -30,7 +30,7 @@
             <div class="row">
                 <RichTextElement
                     v-if="articleData.bodyCopyElement.getHtml()"
-                    styleClass="article-detail-content"
+                    class="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
                 <span

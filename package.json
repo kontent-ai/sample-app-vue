@@ -19,7 +19,7 @@
   "dependencies": {
     "dateformat": "^3.0.3",
     "kentico-cloud-delivery": "^5.7.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "qs": "^6.7.0",
     "rxjs": "^6.5.2",
     "twitter-widgets": "^1.0.0",

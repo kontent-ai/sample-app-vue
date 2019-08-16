@@ -1,6 +1,6 @@
 <template>
     <div 
-        v-html="element.getHtml()" 
+        v-html="element.resolveHtml()" 
         @click="handleClick"
     />
 </template>

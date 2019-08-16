@@ -158,7 +158,7 @@ export default {
       Client.items()
         .elementsParameter(['id'])
         .depthParameter(0)
-        .getObservable()
+        .toObservable()
         .pipe(takeUntil(this.unsubscribeSubject))
         .subscribe(response => {
           this.sampleProjectItemCount = response.items.length;
@@ -188,7 +188,7 @@ export default {
         Client.items()
           .elementsParameter(['id'])
           .depthParameter(0)
-          .getObservable()
+          .toObservable()
           .pipe(takeUntil(this.unsubscribeSubject))
           .subscribe(response => {
             if (response.items.length >= this.sampleProjectItemCount) {

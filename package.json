@@ -18,7 +18,7 @@
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "kentico-cloud-delivery": "^5.7.2",
+    "kentico-cloud-delivery": "^6.0.0",
     "lodash": "^4.17.13",
     "qs": "^6.7.0",
     "rxjs": "^6.5.2",

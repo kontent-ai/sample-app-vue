@@ -35,7 +35,7 @@ class Cafe extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {

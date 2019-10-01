@@ -32,6 +32,7 @@ If you want to change the source Kentico Cloud project, follow these steps:
 4. Create and open a `.env.local` file in the sample application folder.
 5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
 6. Save the file.
+7. Then u can run it.
 
 When you now run the application, it will retrieve the content from your sample project. This set up has higher priority then [setting your sample project by the Configuration page](#connecting-to-your-sample-project).
 
@@ -59,7 +60,7 @@ You can learn more about content editing with Kentico Cloud in the [documentatio
 
 ## Content delivery
 
-You can retrieve content either through the Kentico Cloud Delivery SDKs or the Kentico Cloud Delivery API:
+You can retrieve content either through the Kentico Cloud Delivery SDKs or the `Kentico Cloud Delivery` API:
 
 * For published content, use `https://deliver.kenticocloud.com/PROJECT_ID/items`.
 * For unpublished content, use `https://preview-deliver.kenticocloud.com/PROJECT_ID/items`.

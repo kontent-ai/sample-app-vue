@@ -204,7 +204,7 @@ export default {
       const infoMessage =
         newProjectId === defaultProjectId
           ? 'You\'ve configured your app to with a project ID of a shared Kentico Kontent project.'
-          : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.konent.ai/.`;
+          : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
       this.$router.push(`/?infoMessage=${infoMessage}`);
     },
     receiveMessage(event) {

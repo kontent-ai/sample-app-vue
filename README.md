@@ -52,7 +52,7 @@ When you now run the application, you will see all project content including the
 
 ## Content administration
 
-1. Navigate to <https://app.konent.ai> in your browser.
+1. Navigate to <https://app.kontent.ai> in your browser.
 2. Sign in with your credentials.
 3. Manage content in the content administration interface of your sample project.
 

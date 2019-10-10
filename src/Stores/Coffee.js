@@ -69,7 +69,7 @@ class Coffee extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
@@ -92,7 +92,7 @@ class Coffee extends BaseStore {
 
   provideProcessings() {
     Client.taxonomy('processing')
-      .getObservable()
+      .toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         processings = response.taxonomy.terms;
@@ -102,7 +102,7 @@ class Coffee extends BaseStore {
 
   provideProductStatuses() {
     Client.taxonomy('product_status')
-      .getObservable()
+      .toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         productStatuses = response.taxonomy.terms;

@@ -1,5 +1,5 @@
 import { Client } from '../Client.js';
-import { SortOrder } from 'kentico-cloud-delivery';
+import { SortOrder } from '@kentico/kontent-delivery';
 import { takeUntil } from 'rxjs/operators';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import BaseStore from './Base';
@@ -26,7 +26,7 @@ class Article extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
@@ -47,7 +47,7 @@ class Article extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {

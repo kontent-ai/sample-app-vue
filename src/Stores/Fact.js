@@ -20,13 +20,13 @@ class Fact extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
-          facts[language] = response.item.facts;
+          facts[language] = response.item.facts.value;
         } else {
-          facts[defaultLanguage] = response.item.facts;
+          facts[defaultLanguage] = response.item.facts.value;
         }
         this.notifyChange();
       });

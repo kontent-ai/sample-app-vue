@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <RichTextElement
-                    v-if="articleData.bodyCopyElement.getHtml()"
+                    v-if="articleData.bodyCopyElement.resolveHtml()"
                     class="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />

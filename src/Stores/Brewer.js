@@ -84,7 +84,7 @@ class Brewer extends BaseStore {
       query.languageParameter(language);
     }
 
-    query.getObservable()
+    query.toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         if (language) {
@@ -107,7 +107,7 @@ class Brewer extends BaseStore {
 
   provideManufacturers() {
     Client.taxonomy('manufacturer')
-      .getObservable()
+      .toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         manufacturers = response.taxonomy.terms;
@@ -117,7 +117,7 @@ class Brewer extends BaseStore {
 
   provideProductStatuses() {
     Client.taxonomy('product_status')
-      .getObservable()
+      .toObservable()
       .pipe(takeUntil(this.observableUnsubscribe))
       .subscribe(response => {
         productStatuses = response.taxonomy.terms;

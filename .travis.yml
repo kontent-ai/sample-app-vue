@@ -9,6 +9,6 @@ script:
 deploy:
   provider: surge
   project: ./dist/
-  domain: kentico-cloud-sample-app-vue.surge.sh 
+  domain: https://kontent-sample-app-vue.surge.sh 
   skip_cleanup: true
 

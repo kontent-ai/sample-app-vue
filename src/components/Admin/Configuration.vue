@@ -208,7 +208,7 @@ export default {
       this.$router.push(`/?infoMessage=${infoMessage}`);
     },
     receiveMessage(event) {
-      if (event.origin.toLowerCase() !== 'https://app.konent.ai') return;
+      if (event.origin.toLowerCase() !== 'https://app.kontent.ai') return;
 
       if (!event.data.projectGuid) {
         return;

@@ -22,7 +22,7 @@
     "qs": "^6.7.0",
     "rxjs": "^6.5.2",
     "twitter-widgets": "^1.0.0",
-    "universal-cookie": "^2.2.0",
+    "universal-cookie": "^4.0.3",
     "validator": "^10.11.0",
     "vue": "^2.6.10",
     "vue-i18n": "^7.8.1",

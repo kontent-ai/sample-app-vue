@@ -29,7 +29,7 @@
     "vue-i18n-loader": "^1.0.0",
     "vue-router": "^3.0.6",
     "vue-scrollto": "^2.15.0",
-    "vue2-google-maps": "^0.8.12"
+    "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",

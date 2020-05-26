@@ -20,7 +20,7 @@
     "@kentico/kontent-delivery": "^7.0.1",
     "lodash": "^4.17.15",
     "qs": "^6.7.0",
-    "rxjs": "^6.5.2",
+    "rxjs": "^6.5.5",
     "twitter-widgets": "^1.0.0",
     "universal-cookie": "^4.0.3",
     "validator": "^13.0.0",

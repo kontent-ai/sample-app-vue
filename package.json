@@ -21,7 +21,7 @@
     "lodash": "^4.17.15",
     "qs": "^6.9.4",
     "rxjs": "^6.5.5",
-    "twitter-widgets": "^1.0.0",
+    "twitter-widgets": "^2.0.0",
     "universal-cookie": "^4.0.3",
     "validator": "^13.0.0",
     "vue": "^2.6.11",

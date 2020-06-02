@@ -57,6 +57,7 @@ export default {
           this.zoom = 17;
           VueScrollTo.scrollTo('#map');
         } else {
+          // eslint-disable-next-line no-console
           console.warn('Geocode was not successful for the following reason: ' + status);
         }
       })
@@ -77,6 +78,7 @@ export default {
             let location = results[0].geometry.location;
             this.pushLocation(location);
           } else {
+            // eslint-disable-next-line no-console
             console.warn('Geocode was not successful for the following reason: ' + status);
           }
         })

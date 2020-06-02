@@ -21,14 +21,14 @@
     "lodash": "^4.17.15",
     "qs": "^6.9.4",
     "rxjs": "^6.5.5",
-    "twitter-widgets": "^1.0.0",
+    "twitter-widgets": "^2.0.0",
     "universal-cookie": "^4.0.3",
     "validator": "^13.0.0",
     "vue": "^2.6.11",
-    "vue-i18n": "^7.8.1",
+    "vue-i18n": "^8.18.1",
     "vue-i18n-loader": "^1.0.0",
-    "vue-router": "^3.0.6",
-    "vue-scrollto": "^2.15.0",
+    "vue-router": "^3.3.2",
+    "vue-scrollto": "^2.18.1",
     "vue2-google-maps": "^0.10.7"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-service": "^4.4.1",
     "deepmerge": "^4.2.2",
-    "lint-staged": "^7.3.0",
+    "lint-staged": "^10.2.7",
     "vue-template-compiler": "^2.6.11"
   },
   "babel": {

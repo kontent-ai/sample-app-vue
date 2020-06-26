@@ -205,7 +205,7 @@ export default {
         newProjectId === defaultProjectId
           ? 'You\'ve configured your app to with a project ID of a shared Kentico Kontent project.'
           : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-      const dataOriginInfo = 'Data on this site originates from Kentico Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23%0AData-origin';
+      const dataOriginInfo = 'Data on this site originates from Kentico Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23Data-origin';
       this.$router.push(`/?infoMessage=${infoMessage}${dataOriginInfo}`);
     },
     receiveMessage(event) {

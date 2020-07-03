@@ -15,6 +15,15 @@ This is a sample website written in JavaScript utilizing the Kentico Kontent Del
 5. Type `npm run serve` to start a development server.
 6. The application opens in your browser at <http://localhost:8080>.
 
+### Data origin
+
+This sample wants to showcase either loading content from Kentico Kontent as well as load some part of the site from static JSON resources.
+
+> Basically the content that you can't find in the [`Localization`](https://github.com/Kentico/kontent-sample-app-vue/tree/master/src/Localization) JSON is loaded from Kentico Kontent.
+
+* All data loaded from Kentico Kontent are using [`Stores`](https://github.com/Kentico/kontent-sample-app-vue/tree/master/src/Stores) as for examples "Latest Articles" section ([component here](https://github.com/Kentico/kontent-sample-app-vue/blob/master/src/components/LatestArticles.vue#L111)) on Home Page 
+* The data provided from [`Localization`](https://github.com/Kentico/kontent-sample-app-vue/tree/master/src/Localization) are using `vue-i18n` plugin, so every call in components using `$t('KEYWORD')` in components is loading data from these JSONs as for example "Banner" section" ([component here](https://github.com/Kentico/kontent-sample-app-vue/blob/master/src/components/Banner.vue#L6))
+
 ### Connecting to your sample project
 
 At the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kentico Kontent sample project or create a new one. You'll also be able to start a trial and convert to a free plan when the trial expires.

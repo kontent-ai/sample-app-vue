@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <Banner/>
+        <banner :language="language"/>
         <latest-articles :language="language"/>
         <link-button 
             :text="$t('Home.moreArticles')" 

@@ -9,7 +9,7 @@
                     >
                         <!-- <img 
                             src={kontentLogo} 
-                            alt="Kentico Kontent Logo"
+                            alt="Kontent Logo"
                         /> -->
                         <img v-bind:src="kontentLogo"/>
                     </a>
@@ -19,7 +19,7 @@
         <header>
             <div class="content">
                 <h1>Sample Site—Configuration</h1>
-                <p>For your sample app to work, you should have a Kentico Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kentico Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
+                <p>For your sample app to work, you should have a Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
                     v-if="this.preparingProject"
                     message="Waiting for the sample project to become ready..."
@@ -33,7 +33,7 @@
                 <input 
                     type="submit" 
                     class="button-secondary" 
-                    value="Get Project ID from Kentico Kontent"
+                    value="Get Project ID from Kontent"
                 />
             </form>
         </section>
@@ -203,9 +203,9 @@ export default {
     redirectToHome(newProjectId) {
       const infoMessage =
         newProjectId === defaultProjectId
-          ? 'You\'ve configured your app to with a project ID of a shared Kentico Kontent project.'
+          ? 'You\'ve configured your app to with a project ID of a shared Kontent project.'
           : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-      const dataOriginInfo = 'Data on this site originates from Kentico Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23Data-origin';
+      const dataOriginInfo = 'Data on this site originates from Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23Data-origin';
       this.$router.push(`/?infoMessage=${infoMessage}${dataOriginInfo}`);
     },
     receiveMessage(event) {
@@ -228,7 +228,7 @@ export default {
 
       window.open(
         'https://app.kontent.ai/sample-site-configuration',
-        'Kentico Kontent',
+        'Kontent',
         `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
         ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`
       );

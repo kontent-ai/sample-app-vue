@@ -31,11 +31,10 @@ body {
 }
 
 .kk-container {
-    margin: 0 auto;
     padding: 0 24px;
     max-width: 1048px;
     min-height: 100vh;
-    margin-bottom: 24px;
+    margin: 0 auto 24px;
 }
 
 .margin-top-l {
@@ -574,7 +573,6 @@ input[type=text].project-id-form__input:focus {
     height: 1em;
     overflow: auto;
     width: 1em;
-    animation: spin 2s linear infinite;
     -webkit-animation: spin 2s linear infinite;
 }
 

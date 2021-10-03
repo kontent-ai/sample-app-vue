@@ -1,87 +1,73 @@
 <template>
-    <div class="project-configuration-section">
-        <div class="logotype-row">
-            <div class="content">
-                <div class="logotype">
-                    <a 
-                        href="/" 
-                        class="logotype-link"
-                    >
-                        <!-- <img 
-                            src={kontentLogo} 
-                            alt="Kentico Kontent Logo"
-                        /> -->
-                        <img v-bind:src="kontentLogo"/>
-                    </a>
-                </div>
-            </div>
-        </div>
+    <div class="project-configuration-section kk-container">
+        <a
+            href="/"
+            class="logotype-link"
+        >
+            <img
+                class="logo"
+                v-bind:src="kontentLogo"
+                alt="Kentico Kontent Logo"
+            />
+        </a>
         <header>
-            <div class="content">
-                <h1>Sample Site—Configuration</h1>
-                <p>For your sample app to work, you should have a Kentico Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kentico Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
+            <div>
+                <h1 class="headline-large">Sample Site—Configuration</h1>
+                <p class="margin-top-xl">For your sample app to work, you should have a Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
                     v-if="this.preparingProject"
                     message="Waiting for the sample project to become ready..."
                 ></SpinnerBox>
             </div>
         </header>
-        <section>
-            <h2>Get a Project ID</h2>
-            <p>You may wish to either select from existing projects or create a new sample project. The app will be configured with its project ID.</p>
+        <section class="margin-top-xl">
+            <h2 class="headline-medium">Get a Project ID</h2>
+            <p class="margin-top-l">You may wish to either select from existing projects or create a new sample project. The app will be configured with its project ID.</p>
             <form @submit="openKenticoKontentProjectSelector">
-                <input 
-                    type="submit" 
-                    class="button-secondary" 
-                    value="Get Project ID from Kentico Kontent"
+                <input
+                    type="submit"
+                    class="button-secondary margin-top-xl"
+                    value="Get Project ID from Kontent"
                 />
             </form>
         </section>
-        <div class="content sections-secondary divided">
-            <section class="section-secondary">
-                <h2>Set A Project ID Manually</h2>
-                <p>Alternatively, you can configure your app manually by submitting a project ID below.</p>
-                <div class="inline-controls">
-                    <form @submit="handleSetProjectSubmit">
-                        <div class="form-group">
-                            <div class="form-group-label">
-                                <label for="ProjectGuid">ProjectGuid</label>
-                            </div>
-                            <div class="form-group-input">
-                                <input
-                                    id="ProjectGuid"
-                                    name="ProjectGuid"
-                                    placeholder="ProjectGuid"
-                                    type="text"
-                                    v-model="currentProjectInputValue"
-                                />
-                            </div>
-                            <div class="message-validation">
-                                <span class="field-validation-valid"></span>
-                            </div>
-                        </div>
-                        <input 
-                            type="submit" 
-                            class="button-secondary" 
+        <section class="section-secondary">
+            <h2 class="headline-medium">Set A Project ID Manually</h2>
+            <p class="margin-top-l">Alternatively, you can configure your app manually by submitting a project ID below.</p>
+            <div class="project-id-form margin-top-xl">
+                <form @submit="handleSetProjectSubmit">
+                    <div class="project-id-form">
+                        <input
+                            id="ProjectGuid"
+                            name="ProjectGuid"
+                            placeholder="Project ID"
+                            type="text"
+                            class="project-id-form__input"
+                            v-model="currentProjectInputValue"
+                        />
+                        <span class="field-validation-valid"></span>
+                        <input
+                            type="submit"
+                            class="button-secondary project-id-form__submit-button"
                             value="Submit"
                         />
-                    </form>
-                </div>
-            </section>
-            <section class="section-secondary">
-                <h2>Use the Shared Project</h2>
-                <p>Alternatively, you may wish to use the shared project (project ID "{{defaultProjectId}}").</p>
-                <p>
-                    <strong>Note:</strong> You cannot edit content in the shared project.
-                </p>
-                <input
-                    type="submit"
-                    class="button-secondary"
-                    value="Use the shared project"
-                    @click="setNewProjectId(defaultProjectId)"
-                />
-            </section>
-        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <section class="section-secondary-two">
+            <h2 class="headline-medium">Use the Shared Project</h2>
+            <p class="margin-top-l">Alternatively, you may wish to use the shared project (project ID "{{defaultProjectId}}").</p>
+            <p class="margin-top-l">
+                <strong>Note:</strong> You cannot edit content in the shared project.
+            </p>
+            <input
+                type="submit"
+                class="button-secondary margin-top-xl"
+                value="Use the shared project"
+                @click="setNewProjectId(defaultProjectId)"
+            />
+        </section>
     </div>
 </template>
 

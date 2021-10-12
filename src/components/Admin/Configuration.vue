@@ -235,3 +235,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+body {
+  font-family: 'GT Walsheim Pro', sans-serif;
+  display: table;
+  width: 100%;
+  background-image: linear-gradient(135deg, #F3F4F5, #D3DFF3);
+}
+</style>

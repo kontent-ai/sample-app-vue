@@ -22,14 +22,6 @@ p {
     line-height: 24px;
 }
 
-
-body {
-    font-family: 'GT Walsheim Pro', sans-serif;
-    display: table;
-    width: 100%;
-    background-image: linear-gradient(135deg, #F3F4F5, #D3DFF3);
-}
-
 .kk-container {
     padding: 0 24px;
     max-width: 1048px;

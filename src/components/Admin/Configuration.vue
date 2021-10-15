@@ -243,4 +243,11 @@ body {
   width: 100%;
   background-image: linear-gradient(135deg, #F3F4F5, #D3DFF3);
 }
+p {
+  margin: 0;
+  font-family: 'GT Walsheim Pro', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
 </style>

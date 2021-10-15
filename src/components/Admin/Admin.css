@@ -14,14 +14,6 @@ h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
-p {
-    margin: 0;
-    font-family: 'GT Walsheim Pro', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-}
-
 .kk-container {
     padding: 0 24px;
     max-width: 1048px;

@@ -1,5 +1,6 @@
 import Cookies from 'universal-cookie';
 import { selectedProjectCookieName, defaultProjectId } from './Utilities/SelectedProject';
+import packageInfo from '../package.json';
 
 // Kentico Kontent
 import { DeliveryClient, TypeResolver } from '@kentico/kontent-delivery';
@@ -21,6 +22,8 @@ import { Home } from './Models/Home'
 import { HostedVideo } from './Models/HostedVideo'
 import { Office } from './Models/Office'
 import { Tweet } from './Models/Tweet'
+
+const sourceTrackingHeaderName = 'X-KC-SOURCE';
 
 // configure type resolvers
 let typeResolvers = [
@@ -55,7 +58,13 @@ let Client = new DeliveryClient({
   previewApiKey: previewApiKey,
   globalQueryConfig: {
     usePreviewMode: isPreview()
-  }
+  },
+  globalHeaders: () => [
+    {
+      header: sourceTrackingHeaderName,
+      value: `${packageInfo.name};${packageInfo.version}`,
+    },
+  ],
 });
 
 
@@ -66,7 +75,13 @@ const resetClient = (newProjectId) => {
     previewApiKey: previewApiKey,
     globalQueryConfig: {
       usePreviewMode: isPreview()
-    }
+    },
+    globalHeaders: () => [
+      {
+        header: sourceTrackingHeaderName,
+        value: `${packageInfo.name};${packageInfo.version}`,
+      },
+    ],
   });
   const cookies = new Cookies(document.cookies);
   cookies.set(selectedProjectCookieName, newProjectId, { path: '/' });

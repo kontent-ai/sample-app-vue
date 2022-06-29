@@ -66,11 +66,11 @@ When you now run the application, you will see all project content including the
 2. Sign in with your credentials.
 3. Manage content in the content administration interface of your sample project.
 
-You can learn more about content editing with Kentico Kontent in the [documentation](https://docs.kontent.ai/).
+You can learn [more about content editing](https://kontent.ai/learn/tutorials/write-and-collaborate/create-content/introducing-content-items) at Kontent Learn.
 
 ## Content delivery
 
-You can retrieve content either through the Kentico Kontent Delivery SDKs or the Kentico Kontent Delivery API:
+You can retrieve content either through the Kontent Delivery SDKs or the Kentico Kontent Delivery API:
 
 * For published content, use `https://deliver.kontent.ai/PROJECT_ID/items`.
 * For unpublished content, use `https://preview-deliver.kontent.ai/PROJECT_ID/items`.

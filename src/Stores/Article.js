@@ -1,5 +1,5 @@
 import { Client } from '../Client.js';
-import { SortOrder } from '@kentico/kontent-delivery';
+import { SortOrder } from '@kontent-ai/kontent-delivery';
 import { takeUntil } from 'rxjs/operators';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import BaseStore from './Base';

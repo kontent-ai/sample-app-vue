@@ -2,8 +2,8 @@ import Cookies from 'universal-cookie';
 import { selectedProjectCookieName, defaultProjectId } from './Utilities/SelectedProject';
 import packageInfo from '../package.json';
 
-// Kentico Kontent
-import { DeliveryClient, TypeResolver } from '@kentico/kontent-delivery';
+// Kontent.ai
+import { DeliveryClient, TypeResolver } from '@kontent-ai/kontent-delivery';
 
 const projectId = process.env.VUE_APP_PROJECT_ID || '';
 const previewApiKey = process.env.VUE_APP_PREVIEW_API_KEY || '';

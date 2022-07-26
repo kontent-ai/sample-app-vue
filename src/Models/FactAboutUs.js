@@ -1,4 +1,4 @@
-import { ContentItem } from '@kentico/kontent-delivery';
+import { ContentItem } from '@kontent-ai/kontent-delivery';
 
 export class FactAboutUs extends ContentItem {     
 }

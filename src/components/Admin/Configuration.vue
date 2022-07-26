@@ -7,13 +7,13 @@
             <img
                 class="logo"
                 v-bind:src="kontentLogo"
-                alt="Kentico Kontent Logo"
+                alt="Kontent.ai Logo"
             />
         </a>
         <header>
             <div>
                 <h1 class="headline-large">Sample Site—Configuration</h1>
-                <p class="margin-top-xl">For your sample app to work, you should have a Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
+                <p class="margin-top-xl">For your sample app to work, you should have a Kontent.ai project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
                     v-if="this.preparingProject"
                     message="Waiting for the sample project to become ready..."
@@ -23,7 +23,7 @@
         <section class="margin-top-xl">
             <h2 class="headline-medium">Get a Project ID</h2>
             <p class="margin-top-l">You may wish to either select from existing projects or create a new sample project. The app will be configured with its project ID.</p>
-            <form @submit="openKenticoKontentProjectSelector">
+            <form @submit="openKontentProjectSelector">
                 <input
                     type="submit"
                     class="button-secondary margin-top-xl"
@@ -189,9 +189,9 @@ export default {
     redirectToHome(newProjectId) {
       const infoMessage =
         newProjectId === defaultProjectId
-          ? 'You\'ve configured your app to with a project ID of a shared Kentico Kontent project.'
+          ? 'You\'ve configured your app to with a project ID of a shared Kontent.ai project.'
           : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-      const dataOriginInfo = 'Data on this site originates from Kentico Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23Data-origin';
+      const dataOriginInfo = 'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
       this.$router.push(`/?infoMessage=${infoMessage}${dataOriginInfo}`);
     },
     receiveMessage(event) {
@@ -206,7 +206,7 @@ export default {
         event.data.newlyGeneratedProject
       );
     },
-    openKenticoKontentProjectSelector(event) {
+    openKontentProjectSelector(event) {
       event.preventDefault();
       const windowWidth = 800;
       const windowHeight = 800;
@@ -214,7 +214,7 @@ export default {
 
       window.open(
         'https://app.kontent.ai/sample-site-configuration',
-        'Kentico Kontent',
+        'Kontent.ai',
         `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
         ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`
       );

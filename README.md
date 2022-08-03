@@ -66,7 +66,7 @@ When you now run the application, you will see all project content including the
 2. Sign in with your credentials.
 3. Manage content in the content administration interface of your sample project.
 
-You can learn [more about content editing](https://kontent.ai/learn/tutorials/write-and-collaborate/create-content/introducing-content-items) at Kontent Learn.
+You can learn [more about content editing](https://kontent.ai/learn/tutorials/write-and-collaborate/create-content/introducing-content-items) at Kontent.ai Learn.
 
 ## Content delivery
 

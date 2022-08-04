@@ -78,7 +78,16 @@
 import { ArticleStore } from '../Stores/Article'
 import dateFormat from 'dateformat'
 import { dateFormats } from '../Utilities/LanguageCodes'
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
+import { Client } from '../Client.js';
+
+const resetStore = () => ({
+  articleList: initLanguageCodeObject(),
+  articleDetails: initLanguageCodeObject()
+});
+
+let { articleList } = resetStore();
 
 export default {
   name: 'latest-articles',
@@ -90,9 +99,9 @@ export default {
   computed: {
     articlesData: function(){
       return this.articles.map(article => ({
-        imageLink: _.get(article, 'teaserImage.value[0].url'),
-        postDate : this.formatDate(_.get(article, 'postDate.value')),
-        summary :  _.get(article, 'summary.value') || this.$t('Article.noSummaryValue'),
+        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
+        postDate : this.formatDate(_.get(article, 'elements.postDate.value')),
+        summary :  _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue'),
         link : `/${this.language}/articles/${article.system.id}`,
       }))
     }
@@ -107,22 +116,28 @@ export default {
     formatDate: function(value){
       return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
     },
-    onChange: function(){
-      this.articles = ArticleStore.getArticles(this.articleCount, this.language);
+    fetchArticles: function() {
+      let query = Client.items()
+        .type('article')
+        .orderParameter('elements.post_date', 'desc');
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            articleList[this.language] = response.data.items;
+          } else {
+            articleList[defaultLanguage] = response.data.items
+          }
+          this.articles = this.language ? articleList[this.language].slice(0, this.articleCount) : articleList[defaultLanguage].slice(0, this.articleCount) ;
+        });
+      
     }
   },
   mounted: function(){
-    ArticleStore.subscribe();
-    ArticleStore.addChangeListener(this.onChange);
-    ArticleStore.provideArticles(this.articleCount, this.language);
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    this.articles =  ArticleStore.getArticles(this.articleCount, this.language);
+    this.fetchArticles();
   },
-  beforeDestroy: function() {
-    ArticleStore.unsubscribe();
-  },
-  destroyed: function() {
-    ArticleStore.removeChangeListener(this.onChange);
-  }
 }
 </script>

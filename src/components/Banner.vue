@@ -13,10 +13,12 @@
 </template>
 
 <script>
-import { HomeHeroUnitStore } from '../Stores/HomeHeroUnit';
+import { Client } from '../Client.js';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import _ from 'lodash';
 
+const heroUnits = initLanguageCodeObject();
 
 export default {
   name: 'banner',
@@ -27,10 +29,10 @@ export default {
   computed:{
     heroUnitData: function() {
       return {
-        bannerHeading: _.get(this.heroUnit, 'title.value', this.$t('Banner.loading')),
-        bannerText: _.get(this.heroUnit, 'marketingMessage', ''),
+        bannerHeading: _.get(this.heroUnit, 'elements.title.value', this.$t('Banner.loading')),
+        bannerText: _.get(this.heroUnit, 'elements.marketingMessage', ''),
         sectionStyleObject: {
-          backgroundImage: this.heroUnit ? `url(${this.heroUnit.image.value[0].url})` : undefined,
+          backgroundImage: this.heroUnit ? `url(${this.heroUnit.elements.image.value[0].url})` : undefined,
           backgroundColor: '#B24143'
         }
       }
@@ -38,28 +40,33 @@ export default {
   },
   watch: {
     language: function(){
-      HomeHeroUnitStore.provideHomeHeroUnits(this.language);
+      this.fetchHeroUnit();
     }
   },
   methods: {
-    onChange: function(){
-      this.heroUnit = HomeHeroUnitStore.getFirstHomeHeroUnit(this.language);
+    fetchHeroUnit: function(){
+      var query = Client.items().type('hero_unit').elementsParameter(['hero_unit', 'title', 'image', 'marketing_message']);
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            heroUnits[this.language] = response.data.items;
+          } else {
+            heroUnits[defaultLanguage] = response.data.items;
+          }
+          this.heroUnit = heroUnits[this.language][0];
+        });
     }
   },
   mounted: function(){
-    HomeHeroUnitStore.subscribe();
-    HomeHeroUnitStore.addChangeListener(this.onChange);
-    HomeHeroUnitStore.provideHomeHeroUnits(this.language);
-    this.heroUnit = HomeHeroUnitStore.getFirstHomeHeroUnit(this.language);
+    this.fetchHeroUnit();
   },
   beforeUpdate: function(){
-    this.heroUnit = HomeHeroUnitStore.getFirstHomeHeroUnit(this.language);
-  },
-  beforeDestroy: function() {
-    HomeHeroUnitStore.unsubscribe();
-  },
-  destroyed: function(){
-    HomeHeroUnitStore.removeChangeListener(this.onChange);
+    this.heroUnit = heroUnits[this.language] && heroUnits[this.language][0];
   },
   components: {
     RichTextElement

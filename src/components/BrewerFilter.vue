@@ -53,15 +53,11 @@
 </template>
 
 <script>
-import { BrewerStore } from '../Stores/Brewer';
 
 export default {
   name: 'BrewerFilter',
-  props: ['language'],
+  props: ['language', 'manufacturers', 'productStatuses', 'filter'],
   data: () => ({
-    filter: null,
-    manufacturers: null,
-    productStatuses: null,
     priceRanges: [
       { min: 0, max: 50 },
       { min: 50, max: 250 },
@@ -103,15 +99,15 @@ export default {
   methods: {
     manufacturerOnChange: function(codename) {
       this.filter.toggleManufacturer(codename);
-      BrewerStore.setFilter(this.filter);
+      this.$emit('set-filter', this.filter);
     },
     priceRangeOnChange: function(priceRange) {
       this.filter.togglePriceRange(priceRange);
-      BrewerStore.setFilter(this.filter);
+      this.$emit('set-filter', this.filter);
     },
     productStatusOnChange: function(codename) {
       this.filter.toggleProductStatus(codename);
-      BrewerStore.setFilter(this.filter);
+      this.$emit('set-filter', this.filter);
     },
     formatPrice: function(price, language) {
       return price.toLocaleString(language, {
@@ -120,26 +116,6 @@ export default {
         maximumFractionDigits: 2
       });
     },
-    onChange: function() {
-      this.filter = BrewerStore.getFilter();
-      this.manufacturers = BrewerStore.getManufacturers();
-      this.productStatuses = BrewerStore.getProductStatuses();
-    }
   },
-  created: function() {
-    BrewerStore.subscribe();
-    BrewerStore.addChangeListener(this.onChange);
-    BrewerStore.provideManufacturers();
-    BrewerStore.provideProductStatuses();
-    this.manufacturers = BrewerStore.getManufacturers();
-    this.productStatuses = BrewerStore.getProductStatuses();
-    this.filter = BrewerStore.getFilter();
-  },
-  beforeDestroy: function() {
-    BrewerStore.unsubscribe();
-  },
-  destroyed: function() {
-    BrewerStore.removeChangeListener(this.onChange);
-  }
 };
 </script>

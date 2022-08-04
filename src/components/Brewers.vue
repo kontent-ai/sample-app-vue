@@ -38,15 +38,12 @@
 </template>
 
 <script>
-import { BrewerStore } from '../Stores/Brewer'
 import { resolveContentLink } from '../Utilities/ContentLinks'
 
 export default {
   name: 'Brewers',
-  props: ['language'],
+  props: ['language', 'brewers', 'filter'],
   data: () => ({
-    brewers: [],
-    filter: null,
   }),
   computed: {
     filteredBrewers: function () {
@@ -57,18 +54,13 @@ export default {
     },
     brewersData: function () {
       return this.filteredBrewers.map(brewer => ({
-        price: this.formatPrice(brewer.price.value, this.language),
-        productName: brewer.productName.value,
-        link: resolveContentLink({ type: 'brewer', urlSlug: brewer.urlPattern.value }, this.language),
-        hasNoProductStatus: brewer.productStatus.value.length === 0,
-        productStatusText: brewer.productStatus.value.map((x) => x.name).join(', '),
-        imageLink: brewer.image.value[0].url
+        price: this.formatPrice(brewer.elements.price.value, this.language),
+        productName: brewer.elements.productName.value,
+        link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, this.language),
+        hasNoProductStatus: brewer.elements.productStatus.value.length === 0,
+        productStatusText: brewer.elements.productStatus.value.map((x) => x.name).join(', '),
+        imageLink: brewer.elements.image.value[0].url
       }))
-    }
-  },
-  watch: {
-    language: function () {
-      BrewerStore.provideBrewers(this.language);
     }
   },
   methods: {
@@ -80,22 +72,11 @@ export default {
     },
     resolveContentLink,
     onChange: function () {
-      this.brewers = BrewerStore.getBrewers(this.language);
-      this.filter = BrewerStore.getFilter();
+      
     }
   },
   mounted: function () {
-    BrewerStore.subscribe();
-    BrewerStore.addChangeListener(this.onChange);
-    BrewerStore.provideBrewers(this.language);
-    this.brewers = BrewerStore.getBrewers(this.language);
-    this.filter = BrewerStore.getFilter();
+    this.onChange();
   },
-  beforeDestroy: function() {
-    BrewerStore.unsubscribe();
-  },
-  destroyed: function () {
-    BrewerStore.removeChangeListener(this.onChange);
-  }
 }
 </script>

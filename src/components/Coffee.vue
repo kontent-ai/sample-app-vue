@@ -57,6 +57,7 @@
 <script>
 import { CoffeeStore } from '../Stores/Coffee'
 import RichTextElement from './RichTextElement.vue'
+import { Client } from '../Client.js';
 
 export default {
   name: 'Coffee',
@@ -66,25 +67,25 @@ export default {
   }),
   computed: {
     name: function () {
-      return this.coffee ? this.coffee.productName.value : ''
+      return this.coffee ? this.coffee.elements.productName.value : ''
     },
     imageLink: function () {
-      return this.coffee ? this.coffee.image.value[0].url : ''
+      return this.coffee ? this.coffee.elements.image.value[0].url : ''
     },
     descriptionElement: function () {
-      return this.coffee ? this.coffee.longDescription : null
+      return this.coffee ? this.coffee.elements.longDescription : null
     },
     farm: function () {
-      return this.coffee ? this.coffee.farm.value : ''
+      return this.coffee ? this.coffee.elements.farm.value : ''
     },
     variety: function () {
-      return this.coffee ? this.coffee.variety.value : ''
+      return this.coffee ? this.coffee.elements.variety.value : ''
     },
     processing: function () {
-      return this.coffee && this.coffee.processing.value.length > 0 ? this.coffee.processing.value[0].name : ''
+      return this.coffee && this.coffee.elements.processing.value.length > 0 ? this.coffee.elements.processing.value[0].name : ''
     },
     altitude: function () {
-      return this.coffee ? this.coffee.altitude.value + ' feet' : ''
+      return this.coffee ? this.coffee.elements.altitude.value + ' feet' : ''
     },
   },
   watch: {
@@ -93,22 +94,25 @@ export default {
     }
   },
   methods: {
-    onChange: function () {
-      this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
+    fetchData: function () {
+      var query = Client.items()
+        .type('coffee')
+        .equalsFilter('url_pattern', this.$route.params.coffeeSlug)
+
+      if(this.language){
+        query.languageParameter(this.language)
+      }
+      query
+        .toPromise()
+        .then(response => {
+          this.coffee = response.data.items[0]
+        })
     }
   },
   mounted: function() {
-    CoffeeStore.subscribe();
-    CoffeeStore.addChangeListener(this.onChange);
-    CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
-    this.coffee = CoffeeStore.getCoffee(this.$route.params.coffeeSlug, this.language);
+    this.fetchData();
   },
-  beforeDestroy: function() {
-    CoffeeStore.unsubscribe();
-  },
-  destroyed: function () {
-    CoffeeStore.removeChangeListener(this.onChange);
-  },
+
   components: {
     RichTextElement,
   },

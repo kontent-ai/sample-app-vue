@@ -38,15 +38,10 @@
 </template>
 
 <script>
-import { CoffeeStore } from '../Stores/Coffee';
 
 export default {
   name: 'CoffeeFilter',
-  data: () => ({
-    filter: null,
-    processings: [],
-    productStatuses: []
-  }),
+  props: ['language', 'processings', 'productStatuses', 'filter'],
   computed: {
     processingsData: function() {
       return this.processings.map(processing => ({
@@ -63,42 +58,16 @@ export default {
       }));
     }
   },
-  watch: {
-    language: function() {
-      CoffeeStore.provideProcessings();
-      CoffeeStore.provideProductStatuses();
-    }
-  },
   methods: {
     processingOnChange: function(codename) {
       this.filter.toggleProcessing(codename);
-      CoffeeStore.setFilter(this.filter);
+      this.$emit('set-filter', this.filter);
     },
     productStatusOnChange: function(codename) {
       this.filter.toggleProductStatus(codename);
-      CoffeeStore.setFilter(this.filter);
+      this.$emit('set-filter', this.filter);
     },
-    onChange: function() {
-      this.processings = CoffeeStore.getProcessings();
-      this.productStatuses = CoffeeStore.getProductStatuses();
-      this.filter = CoffeeStore.getFilter();
-    }
   },
-  mounted: function() {
-    CoffeeStore.subscribe();
-    CoffeeStore.addChangeListener(this.onChange);
-    CoffeeStore.provideProcessings();
-    CoffeeStore.provideProductStatuses();
-    this.processings = CoffeeStore.getProcessings();
-    this.productStatuses = CoffeeStore.getProductStatuses();
-    this.filter = CoffeeStore.getFilter();
-  },
-  beforeDestroy: function() {
-    CoffeeStore.unsubscribe();
-  },
-  destroyed: function() {
-    CoffeeStore.removeChangeListener(this.onChange);
-  }
 };
 </script>
 

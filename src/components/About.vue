@@ -52,8 +52,10 @@
 </template>
 
 <script>
-import { FactStore } from '../Stores/Fact'
-import RichTextElement from './RichTextElement.vue'
+import { FactStore } from '../Stores/Fact';
+import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes';
+import RichTextElement from './RichTextElement.vue';
+import { Client } from '../Client.js';
 
 export default {
   name: 'About',
@@ -63,10 +65,11 @@ export default {
   }),
   computed: {
     factsData: function () {
+      debugger;
       return this.facts.map(fact => ({
-        title: fact.title.value,
-        descriptionElement: fact.description,
-        imageLink: fact.image.value[0].url,
+        title: fact.elements.title.value,
+        descriptionElement: fact.elements.description,
+        imageLink: fact.elements.image.value[0].url,
       }))
     }
   },
@@ -76,21 +79,28 @@ export default {
     }
   },
   methods: {
-    onChange: function () {
-      this.facts = FactStore.getFacts(this.language);
+    fetchFacts: function () {
+      const factsList = initLanguageCodeObject();
+      var query = Client.items().type('about_us');
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            debugger
+            factsList[this.language] = response.data.items[0].elements.facts.linkedItems;
+          } else {
+            factsList[defaultLanguage] = response.data.items[0].elements.facts.linkedItems;
+          }
+          this.facts = this.language ? factsList[this.language] : factsList[defaultLanguage];
+        });
     }
   },
   mounted: function () {
-    FactStore.subscribe();
-    FactStore.addChangeListener(this.onChange);
-    FactStore.provideFacts(this.language);
-    this.facts = FactStore.getFacts(this.language);
-  },
-  beforeDestroy: function() {
-    FactStore.unsubscribe();
-  },
-  destroyed: function () {
-    FactStore.removeChangeListener(this.onChange);
+    this.fetchFacts();
   },
   components: {
     RichTextElement,

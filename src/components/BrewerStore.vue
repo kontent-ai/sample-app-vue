@@ -1,7 +1,7 @@
 <template>
     <div class="product-page row">
         <div class="flex">
-            <BrewerFilter 
+            <BrewerFilterComponent 
                 :language="language" 
                 :manufacturers="manufacturers" 
                 :productStatuses="productStatuses"
@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import BrewerFilter from './BrewerFilter.vue'
+import BrewerFilter  from './BrewerFilter.vue'
 import Brewers from './Brewers.vue'
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
-import { Filter } from '../Stores/Brewer';
+import { Filter } from '../Utilities/BrewerFilter';
 
 export default {
   name: 'BrewerStore',

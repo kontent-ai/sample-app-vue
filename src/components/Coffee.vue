@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import { CoffeeStore } from '../Stores/Coffee'
 import RichTextElement from './RichTextElement.vue'
 import { Client } from '../Client.js';
 
@@ -90,7 +89,7 @@ export default {
   },
   watch: {
     language: function () {
-      CoffeeStore.provideCoffee(this.$route.params.coffeeSlug, this.language);
+      this.fetchData();
     }
   },
   methods: {

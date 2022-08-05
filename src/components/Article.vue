@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import { ArticleStore } from '../Stores/Article';
 import dateFormat from 'dateformat';
 import { dateFormats, initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
@@ -68,7 +67,7 @@ export default {
   },
   watch: {
     language: function(){
-      ArticleStore.provideArticle(this.$route.params.articleId, this.language);
+      this.fetchArticle();
       dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
     }
   },

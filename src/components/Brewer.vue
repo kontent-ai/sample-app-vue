@@ -76,7 +76,6 @@ export default {
       query
         .toPromise()
         .then(response => {
-          debugger
           this.brewer = response.data.items[0]
         })
     }

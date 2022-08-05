@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { Filter } from '../Stores/Coffee'
+import { Filter } from '../Utilities/CoffeeFilter'
 import CoffeeFilter from './CoffeeFilter.vue'
 import Coffees from './Coffees.vue'
 import { Client } from '../Client.js';

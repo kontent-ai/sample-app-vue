@@ -13,7 +13,7 @@
         <header>
             <div>
                 <h1 class="headline-large">Sample Site—Configuration</h1>
-                <p class="margin-top-xl">For your sample app to work, you should have a Kontent.ai project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
+                <p class="margin-top-xl">For your sample app to work, you should have a Kontent.ai project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent.ai credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
                     v-if="this.preparingProject"
                     message="Waiting for the sample project to become ready..."
@@ -74,13 +74,11 @@
 <script>
 import Cookies from 'universal-cookie';
 import { isUUID } from 'validator';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import SpinnerBox from '../SpinnerBox.vue';
 
 import { resetClient, Client } from '../../Client';
-import { resetStores } from '../../Utilities/StoreManager';
 import {
   defaultProjectId,
   selectedProjectCookieName
@@ -144,9 +142,8 @@ export default {
       Client.items()
         .elementsParameter(['id'])
         .depthParameter(0)
-        .toObservable()
-        .pipe(takeUntil(this.unsubscribeSubject))
-        .subscribe(response => {
+        .toPromise()
+        .then(response => {
           this.sampleProjectItemCount = response.items.length;
         });
     },
@@ -161,7 +158,6 @@ export default {
       }
 
       resetClient(newProjectId);
-      resetStores();
       if (newlyGeneratedProject) {
         this.waitUntilProjectAccessible(newProjectId);
         this.preparingProject = true;
@@ -174,9 +170,8 @@ export default {
         Client.items()
           .elementsParameter(['id'])
           .depthParameter(0)
-          .toObservable()
-          .pipe(takeUntil(this.unsubscribeSubject))
-          .subscribe(response => {
+          .toPromise()
+          .then(response => {
             if (response.items.length >= this.sampleProjectItemCount) {
               this.preparingProject = false;
               this.redirectToHome(newProjectId);

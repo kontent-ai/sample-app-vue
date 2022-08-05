@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import { FactStore } from '../Stores/Fact';
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
@@ -65,7 +64,6 @@ export default {
   }),
   computed: {
     factsData: function () {
-      debugger;
       return this.facts.map(fact => ({
         title: fact.elements.title.value,
         descriptionElement: fact.elements.description,
@@ -75,7 +73,7 @@ export default {
   },
   watch: {
     language: function () {
-      FactStore.provideFacts(this.language);
+      this.fetchFacts();
     }
   },
   methods: {
@@ -89,8 +87,7 @@ export default {
 
       query.toPromise()
         .then(response => {
-          if (this.language) {
-            debugger
+          if (this.language) { 
             factsList[this.language] = response.data.items[0].elements.facts.linkedItems;
           } else {
             factsList[defaultLanguage] = response.data.items[0].elements.facts.linkedItems;

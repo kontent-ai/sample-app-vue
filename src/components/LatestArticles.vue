@@ -75,19 +75,11 @@
 </template>
 
 <script>
-import { ArticleStore } from '../Stores/Article'
 import dateFormat from 'dateformat'
 import { dateFormats } from '../Utilities/LanguageCodes'
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
 import { Client } from '../Client.js';
-
-const resetStore = () => ({
-  articleList: initLanguageCodeObject(),
-  articleDetails: initLanguageCodeObject()
-});
-
-let { articleList } = resetStore();
 
 export default {
   name: 'latest-articles',
@@ -108,7 +100,7 @@ export default {
   },
   watch: {
     language: function(){
-      ArticleStore.provideArticles(this.articleCount, this.language);
+      this.fetchArticles();
       dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
     }
   },
@@ -117,6 +109,7 @@ export default {
       return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
     },
     fetchArticles: function() {
+      const articleList = initLanguageCodeObject();
       let query = Client.items()
         .type('article')
         .orderParameter('elements.post_date', 'desc');

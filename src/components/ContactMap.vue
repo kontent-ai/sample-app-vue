@@ -87,7 +87,7 @@ export default {
   },
   mounted: function () {
     this.map = this.$refs.map.mapObject;
-    this.$refs.map.$mapCreated.then(() => {
+    this.$refs.map.$mapPromise.then(() => {
       this.mapLoaded = true
     })
   },

@@ -51,7 +51,10 @@
 </template>
 
 <script>
-import { CafeStore } from '../Stores/Cafe';
+import { Client } from '../Client.js';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+
+let languageInitialized = {};
 
 export default {
   name: 'Cafes',
@@ -81,21 +84,20 @@ export default {
   },
   watch: {
     language: function() {
-      CafeStore.provideCompanyCafes(this.language);
-      CafeStore.providePartnerCafes(this.language);
+      this.fetchCafes()
     }
   },
   methods: {
     getModel: function(cafe) {
       let model = {
         name: cafe.system.name,
-        imageLink: 'url(' + cafe.photo.value[0].url + ')',
-        street: cafe.street.value,
-        city: cafe.city.value,
-        zipCode: cafe.zipCode.value,
-        country: cafe.country.value,
-        state: cafe.state.value,
-        phone: cafe.phone.value
+        imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
+        street: cafe.elements.street.value,
+        city: cafe.elements.city.value,
+        zipCode: cafe.elements.zipCode.value,
+        country: cafe.elements.country.value,
+        state: cafe.elements.state.value,
+        phone: cafe.elements.phone.value
       };
       model.dataAddress = model.city + ', ' + model.street;
       model.countryWithState =
@@ -103,24 +105,39 @@ export default {
       model.location = model.city + ', ' + model.countryWithState;
       return model;
     },
-    onChange: function() {
-      this.ourCafes = CafeStore.getCompanyCafes(this.language);
-      this.partnerCafes = CafeStore.getPartnerCafes(this.language);
+    fetchCafes() {
+      const cafesList = initLanguageCodeObject();
+      if (languageInitialized[this.language]) {
+        return;
+      }
+
+      let query = Client.items()
+        .type('cafe')
+        .orderParameter('elements.name', 'desc');
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            cafesList[this.language] = response.data.items;
+          } else {
+            cafesList[defaultLanguage] = response.data.items;
+          }
+          languageInitialized[this.language] = true;
+          this.ourCafes = this.language ? 
+            cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
+            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
+          this.partnerCafes = this.language ? 
+            cafesList[this.language].filter((cafe) => cafe.elements.country.value !== 'USA') :
+            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value !== 'USA');
+        });
     }
   },
   mounted: function() {
-    CafeStore.subscribe();
-    CafeStore.addChangeListener(this.onChange);
-    CafeStore.provideCompanyCafes(this.language);
-    CafeStore.providePartnerCafes(this.language);
-    this.ourCafes = CafeStore.getCompanyCafes(this.language);
-    this.partnerCafes = CafeStore.getPartnerCafes(this.language);
+    this.fetchCafes();
   },
-  beforeDestroy: function() {
-    CafeStore.unsubscribe();
-  },
-  destroyed: function() {
-    CafeStore.removeChangeListener(this.onChange);
-  }
 };
 </script>

@@ -1,16 +1,24 @@
 <template>
     <div 
-        v-html="element.resolveHtml()" 
+        v-html="richTextData" 
         @click="handleClick"
     />
 </template>
 
 <script>
 import {resolveContentLink} from '../Utilities/ContentLinks'
+import { createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk';
 
 export default {
   name: 'RichTextElement',
   props: ['element'],
+  computed: {
+    richTextData: function() {      
+      return createRichTextHtmlResolver().resolveRichText({
+        element: this.element
+      }).html;
+    }
+  },
   methods: {
     handleClick: function(e){
       if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {

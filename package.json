@@ -1,5 +1,5 @@
 {
-  "name": "@kontent-ai/kontent-sample-app-vue",
+  "name": "@kontent-ai/sample-app-vue",
   "version": "1.0.1",
   "scripts": {
     "serve": "vue-cli-service serve",

@@ -118,14 +118,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section .headline-medium {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
 }
 
 .project-configuration-section .headline-large {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 24px;
     font-weight: 700;
     line-height: 32px;
@@ -185,7 +185,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section input[type="submit"] {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;

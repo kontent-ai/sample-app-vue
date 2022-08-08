@@ -1,25 +1,25 @@
 @font-face {
-    font-family: 'GT Walsheim Pro';
+    font-family: 'Work Sans';
     font-style: normal;
     font-weight: 400;
-    src: local('GT Walsheim'), url('Fonts/GT-Walsheim-Regular.woff2') format("woff2");
+    src: local('Work Sans'), url('Fonts/WorkSans-Regular.woff2') format("woff2");
     font-display: swap;
 }
 
 @font-face {
-    font-family: 'GT Walsheim Pro';
+    font-family: 'Work Sans';
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: local('GT Walsheim Medium'), url('Fonts/GT-Walsheim-Medium.woff2') format("woff2");
+    src: local('Work Sans Medium'), url('Fonts/WorkSans-Medium.woff2') format("woff2");
 }
 
 @font-face {
-    font-family: 'GT Walsheim Pro';
+    font-family: 'Work Sans';
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src:  local('GT Walsheim Bold'), url('Fonts/GT-Walsheim-Bold.woff2') format('woff2');
+    src:  local('Work Sans Bold'), url('Fonts/WorkSans-Bold.woff2') format('woff2');
 }
 
 @font-face {

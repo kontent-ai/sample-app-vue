@@ -5,7 +5,7 @@
     >
         <h2 class="banner-heading">{{heroUnitData.bannerHeading}}</h2>
         <RichTextElement
-            v-if="heroUnitData.bannerText.resolveHtml"
+            v-if="heroUnitData.bannerText"
             class="banner-text"
             :element="heroUnitData.bannerText"
         />

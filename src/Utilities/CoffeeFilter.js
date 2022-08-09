@@ -12,8 +12,7 @@ export class Filter {
     if (this.processings.length === 0) {
       return true;
     }
-
-    let processings = coffee.processing.value.map(x => x.codename);
+    let processings = coffee.elements.processing.value.map(x => x.codename);
 
     return this.processings.some(x => processings.includes(x));
   }
@@ -23,7 +22,7 @@ export class Filter {
       return true;
     }
 
-    let statuses = coffee.productStatus.value.map(x => x.codename);
+    let statuses = coffee.elements.productStatus.value.map(x => x.codename);
 
     return this.productStatuses.some(x => statuses.includes(x));
   }

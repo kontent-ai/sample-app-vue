@@ -94,6 +94,7 @@ export default {
         imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
         postDate : this.formatDate(_.get(article, 'elements.postDate.value')),
         summary :  _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue'),
+        title: _.get(article, 'elements.title.value'),
         link : `/${this.language}/articles/${article.system.id}`,
       }))
     }

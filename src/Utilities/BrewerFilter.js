@@ -15,7 +15,7 @@ export class Filter {
       return true;
     }
 
-    let manufacturerCodenames = brewer.manufacturer.value.map(x => x.codename);
+    let manufacturerCodenames = brewer.elements.manufacturer.value.map(x => x.codename);
     return manufacturerCodenames.some(x => this.manufacturers.includes(x));
   }
 
@@ -24,7 +24,7 @@ export class Filter {
       return true;
     }
 
-    let price = brewer.price.value;
+    let price = brewer.elements.price.value;
 
     return this.priceRanges.some((priceRange) => priceRange.min <= price && price <= priceRange.max);
   }
@@ -34,7 +34,7 @@ export class Filter {
       return true;
     }
 
-    let statusCodenames = brewer.productStatus.value.map(x => x.codename);
+    let statusCodenames = brewer.elements.productStatus.value.map(x => x.codename);
     return statusCodenames.some((x) => this.productStatuses.includes(x));
   }
 

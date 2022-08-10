@@ -1,7 +1,7 @@
 <template>
     <div class="product-page row">
         <div class="flex">
-            <BrewerFilterComponent 
+            <BrewerFilter
                 :language="language" 
                 :manufacturers="manufacturers" 
                 :productStatuses="productStatuses"

@@ -65,8 +65,6 @@ import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCo
 import ContactMap from './ContactMap.vue'
 import VueScrollTo from 'vue-scrollto'
 
-let languageInitialized = {};
-
 export default {
   name: 'Contacts',
   props: ['language'],
@@ -130,9 +128,6 @@ export default {
     },
     fetchCafes() {
       const cafesList = initLanguageCodeObject();
-      if (languageInitialized[this.language]) {
-        return;
-      }
 
       let query = Client.items()
         .type('cafe')
@@ -149,7 +144,6 @@ export default {
           } else {
             cafesList[defaultLanguage] = response.data.items;
           }
-          languageInitialized[this.language] = true;
           this.cafes = this.language ? 
             cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
             cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');

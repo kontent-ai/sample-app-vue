@@ -54,8 +54,6 @@
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
-let languageInitialized = {};
-
 export default {
   name: 'Cafes',
   props: ['language'],
@@ -107,9 +105,6 @@ export default {
     },
     fetchCafes() {
       const cafesList = initLanguageCodeObject();
-      if (languageInitialized[this.language]) {
-        return;
-      }
 
       let query = Client.items()
         .type('cafe')
@@ -126,7 +121,6 @@ export default {
           } else {
             cafesList[defaultLanguage] = response.data.items;
           }
-          languageInitialized[this.language] = true;
           this.ourCafes = this.language ? 
             cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
             cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');

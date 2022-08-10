@@ -2,7 +2,7 @@
     font-family: 'Work Sans';
     font-style: normal;
     font-weight: 400;
-    src: local('Work Sans'), url('Fonts/WorkSans-Regular.woff2') format("woff2");
+    src: local('Work Sans'), url('Fonts/WorkSans-Light.woff2') format("woff2");
     font-display: swap;
 }
 
@@ -11,7 +11,7 @@
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: local('Work Sans Medium'), url('Fonts/WorkSans-Medium.woff2') format("woff2");
+    src: local('Work Sans Regular'), url('Fonts/WorkSans-Regular.woff2') format("woff2");
 }
 
 @font-face {
@@ -19,7 +19,7 @@
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src:  local('Work Sans Bold'), url('Fonts/WorkSans-Bold.woff2') format('woff2');
+    src:  local('Work Sans SemiBold'), url('Fonts/WorkSans-SemiBold.woff2') format('woff2');
 }
 
 @font-face {

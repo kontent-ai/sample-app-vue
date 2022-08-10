@@ -2,7 +2,7 @@
     font-family: 'Work Sans';
     font-style: normal;
     font-weight: 400;
-    src: local('Work Sans'), url('Fonts/WorkSans-Light.woff2') format("woff2");
+    src: local('Work Sans Light'), url('Fonts/WorkSans-Light.woff2') format("woff2");
     font-display: swap;
 }
 

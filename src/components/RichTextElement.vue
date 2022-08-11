@@ -8,7 +8,6 @@
 <script>
 import {resolveContentLink} from '../Utilities/ContentLinks'
 import { createRichTextHtmlResolver, linkedItemsHelper } from '@kontent-ai/delivery-sdk';
-// import TwitterWidgetsLoader from 'twitter-widgets';
 
 export default {
   name: 'RichTextElement',
@@ -69,66 +68,12 @@ export default {
           }
 
           return '<div></div>';
-        }
-
-        
-        // linkedItems: ( linkedItem ) => {
-        //   const contentItemType = linkedItem ? linkedItem.system.type : '';
-
-        //   switch (contentItemType) {
-        //   case 'tweet': {
-        //     let tweetLink = linkedItem.elements.tweetLink.value;
-        //     let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
-
-        //     let selectedTheme = linkedItem.elements.theme.value[0].codename;
-        //     selectedTheme = selectedTheme ? selectedTheme : 'light';
-
-        //     setTimeout(() => {
-        //       window.twttr.widgets.createTweet(
-        //         tweetID,
-        //         document.getElementById(`tweet${tweetID}`),
-        //         {
-        //           theme: selectedTheme,
-        //         }
-        //       );
-        //     }, 100);
-
-        //     return <div id={`tweet${tweetID}`}></div>;
-        //   }
-        //   case 'hosted_video': {
-        //     if (linkedItem.elements.videoHost.value.find((item) => item.codename === 'vimeo')) {
-        //       return (
-        //         <iframe
-        //           className="hosted-video__wrapper"
-        //           src={`https://player.vimeo.com/video/${linkedItem.elements.videoId.value}?title=0&byline=0&portrait=0`}
-        //           width="640"
-        //           height="360"
-        //           frameBorder="0"
-        //           allowFullScreen
-        //           title={`Vimeo video ${linkedItem.elements.videoId.value}`}
-        //         ></iframe>
-        //       );
-        //     } else if (
-        //       linkedItem.elements.videoHost.value.find((item) =>item.codename === 'youtube')) {
-        //       return (
-        //         <iframe
-        //           className="hosted-video__wrapper"
-        //           width="560"
-        //           height="315"
-        //           src={`https://www.youtube.com/embed/${linkedItem.elements.videoId.value}`}
-        //           frameBorder="0"
-        //           allowFullScreen
-        //           title={`Youtube video ${linkedItem.elements.videoId.value}`}
-        //         ></iframe>
-        //       );
-        //     } else {
-        //       return <div>Content item not supported</div>;
-        //     }
-        //   }
-        //   default:
-        //     return <div>Content item not supported</div>;
-        //   }
-        // },
+        },
+        urlResolver: (linkId, linkText, link) => {
+          return {
+            linkHtml: `<a href="${resolveContentLink(link)}">${linkText}</a>`,
+          };
+        },
       }).html;
 
   },

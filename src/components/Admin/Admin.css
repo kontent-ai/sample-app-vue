@@ -199,8 +199,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section input[type="submit"].button-primary {
-    background-color: #3DCCA8;
-    border-color: #3DCCA8;
+    background-color: #6956CC;
+    border-color: #6956CC;
 }
 
 .project-configuration-section input[type="submit"].button-primary:active,
@@ -212,21 +212,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section input[type="submit"].button-secondary {
-    background: #3DCCA8;
-    box-shadow:
-            0 8px 14px 2px rgb(61 204 168 / 14%),
-            0 6px 20px 5px rgb(61 204 168 / 12%),
-            0 8px 10px -5px rgb(61 204 168 / 20%);
+    background: #6956CC;
 }
 
 .project-configuration-section input[type="submit"].button-secondary:active,
 .project-configuration-section input[type="submit"].button-secondary:hover {
     background-color: #231f20;
     color: #ffffff;
-    box-shadow:
-            0 8px 14px 2px rgb(35 31 32 / 14%),
-            0 6px 20px 5px rgb(35 31 32 / 12%),
-            0 8px 10px -5px rgb(35 31 32 / 20%);
 }
 
 .project-configuration-section input[type="submit"].button-secondary:focus {

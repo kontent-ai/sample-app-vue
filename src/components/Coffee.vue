@@ -89,15 +89,12 @@ export default {
     },
   },
   watch: {
-    language: async function () {
-      await this.fetchData();
-      console.log(this.coffee);
-
-      console.log();
+    language: function () {
+      this.fetchData();
     }
   },
   methods: {
-    fetchData: async function () {
+    fetchData: function () {
       var query = Client.items()
         .type('coffee')
         .equalsFilter('url_pattern', this.$route.params.coffeeSlug)

@@ -96,7 +96,7 @@ export default {
         },
         urlResolver: (linkId, linkText, link) => {
           return {
-            linkHtml: `<a href="${resolveContentLink(link)}">${linkText}</a>`,
+            linkHtml: `<a href="${resolveContentLink(link, this.$i18n.locale)}">${linkText}</a>`,
           };
         },
       }).html;

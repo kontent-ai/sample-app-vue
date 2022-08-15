@@ -41,6 +41,7 @@
 <script>
 import { Client } from '../Client.js';
 import RichTextElement from './RichTextElement.vue'
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 
 export default {
   name: 'Brewer',
@@ -77,6 +78,9 @@ export default {
         .toPromise()
         .then(response => {
           this.brewer = response.data.items[0]
+          if(this.brewer.system.language !== this.language){
+            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.brewer.system.language)})
+          }
         })
     }
   },

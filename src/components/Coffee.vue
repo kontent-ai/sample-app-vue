@@ -57,6 +57,7 @@
 <script>
 import RichTextElement from './RichTextElement.vue'
 import { Client } from '../Client.js';
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 
 export default {
   name: 'Coffee',
@@ -88,12 +89,15 @@ export default {
     },
   },
   watch: {
-    language: function () {
-      this.fetchData();
+    language: async function () {
+      await this.fetchData();
+      console.log(this.coffee);
+
+      console.log();
     }
   },
   methods: {
-    fetchData: function () {
+    fetchData: async function () {
       var query = Client.items()
         .type('coffee')
         .equalsFilter('url_pattern', this.$route.params.coffeeSlug)
@@ -105,6 +109,9 @@ export default {
         .toPromise()
         .then(response => {
           this.coffee = response.data.items[0]
+          if(this.coffee.system.language !== this.language){
+            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.coffee.system.language)})
+          }
         })
     }
   },

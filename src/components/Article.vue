@@ -47,6 +47,7 @@ import dateFormat from 'dateformat';
 import { dateFormats, initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import _ from 'lodash';
 
 export default {
@@ -94,6 +95,9 @@ export default {
             articleDetails[defaultLanguage][articleId] = response.data.items[0];
           }
           this.article = this.language ? articleDetails[this.language][articleId] : articleDetails[defaultLanguage][articleId]
+          if(this.article.system.language !== this.language){
+            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.article.system.language)})
+          }
         });
     }
   },

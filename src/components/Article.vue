@@ -67,7 +67,7 @@ export default {
   },
   watch: {
     language: function(){
-      this.fetchArticle();
+      this.fetchArticle(this.$route.params.articleId);
       dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
     }
   },
@@ -98,7 +98,7 @@ export default {
     }
   },
   mounted: function(){
-    this.fetchArticle(this.$route.params.articleId)
+    this.fetchArticle(this.$route.params.articleId);
   },
   components: {
     RichTextElement

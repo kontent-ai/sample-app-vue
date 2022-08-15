@@ -16,8 +16,33 @@ export default {
     richTextData: null
   }),
   mounted: function() {
-    this.richTextData =      
-      createRichTextHtmlResolver().resolveRichText({
+    this.loadData();
+  },
+  watch: { 
+    element: function() {
+      this.loadData();
+    }
+  },
+  methods: {
+    handleClick: function(e){
+      if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
+        e.preventDefault();
+
+        const id = e.target.getAttribute('data-item-id');
+        const link = this.element.links.find(m => m.itemId === id);
+
+        if (link) {
+          const path = resolveContentLink(link);
+          const language = this.$i18n.locale;
+
+          if (path) {
+            this.$router.push(`/${language}${path}`);
+          }
+        }
+      }
+    },
+    loadData: function() {
+      this.richTextData = createRichTextHtmlResolver().resolveRichText({
         element: this.element,
         linkedItems: linkedItemsHelper.convertLinkedItemsToArray(this.element.linkedItems),
         contentItemResolver: (itemCodename, contentItem) => {
@@ -76,24 +101,6 @@ export default {
         },
       }).html;
 
-  },
-  methods: {
-    handleClick: function(e){
-      if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
-        e.preventDefault();
-
-        const id = e.target.getAttribute('data-item-id');
-        const link = this.element.links.find(m => m.itemId === id);
-
-        if (link) {
-          const path = resolveContentLink(link);
-          const language = this.$i18n.locale;
-
-          if (path) {
-            this.$router.push(`/${language}${path}`);
-          }
-        }
-      }
     }
   }
 }

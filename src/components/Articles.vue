@@ -59,7 +59,7 @@ export default {
       return this.articles.map(article => ({
         title: _.get(article, 'elements.title.value') || this.$t('Article.noTitleValue'),
         imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
+        link: `/${this.language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
         postDate: this.formatDate(_.get(article, 'elements.postDate.value')),
         summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
       }));

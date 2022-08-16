@@ -4,17 +4,17 @@
         <latest-articles :language="language"/>
         <link-button 
             :text="$t('Home.moreArticles')" 
-            :link="`/${language}/articles`"
+            :link="`/${language.toLowerCase()}/articles`"
         />
         <our-story/>
         <link-button 
             :text="$t('Home.aboutLinkText')" 
-            :link="`/${language}/about`"
+            :link="`/${language.toLowerCase()}/about`"
         />
         <taste-our-coffee :language="language"/>
         <link-button 
             :text="$t('Home.cafesLinkText')" 
-            :link="`/${language}/cafes`"
+            :link="`/${language.toLowerCase()}/cafes`"
         />
     </div>
 </template>

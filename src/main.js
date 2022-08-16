@@ -17,6 +17,7 @@ import Coffee from './components/Coffee.vue'
 import Brewer from './components/Brewer.vue'
 import Contacts from './components/Contacts.vue'
 import Article from './components/Article.vue'
+import NotFound from './components/NotFound.vue'
 
 import { projectConfigurationPath } from './Utilities/SelectedProject'
 
@@ -47,7 +48,7 @@ let router = new Router({
       component: Configuration
     },
     {
-      path: '/:lang?/store',
+      path: '/:lang(en-us|es-es)/store',
       component: Store,
       children: [
         {
@@ -65,40 +66,52 @@ let router = new Router({
       ]
     },
     {
-      path: '/:lang?/articles',
+      path: '/:lang(en-us|es-es)/articles',
       component: Articles,
     },
     {
-      path: '/:lang?/articles/:articleId',
+      path: '/:lang(en-us|es-es)/articles/:articleId',
       component: Article,
     },
     {
-      path: '/:lang?/about',
+      path: '/:lang(en-us|es-es)/about',
       component: About,
     },
     {
-      path: '/:lang?/cafes',
+      path: '/:lang(en-us|es-es)/cafes',
       component: Cafes,
     },
     {
-      path: '/:lang?/contacts',
+      path: '/:lang(en-us|es-es)/contacts',
       component: Contacts,
     },
     {
-      path: '/:lang?/coffees/:coffeeSlug',
+      path: '/:lang(en-us|es-es)/coffees/:coffeeSlug',
       component: Coffee,
     },
     {
-      path: '/:lang?/brewers/:brewerSlug',
+      path: '/:lang(en-us|es-es)/brewers/:brewerSlug',
       component: Brewer,
     },
     {
-      path: '/:lang?',
+      path: '/:lang(en-us|es-es)',
       component: Home,
     },
     {
+      path: '/:lang(en-us|es-es)/404',
+      component: NotFound,
+    },
+    {
+      path: '/',
+      redirect: '/en-us',
+    },
+    {
+      path: '/:lang(en-us|es-es)/*',
+      redirect: to => ({ path: `${to.params.lang}/404` })
+    },
+    {
       path: '*',
-      redirect: '/',
+      redirect: '/en-us/404'
     }
   ]
 });

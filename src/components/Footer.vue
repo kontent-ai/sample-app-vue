@@ -8,7 +8,7 @@
                             <h3 class="contact-title">{{$t('Footer.contact')}}</h3>
                             <p>
                                 (+0) 000-000-0000<br />
-                                <router-link to="mailto:dancinggoat@localhost.local">{{email}}</router-link>
+                                <a href="mailto:dancinggoat@localhost.local">{{email}}</a>
                                 <br />
                                 <br /> Dancing Goat Ltd<br /> 62 E Lake St Chicago,<br /> {{$t('Footer.cityStateZip')}}
                             </p>

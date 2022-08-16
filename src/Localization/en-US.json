@@ -64,5 +64,8 @@
         "noSummaryValue": "No summary filled",
         "noBodyCopyValue" : "No body copy element filled",
         "noPostDateValue": "No post date filled"
+    },
+    "NotFound":{
+        "message": "Sorry, we could not find what you are looking for."
     }
 }

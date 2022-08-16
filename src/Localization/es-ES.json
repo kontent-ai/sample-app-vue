@@ -64,6 +64,8 @@
         "noSummaryValue": "Sin resumen lleno",
         "noBodyCopyValue" : "Ningún elemento body copy lleno",
         "noPostDateValue": "Ningún elemento post date lleno"
+    },
+    "NotFound":{
+        "message": "Lo sentimos, no pudimos encontrar lo que buscas."
     }
-
 }

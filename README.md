@@ -79,6 +79,20 @@ For more info about the API, see the [API reference](hhttps://kontent.ai/learn/r
 
 You can find the Delivery and other SDKs at <https://github.com/kontent-ai>.
 
+## Language fallbacks
+
+To deal with content that is not available in current language, this project uses method called language fallbacks. It will fetch the content in the language which set as fallback language in the Kontent.ai project and redirect the website to the URL with prefix of the given language. However, it is possible to disable language fallbacks by adding a filter of `system.language` to your query. For more information about getting localized content check this [`link.`](https://kontent.ai/learn/tutorials/develop-apps/get-content/localized-content-items/?tech=javascript)
+
+```js
+var query = Client.items().type('about_us');
+
+if (this.language) {
+    query
+    .languageParameter(this.language)
+    .equalsFilter('system.language', 'es-ES');
+}
+```
+
 ## Deployment
 
 You can use, for example, [surge](http://surge.sh/) to deploy your app live. Check out the step-by-step guide on our [blog](https://kontent.ai/blog/3-steps-to-rapidly-deploy-headless-single-page-app).

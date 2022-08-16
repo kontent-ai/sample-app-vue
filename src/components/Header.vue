@@ -68,22 +68,22 @@ export default {
   props: ['language', 'changeLang', 'infoMessageText'],
   computed: {
     homeRoute: function(){
-      return '/' + this.language;
+      return '/' + this.language.toLowerCase();
     },
     storeRoute: function(){
-      return '/' + this.language + '/' + 'store';
+      return '/' + this.language.toLowerCase() + '/' + 'store';
     },
     articlesRoute: function(){
-      return '/' + this.language + '/' + 'articles';
+      return '/' + this.language.toLowerCase() + '/' + 'articles';
     },
     aboutRoute: function(){
-      return '/' + this.language + '/' + 'about';
+      return '/' + this.language.toLowerCase() + '/' + 'about';
     },
     cafesRoute: function(){
-      return '/' + this.language + '/' + 'cafes';
+      return '/' + this.language.toLowerCase() + '/' + 'cafes';
     },
     contactsRoute: function(){
-      return '/' + this.language + '/' + 'contacts';
+      return '/' + this.language.toLowerCase() + '/' + 'contacts';
     }
   },
   components: {

@@ -97,16 +97,18 @@ export default {
     fetchData: function () {
       var query = Client.items()
         .type('coffee')
-        .equalsFilter('url_pattern', this.$route.params.coffeeSlug)
+        .equalsFilter('url_pattern', this.$route.params.coffeeSlug);
 
       if(this.language){
-        query.languageParameter(this.language)
+        query.languageParameter(this.language);
       }
+      
       query
         .toPromise()
         .then(response => {
-          this.coffee = response.data.items[0]
-          if(this.coffee.system.language !== this.language){
+          this.coffee = response.data.items[0];
+
+          if(this.coffee.system.language !== this.language) {
             this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.coffee.system.language)})
           }
         })

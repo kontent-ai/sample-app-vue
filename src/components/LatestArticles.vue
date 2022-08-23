@@ -114,9 +114,11 @@ export default {
       let query = Client.items()
         .type('article')
         .orderParameter('elements.post_date', 'desc');
+
       if (this.language) {
         query.languageParameter(this.language);
       }
+      
       query.toPromise()
         .then(response => {
           if (this.language) {

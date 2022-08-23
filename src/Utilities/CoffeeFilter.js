@@ -12,7 +12,8 @@ export class Filter {
     if (this.processings.length === 0) {
       return true;
     }
-    let processings = coffee.elements.processing.value.map(x => x.codename);
+
+    const processings = coffee.elements.processing.value.map(x => x.codename);
 
     return this.processings.some(x => processings.includes(x));
   }
@@ -22,19 +23,19 @@ export class Filter {
       return true;
     }
 
-    let statuses = coffee.elements.productStatus.value.map(x => x.codename);
+    const statuses = coffee.elements.productStatus.value.map(x => x.codename);
 
     return this.productStatuses.some(x => statuses.includes(x));
   }
 
   toggleProcessing(processing) {
-    let index = this.processings.indexOf(processing);
+    const index = this.processings.indexOf(processing);
 
     if (index < 0) this.processings.push(processing); else this.processings.splice(index, 1);
   }
 
   toggleProductStatus(status) {
-    let index = this.productStatuses.indexOf(status);
+    const index = this.productStatuses.indexOf(status);
 
     if (index < 0) this.productStatuses.push(status); else this.productStatuses.splice(index, 1);
   }

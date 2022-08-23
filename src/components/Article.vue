@@ -95,7 +95,8 @@ export default {
             articleDetails[defaultLanguage][articleId] = response.data.items[0];
           }
           this.article = this.language ? articleDetails[this.language][articleId] : articleDetails[defaultLanguage][articleId]
-          if(this.article.system.language !== this.language){
+
+          if(this.article.system.language !== this.language) {
             this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.article.system.language)})
           }
         });

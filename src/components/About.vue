@@ -7,7 +7,6 @@
             <section
                 v-if="index % 2 === 0"
                 class="row text-and-image"
-                :key="index"
             >
                 <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6">
@@ -28,7 +27,6 @@
             <section
                 v-else
                 class="row text-and-image"
-                :key="index"
             >
                 <h2 class="col-lg-12">{{fact.title}}</h2>
                 <div class="col-md-6 col-md-push-6">

@@ -13,6 +13,7 @@ export function resolveContentLink(link, language) {
   default:
     resultLink = '';
   }
+  
   if(language){
     resultLink = `/${language.toLowerCase()}${resultLink}`
   }

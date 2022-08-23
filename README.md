@@ -5,7 +5,7 @@
 [![Stack Overflow](https://img.shields.io/badge/Stack%20Overflow-ASK%20NOW-FE7A16.svg?logo=stackoverflow&logoColor=white)](https://stackoverflow.com/tags/kontent-ai)
 [![Discord](https://img.shields.io/discord/821885171984891914?label=Discord&logo=Discord&logoColor=white)](https://discord.gg/SKCxwPtevJ)
 
-This is a sample website written in JavaScript utilizing the Kontent.ai Delivery API to manage and retrieve content. You can register your account for free at <https://app.konent.ai>.
+This is a sample website written in JavaScript utilizing the Kontent.ai Delivery API to retrieve content. You can register your account for free at <https://app.kontent.ai>.
 
 ## Application setup
 
@@ -18,40 +18,76 @@ This is a sample website written in JavaScript utilizing the Kontent.ai Delivery
 
 ### Data origin
 
-This sample wants to showcase either loading content from Kontent.ai as well as load some part of the site from static JSON resources.
+This sample wants to showcase either loading content from Kontent.ai as well as loading some part of the site from static JSON resources.
 
-> Basically the content that you can't find in the [`Localization`](https://github.com/kontent-ai/sample-app-vue/tree/master/src/Localization) JSON is loaded from Kontent.ai.
+> Basically, the content that you can't find in the [`Localization`](https://github.com/kontent-ai/sample-app-vue/tree/master/src/Localization) folder is loaded from Kontent.ai.
 
-* All data loaded from Konten.ai are using [`Stores`](https://github.com/kontent-ai/sample-app-vue/tree/master/src/Stores) as for examples "Latest Articles" section ([component here](https://github.com/kontent-ai/kontent-sample-app-vue/blob/master/src/components/LatestArticles.vue#L111)) on Home Page 
-* The data provided from [`Localization`](https://github.com/kontent-ai/kontent-sample-app-vue/tree/master/src/Localization) are using `vue-i18n` plugin, so every call in components using `$t('KEYWORD')` in components is loading data from these JSONs as for example "Banner" section" ([component here](https://github.com/kontent-ai/kontent-sample-app-vue/blob/master/src/components/Banner.vue#L6))
+* The data provided from [`Localization`](https://github.com/kontent-ai/kontent-sample-app-vue/tree/master/src/Localization) are using the `vue-i18n` plugin, so every call in components using `$t('KEYWORD')` in components is loading data from these JSONs as "Banner" section" ([component here](https://github.com/kontent-ai/kontent-sample-app-vue/blob/master/src/components/Banner.vue#L6))
 
-### Connecting to your sample project
+### Data fetching
 
-At the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kontent.ai sample project or create a new one. You'll also be able to start a trial and convert to a free plan when the trial expires.
+This solution fetches data using the [Delivery client](https://github.com/kontent-ai/delivery-sdk-js). For more implementation detail on how to set up the client see [src/Client.js](https://github.com/kontent-ai/sample-app-vue/blob/master/src/Client.js). After your client is set up, you are able to deliver your content to your project. The following example showcases how to use a Kontent.ai delivery client to fetch data.
 
-* If you want to open the configuration page after the project is already connected to the app. Just open url <http://localhost:8080/Admin/Configuration>.
+```js
+fetchBrewer: function () {
+  var query = Client.items()
+    .type('brewer')
+    .equalsFilter('url_pattern', this.$route.params.brewerSlug)
+
+  if(this.language) {
+    query.languageParameter(this.language)
+  }
+
+  query
+    .toPromise()
+    .then(response => {
+      // store data to the state variable of your component.
+      this.brewer = response.data.items[0]
+    }
+}
+```
+
+### Language fallbacks
+
+To deal with content that is not available in the current language, this project uses a method called language fallbacks. It will fetch the content in the language set as a fallback language in the Kontent.ai project and redirect the website to the URL with a prefix of the given language. However, it is possible to disable language fallbacks by adding a filter of `system.language` to your query. For more information about getting localized content check this [`link.`](https://kontent.ai/learn/tutorials/develop-apps/get-content/localized-content-items/?tech=javascript)
+
+```js
+var query = Client.items().type('about_us');
+
+if (this.language) {
+    query
+    .languageParameter(this.language)
+    .equalsFilter('system.language', 'es-ES');
+}
+```
+
+## Connecting to your sample project
+
+On the first run of the app, you'll be presented with a configuration page. It will allow you to connect the app to your Kontent.ai sample project or create a new one. You'll also be able to start a trial and convert to a developer plan when the trial expires.
+
+> If you want to open the configuration page after the project is already connected to the app. Just open the URL <http://localhost:8080/Admin/Configuration>.
 
 Alternatively, you can connect your project manually as per the chapter below.
 
-#### Connecting to your project manually
+### Connecting to your project manually
 
 If you want to change the source Kontent.ai project, follow these steps:
 
-1. In Kontent.ai,nchoose Project settings from the app menu.
-2. Under Development, choose API keys.
+1. In Kontent.ai, choose Project settings from the app menu.
+2. Under Production environment settings, choose API keys.
 3. Copy your Project ID.
 4. Create and open a `.env.local` file in the sample application folder.
 5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
 6. Save the file.
 
-When you now run the application, it will retrieve the content from your sample project. This set up has higher priority then [setting your sample project by the Configuration page](#connecting-to-your-sample-project).
+When you now run the application, it will retrieve the content from your sample project. This setup has a higher priority than [setting your sample project via the Configuration page](#connecting-to-your-sample-project).
 
-## Previewing content from your project
+### Previewing content from your project
 
 To preview unpublished content in the sample application, follow these steps:
 
 1. In Kontent.ai, choose Project settings from the app menu.
-2. Under Development, choose API keys.
+2. Under Production environment settings, choose API keys.
 3. Copy your Project ID and Preview API key.
 4. Create and open a `.env.local` file in the sample application folder.
 5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
@@ -79,21 +115,6 @@ For more info about the API, see the [API reference](hhttps://kontent.ai/learn/r
 
 You can find the Delivery and other SDKs at <https://github.com/kontent-ai>.
 
-## Language fallbacks
-
-To deal with content that is not available in current language, this project uses method called language fallbacks. It will fetch the content in the language which set as fallback language in the Kontent.ai project and redirect the website to the URL with prefix of the given language. However, it is possible to disable language fallbacks by adding a filter of `system.language` to your query. For more information about getting localized content check this [`link.`](https://kontent.ai/learn/tutorials/develop-apps/get-content/localized-content-items/?tech=javascript)
-
-```js
-var query = Client.items().type('about_us');
-
-if (this.language) {
-    query
-    .languageParameter(this.language)
-    .equalsFilter('system.language', 'es-ES');
-}
-```
-
 ## Deployment
 
 You can use, for example, [surge](http://surge.sh/) to deploy your app live. Check out the step-by-step guide on our [blog](https://kontent.ai/blog/3-steps-to-rapidly-deploy-headless-single-page-app).
-

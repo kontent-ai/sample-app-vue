@@ -8,10 +8,10 @@
                 <div class="store-menu-list row">
                     <ul>
                         <li>
-                            <router-link :to="`/${language}/store/coffees`">{{$t('Store.coffeesLinkTitle')}}</router-link>
+                            <router-link :to="`/${language.toLowerCase()}/store/coffees`">{{$t('Store.coffeesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="`/${language}/store/brewers`">{{$t('Store.brewersLinkTitle')}}</router-link>
+                            <router-link :to="`/${language.toLowerCase()}/store/brewers`">{{$t('Store.brewersLinkTitle')}}</router-link>
                         </li>
                     </ul>
                 </div>

@@ -60,7 +60,8 @@
 </template>
 
 <script>
-import { CafeStore } from '../Stores/Cafe'
+import { Client } from '../Client.js';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import ContactMap from './ContactMap.vue'
 import VueScrollTo from 'vue-scrollto'
 
@@ -86,26 +87,26 @@ export default {
         return [];
       }
       return this.cafes.map((cafe) => {
-        return `${cafe.city.value}, ${cafe.street.value}`;
+        return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
       })
     }
   },
   watch: {
     language: function(){
-      CafeStore.provideCompanyCafes(this.language);
+      this.fetchCafes();
     }
   },
   methods: {
     getModel: function (cafe) {
       let model = {
         name: cafe.system.name,
-        street: cafe.street.value,
-        city: cafe.city.value,
-        zipCode: cafe.zipCode.value,
-        country: cafe.country.value,
-        state: cafe.state.value,
-        phone: cafe.phone.value,
-        email: cafe.email.value,
+        street: cafe.elements.street.value,
+        city: cafe.elements.city.value,
+        zipCode: cafe.elements.zipCode.value,
+        country: cafe.elements.country.value,
+        state: cafe.elements.state.value,
+        phone: cafe.elements.phone.value,
+        email: cafe.elements.email.value,
       };
       model.dataAddress = model.city + ', ' + model.street;
       model.countryWithState = model.country + (model.state ? ', ' + model.state : '');
@@ -125,21 +126,32 @@ export default {
       }
       this.selectedAddress = model.dataAddress
     },
-    onChange: function(){
-      this.cafes = CafeStore.getCompanyCafes(this.language);
+    fetchCafes() {
+      const cafesList = initLanguageCodeObject();
+
+      let query = Client.items()
+        .type('cafe')
+        .orderParameter('elements.name', 'desc');
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            cafesList[this.language] = response.data.items;
+          } else {
+            cafesList[defaultLanguage] = response.data.items;
+          }
+          this.cafes = this.language ? 
+            cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
+            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
+        });
     }
   },
   mounted: function() {
-    CafeStore.subscribe();
-    CafeStore.addChangeListener(this.onChange);
-    CafeStore.provideCompanyCafes(this.language);
-    this.cafes = CafeStore.getCompanyCafes(this.language);
-  },
-  beforeDestroy: function() {
-    CafeStore.unsubscribe();
-  },
-  destroyed: function(){
-    CafeStore.removeChangeListener(this.onChange);
+    this.fetchCafes();
   },
   components: {
     ContactMap,

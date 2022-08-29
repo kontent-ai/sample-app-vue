@@ -1,5 +1,5 @@
 {
-  "name": "@kentico/kontent-sample-app-vue",
+  "name": "@kontent-ai/sample-app-vue",
   "version": "1.0.1",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -16,8 +16,9 @@
     "pre-commit": "lint-staged"
   },
   "dependencies": {
+    "@intlify/vue-i18n-loader": "^1.0.0",
+    "@kontent-ai/delivery-sdk": "^12.0.2",
     "dateformat": "^3.0.3",
-    "@kentico/kontent-delivery": "^9.1.1",
     "lodash": "^4.17.19",
     "qs": "^6.9.4",
     "rxjs": "^6.5.5",
@@ -26,7 +27,6 @@
     "validator": "^13.0.0",
     "vue": "^2.6.11",
     "vue-i18n": "^8.18.1",
-    "@intlify/vue-i18n-loader": "^1.0.0",
     "vue-router": "^3.3.2",
     "vue-scrollto": "^2.18.1",
     "vue2-google-maps": "^0.10.7"

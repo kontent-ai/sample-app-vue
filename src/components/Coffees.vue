@@ -38,16 +38,11 @@
 </template>
 
 <script>
-import { CoffeeStore } from '../Stores/Coffee'
 import { resolveContentLink } from '../Utilities/ContentLinks'
 
 export default {
   name: 'Coffees',
-  props: ['language'],
-  data: () => ({
-    coffees: [],
-    filter: null,
-  }),
+  props: ['language', 'coffees', 'filter'],
   computed: {
     filteredCoffees: function () {
       if (this.coffees.length === 0 || !this.filter) {
@@ -57,18 +52,13 @@ export default {
     },
     coffeesData: function () {
       return this.filteredCoffees.map(coffee => ({
-        price: this.formatPrice(coffee.price.value, this.language),
-        name: coffee.productName.value,
-        imageLink: coffee.image.value[0].url,
-        link: resolveContentLink({ type: 'coffee', urlSlug: coffee.urlPattern.value }, this.language),
-        hasNoProductStatus: coffee.productStatus.value.length === 0,
-        productStatusText: coffee.productStatus.value.map(x => x.name).join(', ')
+        price: this.formatPrice(coffee.elements.price.value, this.language),
+        name: coffee.elements.productName.value,
+        imageLink: coffee.elements.image.value[0].url,
+        link: resolveContentLink({ type: 'coffee', urlSlug: coffee.elements.urlPattern.value }, this.language),
+        hasNoProductStatus: coffee.elements.productStatus.value.length === 0,
+        productStatusText: coffee.elements.productStatus.value.map(x => x.name).join(', ')
       }))
-    }
-  },
-  watch: {
-    language: function () {
-      CoffeeStore.provideCoffees(this.language);
     }
   },
   methods: {
@@ -79,23 +69,6 @@ export default {
       });
     },
     resolveContentLink,
-    onChange: function () {
-      this.coffees = CoffeeStore.getCoffees(this.language);
-      this.filter = CoffeeStore.getFilter();
-    }
   },
-  mounted: function() {
-    CoffeeStore.subscribe();
-    CoffeeStore.addChangeListener(this.onChange);
-    CoffeeStore.provideCoffees(this.language);
-    this.filter = CoffeeStore.getFilter();
-    this.coffees = CoffeeStore.getCoffees(this.language);
-  },
-  beforeDestroy: function() {
-    CoffeeStore.unsubscribe();
-  },
-  destroyed: function () {
-    CoffeeStore.removeChangeListener(this.onChange);
-  }
 }
 </script>

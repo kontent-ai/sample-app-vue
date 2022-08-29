@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <RichTextElement
-                    v-if="articleData.bodyCopyElement.resolveHtml()"
+                    v-if="articleData.bodyCopyElement"
                     class="article-detail-content"
                     :element="articleData.bodyCopyElement"
                 />
@@ -43,10 +43,11 @@
 </template>
 
 <script>
-import { ArticleStore } from '../Stores/Article';
 import dateFormat from 'dateformat';
-import { dateFormats } from '../Utilities/LanguageCodes';
+import { dateFormats, initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
+import { Client } from '../Client.js';
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import _ from 'lodash';
 
 export default {
@@ -58,16 +59,16 @@ export default {
   computed: {
     articleData: function() {
       return {
-        title: _.get(this.article, 'title.value') || this.$t('Article.noTitleValue'),
-        imageLink: _.get(this.article, 'teaserImage.value[0].url'),
-        postDate: this.formatDate(_.get(this.article, 'postDate.value')),
-        bodyCopyElement: _.get(this.article, 'bodyCopy') || this.$t('Article.noBodyCopyValue')
+        title: _.get(this.article, 'elements.title.value') || this.$t('Article.noTitleValue'),
+        imageLink: _.get(this.article, 'elements.teaserImage.value[0].url'),
+        postDate: this.formatDate(_.get(this.article, 'elements.postDate.value')),
+        bodyCopyElement: _.get(this.article, 'elements.bodyCopy') || this.$t('Article.noBodyCopyValue')
       };
     }
   },
   watch: {
     language: function(){
-      ArticleStore.provideArticle(this.$route.params.articleId, this.language);
+      this.fetchArticle(this.$route.params.articleId);
       dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
     }
   },
@@ -75,25 +76,34 @@ export default {
     formatDate: function(value){
       return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('Article.noPostDateValue');
     },
-    onChange: function(){
-      this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
+    fetchArticle: function(articleId){
+      const articleDetails = initLanguageCodeObject();
+      let query = Client.items()
+        .type('article')
+        .equalsFilter('system.id', articleId)
+        .elementsParameter(['title', 'teaser_image', 'post_date', 'body_copy', 'video_host', 'video_id', 'tweet_link', 'theme', 'display_options'])
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            articleDetails[this.language][articleId] = response.data.items[0];
+          } else {
+            articleDetails[defaultLanguage][articleId] = response.data.items[0];
+          }
+          this.article = this.language ? articleDetails[this.language][articleId] : articleDetails[defaultLanguage][articleId]
+
+          if(this.article.system.language !== this.language) {
+            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.article.system.language)})
+          }
+        });
     }
   },
   mounted: function(){
-    ArticleStore.subscribe();
-    ArticleStore.addChangeListener(this.onChange);
-    ArticleStore.provideArticle(this.$route.params.articleId, this.language);
-    dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
-  },
-  beforeUpdate: function(){
-    this.article = ArticleStore.getArticle(this.$route.params.articleId, this.language);
-  },
-  beforeDestroy: function() {
-    ArticleStore.unsubscribe();
-  },
-  destroyed: function(){
-    ArticleStore.removeChangeListener(this.onChange);
+    this.fetchArticle(this.$route.params.articleId);
   },
   components: {
     RichTextElement

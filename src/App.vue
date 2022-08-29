@@ -79,7 +79,7 @@ export default {
       } else {
         urlParts.splice(1, 0, newLanguage);
       }
-      this.$router.push(urlParts.join('/'));
+      this.$router.push(urlParts.join('/').toLowerCase());
       this.$i18n.locale = newLanguage;
     }
   },

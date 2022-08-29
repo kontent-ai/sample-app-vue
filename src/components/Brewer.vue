@@ -39,8 +39,9 @@
 </template>
 
 <script>
-import { BrewerStore } from '../Stores/Brewer'
+import { Client } from '../Client.js';
 import RichTextElement from './RichTextElement.vue'
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 
 export default {
   name: 'Brewer',
@@ -56,30 +57,36 @@ export default {
       if(!newBrewer){
         return;
       }
-      this.name = newBrewer.productName.value;
-      this.imageLink = newBrewer.image.value[0].url;
-      this.descriptionElement = newBrewer.longDescription;
+      this.name = newBrewer.elements.productName.value;
+      this.imageLink = newBrewer.elements.image.value[0].url;
+      this.descriptionElement = newBrewer.elements.longDescription;
     },
     language: function(){
-      BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
+      this.fetchBrewer();
     }
   },
   methods:{
-    onChange: function(){
-      this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
+    fetchBrewer: function () {
+      var query = Client.items()
+        .type('brewer')
+        .equalsFilter('url_pattern', this.$route.params.brewerSlug)
+
+      if(this.language){
+        query.languageParameter(this.language)
+      }
+      query
+        .toPromise()
+        .then(response => {
+          this.brewer = response.data.items[0]
+          
+          if(this.brewer.system.language !== this.language) {
+            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.brewer.system.language)})
+          }
+        })
     }
   },
   mounted: function(){
-    BrewerStore.subscribe();
-    BrewerStore.addChangeListener(this.onChange);
-    BrewerStore.provideBrewer(this.$route.params.brewerSlug, this.language);
-    this.brewer = BrewerStore.getBrewer(this.$route.params.brewerSlug, this.language);
-  },
-  beforeDestroy: function() {
-    BrewerStore.unsubscribe();
-  },
-  destroyed: function(){
-    BrewerStore.removeChangeListener(this.onChange);
+    this.fetchBrewer();
   },
   components: {
     RichTextElement,

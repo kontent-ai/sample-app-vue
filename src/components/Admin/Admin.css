@@ -5,7 +5,7 @@
 
 html,
 body {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     color: #151515;
     margin: 0;
     padding: 0;
@@ -118,14 +118,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section .headline-medium {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 16px;
     font-weight: 700;
     line-height: 24px;
 }
 
 .project-configuration-section .headline-large {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 24px;
     font-weight: 700;
     line-height: 32px;
@@ -185,7 +185,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section input[type="submit"] {
-    font-family: 'GT Walsheim Pro', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     font-size: 12px;
     font-weight: 700;
     line-height: 16px;
@@ -199,28 +199,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .project-configuration-section input[type="submit"].button-primary {
-    background-color: #ef5a22;
-    border-color: #db531f;
+    background-color: #6956CC;
+    border-color: #6956CC;
 }
 
 .project-configuration-section input[type="submit"].button-primary:active,
 .project-configuration-section input[type="submit"].button-primary:hover,
 .project-configuration-section input[type="submit"].button-primary:focus {
-    background-color: #db531f;
-    border-color: #db531f;
+    background-color: #231f20;
+    border-color: #231f20;
+    color: #ffffff;
 }
 
 .project-configuration-section input[type="submit"].button-secondary {
-    background: #DB3C00;
-    box-shadow:
-            0 8px 14px 2px rgb(244 92 35 / 14%),
-            0 6px 20px 5px rgb(244 92 35 / 12%),
-            0 8px 10px -5px rgb(244 92 35 / 20%);
+    background: #6956CC;
 }
 
 .project-configuration-section input[type="submit"].button-secondary:active,
 .project-configuration-section input[type="submit"].button-secondary:hover {
-    background-color: #953000;
+    background-color: #231f20;
+    color: #ffffff;
 }
 
 .project-configuration-section input[type="submit"].button-secondary:focus {

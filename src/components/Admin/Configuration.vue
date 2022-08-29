@@ -7,13 +7,13 @@
             <img
                 class="logo"
                 v-bind:src="kontentLogo"
-                alt="Kentico Kontent Logo"
+                alt="Kontent.ai Logo"
             />
         </a>
         <header>
             <div>
                 <h1 class="headline-large">Sample Site—Configuration</h1>
-                <p class="margin-top-xl">For your sample app to work, you should have a Kontent project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
+                <p class="margin-top-xl">For your sample app to work, you should have a Kontent.ai project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent.ai credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
                     v-if="this.preparingProject"
                     message="Waiting for the sample project to become ready..."
@@ -23,7 +23,7 @@
         <section class="margin-top-xl">
             <h2 class="headline-medium">Get a Project ID</h2>
             <p class="margin-top-l">You may wish to either select from existing projects or create a new sample project. The app will be configured with its project ID.</p>
-            <form @submit="openKenticoKontentProjectSelector">
+            <form @submit="openKontentProjectSelector">
                 <input
                     type="submit"
                     class="button-secondary margin-top-xl"
@@ -74,19 +74,17 @@
 <script>
 import Cookies from 'universal-cookie';
 import { isUUID } from 'validator';
-import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 import SpinnerBox from '../SpinnerBox.vue';
 
 import { resetClient, Client } from '../../Client';
-import { resetStores } from '../../Utilities/StoreManager';
 import {
   defaultProjectId,
   selectedProjectCookieName
 } from '../../Utilities/SelectedProject';
 
-import kontentLogo from '../../Images/Admin/kk-logo.svg';
+import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 
 const getWindowCenterPosition = (windowWidth, windowHeight) => {
   const dualScreenLeft =
@@ -144,10 +142,9 @@ export default {
       Client.items()
         .elementsParameter(['id'])
         .depthParameter(0)
-        .toObservable()
-        .pipe(takeUntil(this.unsubscribeSubject))
-        .subscribe(response => {
-          this.sampleProjectItemCount = response.items.length;
+        .toPromise()
+        .then(response => {
+          this.sampleProjectItemCount = response.data.items.length;
         });
     },
     setNewProjectId(newProjectId, newlyGeneratedProject) {
@@ -161,7 +158,6 @@ export default {
       }
 
       resetClient(newProjectId);
-      resetStores();
       if (newlyGeneratedProject) {
         this.waitUntilProjectAccessible(newProjectId);
         this.preparingProject = true;
@@ -174,10 +170,9 @@ export default {
         Client.items()
           .elementsParameter(['id'])
           .depthParameter(0)
-          .toObservable()
-          .pipe(takeUntil(this.unsubscribeSubject))
-          .subscribe(response => {
-            if (response.items.length >= this.sampleProjectItemCount) {
+          .toPromise()
+          .then(response => {
+            if (response.data.items.length >= this.sampleProjectItemCount) {
               this.preparingProject = false;
               this.redirectToHome(newProjectId);
             } else {
@@ -189,9 +184,9 @@ export default {
     redirectToHome(newProjectId) {
       const infoMessage =
         newProjectId === defaultProjectId
-          ? 'You\'ve configured your app to with a project ID of a shared Kentico Kontent project.'
+          ? 'You\'ve configured your app to with a project ID of a shared Kontent.ai project.'
           : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-      const dataOriginInfo = 'Data on this site originates from Kentico Kontent as well from static JSON resources. To distinguish data sources see https://github.com/Kentico/kontent-sample-app-vue%23Data-origin';
+      const dataOriginInfo = 'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
       this.$router.push(`/?infoMessage=${infoMessage}${dataOriginInfo}`);
     },
     receiveMessage(event) {
@@ -206,7 +201,7 @@ export default {
         event.data.newlyGeneratedProject
       );
     },
-    openKenticoKontentProjectSelector(event) {
+    openKontentProjectSelector(event) {
       event.preventDefault();
       const windowWidth = 800;
       const windowHeight = 800;
@@ -214,7 +209,7 @@ export default {
 
       window.open(
         'https://app.kontent.ai/sample-site-configuration',
-        'Kentico Kontent',
+        'Kontent.ai',
         `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
         ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`
       );
@@ -238,14 +233,14 @@ export default {
 
 <style scoped>
 body {
-  font-family: 'GT Walsheim Pro', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   display: table;
   width: 100%;
   background-image: linear-gradient(135deg, #F3F4F5, #D3DFF3);
 }
 p {
   margin: 0;
-  font-family: 'GT Walsheim Pro', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;

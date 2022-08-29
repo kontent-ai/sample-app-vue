@@ -42,9 +42,10 @@
 
 <script>
 import dateFormat from 'dateformat';
-import { ArticleStore } from '../Stores/Article';
 import { dateFormats } from '../Utilities/LanguageCodes';
+import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
+import { Client } from '../Client.js';
 
 export default {
   name: 'Articles',
@@ -56,17 +57,17 @@ export default {
   computed: {
     articlesData: function() {
       return this.articles.map(article => ({
-        title: _.get(article, 'title.value') || this.$t('Article.noTitleValue'),
-        imageLink: _.get(article, 'teaserImage.value[0].url'),
-        link: `/${this.language}/articles/${_.get(article, 'system.id')}`,
-        postDate: this.formatDate(_.get(article, 'postDate.value')),
-        summary: _.get(article, 'summary.value') || this.$t('Article.noSummaryValue')
+        title: _.get(article, 'elements.title.value') || this.$t('Article.noTitleValue'),
+        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
+        link: `/${this.language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
+        postDate: this.formatDate(_.get(article, 'elements.postDate.value')),
+        summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
       }));
     }
   },
   watch: {
     language: function() {
-      ArticleStore.provideArticles(this.articleCount, this.language);
+      this.fetchArticles();
       dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
     }
   },
@@ -74,25 +75,30 @@ export default {
     formatDate: function(value) {
       return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
     },
-    onChange: function() {
-      this.articles = ArticleStore.getArticles(
-        this.articleCount,
-        this.language
-      );
+    fetchArticles: function() {
+      const articleList = initLanguageCodeObject();
+      let query = Client.items()
+        .type('article')
+        .orderParameter('elements.post_date', 'desc');
+
+      if (this.language) {
+        query.languageParameter(this.language);
+      }
+
+      query.toPromise()
+        .then(response => {
+          if (this.language) {
+            articleList[this.language] = response.data.items;
+          } else {
+            articleList[defaultLanguage] = response.data.items
+          }
+          this.articles = this.language ? articleList[this.language] : articleList[defaultLanguage];
+        });
     }
   },
   mounted: function() {
-    ArticleStore.subscribe();
-    ArticleStore.addChangeListener(this.onChange);
-    ArticleStore.provideArticles(this.articleCount, this.language);
-    this.articles = ArticleStore.getArticles(this.articleCount, this.language);
+    this.fetchArticles();
     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
   },
-  beforeDestroy: function() {
-    ArticleStore.unsubscribe();
-  },
-  destroyed: function() {
-    ArticleStore.removeChangeListener(this.onChange);
-  }
 };
 </script>

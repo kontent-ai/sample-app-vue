@@ -84,7 +84,7 @@ import {
   selectedProjectCookieName
 } from '../../Utilities/SelectedProject';
 
-import kontentLogo from '../../Images/Admin/kk-logo.svg';
+import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 
 const getWindowCenterPosition = (windowWidth, windowHeight) => {
   const dualScreenLeft =
@@ -144,7 +144,7 @@ export default {
         .depthParameter(0)
         .toPromise()
         .then(response => {
-          this.sampleProjectItemCount = response.items.length;
+          this.sampleProjectItemCount = response.data.items.length;
         });
     },
     setNewProjectId(newProjectId, newlyGeneratedProject) {
@@ -172,7 +172,7 @@ export default {
           .depthParameter(0)
           .toPromise()
           .then(response => {
-            if (response.items.length >= this.sampleProjectItemCount) {
+            if (response.data.items.length >= this.sampleProjectItemCount) {
               this.preparingProject = false;
               this.redirectToHome(newProjectId);
             } else {

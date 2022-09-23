@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'LayoutFooter',
   data: () => ({
     email: 'dancinggoat@localhost.local',
   }),

@@ -1,38 +1,37 @@
 <template>
     <div class="container">
-        <template  v-for="(article, index) in articlesData">
-            <div :key="article.id">
-                <div
-                    v-if="index % 4 === 0"
-                    class="clear"
-                >
-                </div>
-                <div class="col-md-3" >
-                    <div class="article-tile">
-                        <router-link :to="article.link">
-                            <img
-                                v-if="article.imageLink"
-                                :alt="'Article '  + article.title"
-                                class="article-tile-image"
-                                :src="article.imageLink"
-                                :title="'Article ' + article.title"
-                            />
-                            <span 
-                                v-else 
-                                class="article-tile-image"
-                            >{{ $t('Article.noTeaserValue') }}</span>
-                        </router-link>
-                        <div class="article-tile-date">
-                            {{article.postDate}}
-                        </div>
-                        <div class="article-tile-content">
-                            <h2 class="h4">
-                                <router-link :to="article.link">{{article.title}}</router-link>
-                            </h2>
-                            <p class="article-tile-text">
-                                {{article.summary}}
-                            </p>
-                        </div>
+        <!-- eslint-disable -->
+        <template  v-for="(article, index) in articlesData" :key="article.id">
+            <div
+                v-if="index % 4 === 0"
+                class="clear"
+            >
+            </div>
+            <div class="col-md-3" >
+                <div class="article-tile">
+                    <router-link :to="article.link">
+                        <img
+                            v-if="article.imageLink"
+                            :alt="'Article '  + article.title"
+                            class="article-tile-image"
+                            :src="article.imageLink"
+                            :title="'Article ' + article.title"
+                        />
+                        <span 
+                            v-else 
+                            class="article-tile-image"
+                        >{{ $t('Article.noTeaserValue') }}</span>
+                    </router-link>
+                    <div class="article-tile-date">
+                        {{article.postDate}}
+                    </div>
+                    <div class="article-tile-content">
+                        <h2 class="h4">
+                            <router-link :to="article.link">{{article.title}}</router-link>
+                        </h2>
+                        <p class="article-tile-text">
+                            {{article.summary}}
+                        </p>
                     </div>
                 </div>
             </div>

@@ -39,9 +39,8 @@
             >
                 <h3>{{location}}</h3>
                 <p
-                    v-for="(partnerCafeModel, index) in partnerCafesData"
+                    v-for="(partnerCafeModel, index) in partnerCafesData.filter(cafe => cafe.location == location)"
                     :key="index"
-                    v-if="partnerCafeModel.location === location"
                 >
                     {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
                 </p>

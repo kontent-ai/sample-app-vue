@@ -16,7 +16,7 @@ import Cafes from './components/Cafes.vue'
 import Coffee from './components/Coffee.vue'
 import Brewer from './components/Brewer.vue'
 import Contacts from './components/Contacts.vue'
-import Article from './components/Article.vue'
+import NewArticle from './components/NewArticle.vue'
 import NotFound from './components/NotFound.vue'
 
 import { projectConfigurationPath } from './Utilities/SelectedProject'
@@ -71,7 +71,7 @@ let router = new Router({
     },
     {
       path: '/:lang(en-us|es-es)/articles/:articleId',
-      component: Article,
+      component: NewArticle,
     },
     {
       path: '/:lang(en-us|es-es)/about',

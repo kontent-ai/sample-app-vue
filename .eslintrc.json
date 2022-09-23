@@ -6,13 +6,14 @@
     "node": true
   },
   "parserOptions": {
-    "parser": "babel-eslint"
+    "parser": "@babel/eslint-parser"
   },
   "extends": [
     "eslint:recommended",
     "plugin:vue/essential"
   ],
   "rules": {
+    "vue/multi-word-component-names": "off",
     "indent": [
       "error",
       2
@@ -43,8 +44,7 @@
       {
         "singleline": 1,
         "multiline": {
-          "max": 1,
-          "allowFirstLine": false
+          "max": 1
         }
       }
     ]

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <gmap-map 
         class="map" 
         :style="mapStyle" 
@@ -92,4 +92,4 @@ export default {
     })
   },
 }
-</script>
+</script> -->

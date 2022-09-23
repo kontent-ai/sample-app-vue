@@ -51,7 +51,7 @@ import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import _ from 'lodash';
 
 export default {
-  name: 'Article',
+  name: 'NewArticle',
   props: ['language'],
   data: () => ({
     article: null,

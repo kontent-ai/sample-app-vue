@@ -64,7 +64,7 @@
 import MessageBox from './MessageBox'
 
 export default {
-  name: 'Header',
+  name: 'LayoutHeader',
   props: ['language', 'changeLang', 'infoMessageText'],
   computed: {
     homeRoute: function(){

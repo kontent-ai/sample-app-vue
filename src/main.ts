@@ -1,8 +1,7 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createApp }  from 'vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import VueScrollTo from 'vue-scrollto'
-import VueI18n from 'vue-i18n'
-import * as VueGoogleMaps from 'vue2-google-maps'
+import { createI18n } from 'vue-i18n'
 
 import App from './App.vue'
 import Configuration from './components/Admin/Configuration.vue'
@@ -27,21 +26,10 @@ import es from './Localization/es-ES.json'
 import './index.css';
 import './components/Admin/Admin.css';
 
-Vue.config.productionTip = false;
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
-  }
-});
-Vue.use(VueI18n);
-Vue.use(Router);
-Vue.use(VueScrollTo, {
-  duration: 1000,
-  easing: 'ease-in-out',
-});
-
-let router = new Router({
-  mode: 'history',
+// TODO
+// Vue.config.productionTip = false;
+const  router = createRouter({
+  history: createWebHistory(),
   routes: [
     {
       path: projectConfigurationPath,
@@ -116,16 +104,23 @@ let router = new Router({
   ]
 });
 
-let i18n = new VueI18n({
+const app = createApp(App)
+app.use(router)
+const i18n = createI18n({
   locale: 'en-US',
+  allowComposition: true,
   messages: {
     'en-US': en,
     'es-ES': es,
   },
 });
+app.use(i18n);
+// app.use(VueGoogleMaps, {
+//   load: {
+//     key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
+//   }
+// });
+app.mount('#app')
 
-new Vue({
-  router,
-  i18n,
-  render: h => h(App)
-}).$mount('#app');
+
+

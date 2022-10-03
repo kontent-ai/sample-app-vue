@@ -34,7 +34,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-plugin-eslint": "^3.12.1",
-    "@vue/cli-service": "^4.4.1",
+    "@vue/cli-service": "^5.0.8",
     "deepmerge": "^4.2.2",
     "lint-staged": "^10.2.7",
     "vue-template-compiler": "^2.6.11"

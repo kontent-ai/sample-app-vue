@@ -44,7 +44,7 @@ import RichTextElement from './RichTextElement.vue'
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 
 export default {
-  name: 'Brewer',
+  name: 'BrewerComponent',
   props: ['language'],
   data: () => ({
     brewer: null,

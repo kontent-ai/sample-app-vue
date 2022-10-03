@@ -1,36 +1,36 @@
 <template>
     <div class="container">
-        <banner :language="language"/>
+        <BannerComponent :language="language"/>
         <latest-articles :language="language"/>
         <link-button 
-            :text="$t('Home.moreArticles')" 
+            :text="$t('HomeComponent.moreArticles')" 
             :link="`/${language.toLowerCase()}/articles`"
         />
         <our-story/>
         <link-button 
-            :text="$t('Home.aboutLinkText')" 
+            :text="$t('HomeComponent.aboutLinkText')" 
             :link="`/${language.toLowerCase()}/about`"
         />
         <taste-our-coffee :language="language"/>
         <link-button 
-            :text="$t('Home.cafesLinkText')" 
+            :text="$t('HomeComponent.cafesLinkText')" 
             :link="`/${language.toLowerCase()}/cafes`"
         />
     </div>
 </template>
 
 <script>
-import Banner from './Banner'
+import BannerComponent from './BannerComponent'
 import LatestArticles from './LatestArticles'
 import LinkButton from './LinkButton'
 import OurStory from './OurStory'
 import TasteOurCoffee from './TasteOurCoffee'
 
 export default {
-  name: 'Home',
+  name: 'HomeComponent',
   props: ['language'],
   components: {
-    Banner,
+    BannerComponent,
     LatestArticles,
     LinkButton,
     OurStory,

@@ -20,7 +20,7 @@
                             <span 
                                 v-else 
                                 class="article-tile-image"
-                            >{{ $t('Article.noTeaserValue') }}</span>
+                            >{{ $t('ArticleComponent.noTeaserValue') }}</span>
                         </router-link>
                         <div class="article-tile-date">
                             {{article.postDate}}
@@ -48,7 +48,7 @@ import _ from 'lodash';
 import { Client } from '../Client.js';
 
 export default {
-  name: 'Articles',
+  name: 'ArticlesComponent',
   props: ['language'],
   data: () => ({
     articles: [],
@@ -57,11 +57,11 @@ export default {
   computed: {
     articlesData: function() {
       return this.articles.map(article => ({
-        title: _.get(article, 'elements.title.value') || this.$t('Article.noTitleValue'),
+        title: _.get(article, 'elements.title.value') || this.$t('ArticleComponent.noTitleValue'),
         imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
         link: `/${this.language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
         postDate: this.formatDate(_.get(article, 'elements.postDate.value')),
-        summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
+        summary: _.get(article, 'elements.summary.value') || this.$t('ArticleComponent.noSummaryValue')
       }));
     }
   },
@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     formatDate: function(value) {
-      return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
+      return value ? dateFormat(value, 'mmmm d') : this.$t('ArticleComponent.noPostDateValue');
     },
     fetchArticles: function() {
       const articleList = initLanguageCodeObject();

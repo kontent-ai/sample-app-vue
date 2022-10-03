@@ -41,7 +41,7 @@
 import { resolveContentLink } from '../Utilities/ContentLinks'
 
 export default {
-  name: 'Coffees',
+  name: 'CoffeesComponent',
   props: ['language', 'coffees', 'filter'],
   computed: {
     filteredCoffees: function () {

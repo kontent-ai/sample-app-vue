@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="col-md-12">
-            <h2 class="contact-title">{{$t('Contacts.roasteryTitle')}}</h2>
+            <h2 class="contact-title">{{$t('ContactsComponent.roasteryTitle')}}</h2>
             <ul
                 v-if="firstCafe"
                 class="contact-info"
@@ -23,7 +23,7 @@
             </ul>
         </div>
         <div>
-            <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
+            <h2>{{$t('ContactsComponent.ourCafesTitle')}}</h2>
             <div class="row">
                 <div
                     v-for="(model, index) in cafeModels"
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-        <h2 class="map-title">{{$t('Contacts.mapTitle')}}</h2>
+        <h2 class="map-title">{{$t('ContactsComponent.mapTitle')}}</h2>
         <ContactMap
             :cafesAddresses="cafesAddresses"
             :focusOnAddress="selectedAddress"
@@ -66,7 +66,7 @@ import ContactMap from './ContactMap.vue'
 import VueScrollTo from 'vue-scrollto'
 
 export default {
-  name: 'Contacts',
+  name: 'ContactsComponent',
   props: ['language'],
   data: () => ({
     cafes: [],

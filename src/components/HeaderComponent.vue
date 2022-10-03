@@ -8,22 +8,22 @@
                 <nav role="navigation">
                     <ul>
                         <li>
-                            <router-link :to="homeRoute">{{$t('Header.homeLinkTitle')}}</router-link>
+                            <router-link :to="homeRoute">{{$t('HeaderComponent.homeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="storeRoute">{{$t('Header.storeLinkTitle')}}</router-link>
+                            <router-link :to="storeRoute">{{$t('HeaderComponent.storeLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="articlesRoute">{{$t('Header.articlesLinkTitle')}}</router-link>
+                            <router-link :to="articlesRoute">{{$t('HeaderComponent.articlesLinkTitle')}}</router-link>
                         </li>
                         <li >
-                            <router-link :to="aboutRoute">{{$t('Header.aboutLinkTitle')}}</router-link>
+                            <router-link :to="aboutRoute">{{$t('HeaderComponent.aboutLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="cafesRoute">{{$t('Header.cafesLinkTitle')}}</router-link>
+                            <router-link :to="cafesRoute">{{$t('HeaderComponent.cafesLinkTitle')}}</router-link>
                         </li>
                         <li>
-                            <router-link :to="contactsRoute">{{$t('Header.contactsLinkTitle')}}</router-link>
+                            <router-link :to="contactsRoute">{{$t('HeaderComponent.contactsLinkTitle')}}</router-link>
                         </li>
                     </ul>
                 </nav>
@@ -64,7 +64,7 @@
 import MessageBox from './MessageBox'
 
 export default {
-  name: 'Header',
+  name: 'HeaderComponent',
   props: ['language', 'changeLang', 'infoMessageText'],
   computed: {
     homeRoute: function(){

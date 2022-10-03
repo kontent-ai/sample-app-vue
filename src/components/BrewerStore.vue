@@ -8,7 +8,7 @@
                 :filter="brewerFilter"
                 @set-filter="setFilter"
             />
-            <Brewers 
+            <BrewersComponent 
                 :language="language"
                 :brewers="brewers"
                 :filter="brewerFilter"
@@ -19,7 +19,7 @@
 
 <script>
 import BrewerFilter  from './BrewerFilter.vue'
-import Brewers from './Brewers.vue'
+import BrewersComponent from './BrewersComponent.vue'
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import { Filter } from '../Utilities/BrewerFilter';
@@ -35,7 +35,7 @@ export default {
   }),
   components: {
     BrewerFilter,
-    Brewers
+    BrewersComponent
   },
   methods: {
     fetchData: function(language) {

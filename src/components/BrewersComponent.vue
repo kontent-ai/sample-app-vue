@@ -41,7 +41,7 @@
 import { resolveContentLink } from '../Utilities/ContentLinks'
 
 export default {
-  name: 'Brewers',
+  name: 'BrewersComponent',
   props: ['language', 'brewers', 'filter'],
   data: () => ({
   }),

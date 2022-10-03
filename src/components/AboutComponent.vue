@@ -55,7 +55,7 @@ import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 
 export default {
-  name: 'About',
+  name: 'AboutComponent',
   props: ['language'],
   data: () => ({
     facts: [],

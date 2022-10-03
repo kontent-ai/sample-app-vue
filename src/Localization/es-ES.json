@@ -1,6 +1,6 @@
 {
     "locale": "es-ES",
-    "Banner": {
+    "BannerComponent": {
         "heading": "Café tostado de primera calidad ",
         "text": "Descubre el fascinante mundo de Dancing Goat café de la mas alta calidad. Nunca más perderás una sola oportunidad de disfrutar un buen café.",
         "loading": "Cargando..."
@@ -8,7 +8,7 @@
     "LatestArticles": {
         "latestArticlesTitle": "Último artículo"
     },
-    "Home": {
+    "HomeComponent": {
         "moreArticles": "Más artículos",
         "aboutLinkText": "Leer toda la historia",
         "cafesLinkText": "Más cafés"
@@ -20,7 +20,7 @@
     "TasteOurCoffee": {
         "title": "Probar nuestro café"
     },
-    "Header": {
+    "HeaderComponent": {
         "homeLinkTitle": "Inicio",
         "storeLinkTitle": "Tienda",
         "articlesLinkTitle": "Artículos",
@@ -28,7 +28,7 @@
         "cafesLinkTitle": "Cafés",
         "contactsLinkTitle": "Contacto"
     },
-    "Store": {
+    "StoreComponent": {
         "coffeesLinkTitle": "Cafés",
         "brewersLinkTitle": "Cerveceros"
     },
@@ -41,16 +41,16 @@
         "priceTitle": "Precio",
         "statusTitle": "Estado"
     },
-    "Cafes": {
+    "CafesComponent": {
         "ourCafesTitle" : "Nuestros cafés",
         "partnerCafesTitle" : "Otros lugares donde puedes tomar nuestro café"
     },
-    "Contacts": {
+    "ContactsComponent": {
         "roasteryTitle":"Roastery",
         "ourCafesTitle": "Probar nuestro café",
         "mapTitle": "Pase por nuestros cafés        "
     },
-    "Footer": {
+    "FooterComponent": {
       "followUs": "Síguenos",
       "followUsOnFacebook": "Síguenos en Facebook",
       "followUsOnTwitter": "Síganos en Twitter",
@@ -58,7 +58,7 @@
       "cityStateZip": "Illinois 60601, EE.UU.",
       "allRightsReserved": "Todos los derechos reservados."
     },
-    "Article": {
+    "ArticleComponent": {
         "noTitleValue": "(El artículo no tiene título)",
         "noTeaserValue": "(El artículo no tiene imagen teaser)",
         "noSummaryValue": "Sin resumen lleno",

@@ -60,7 +60,7 @@ import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 
 export default {
-  name: 'Coffee',
+  name: 'CoffeeComponent',
   props: ['language'],
   data: () => ({
     coffee: null,

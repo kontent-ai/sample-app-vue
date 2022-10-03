@@ -5,18 +5,18 @@ import VueI18n from 'vue-i18n'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
 import App from './App.vue'
-import Configuration from './components/Admin/Configuration.vue'
-import Home from './components/Home.vue'
-import Store from './components/Store.vue'
+import ConfigurationComponen from './components/Admin/ConfigurationComponen.vue'
+import HomeComponent from './components/HomeComponent.vue'
+import StoreComponent from './components/StoreComponent.vue'
 import CoffeeStore from './components/CoffeeStore.vue'
 import BrewerStore from './components/BrewerStore.vue'
-import Articles from './components/Articles.vue'
-import About from './components/About.vue'
-import Cafes from './components/Cafes.vue'
-import Coffee from './components/Coffee.vue'
-import Brewer from './components/Brewer.vue'
-import Contacts from './components/Contacts.vue'
-import Article from './components/Article.vue'
+import ArticlesComponent from './components/ArticlesComponent.vue'
+import AboutComponent from './components/AboutComponent.vue'
+import CafesComponent from './components/CafesComponent.vue'
+import CoffeeComponent from './components/CoffeeComponent.vue'
+import BrewerComponent from './components/BrewerComponent.vue'
+import ContactsComponent from './components/ContactsComponent.vue'
+import ArticleComponent from './components/ArticleComponent.vue'
 import NotFound from './components/NotFound.vue'
 
 import { projectConfigurationPath } from './Utilities/SelectedProject'
@@ -45,11 +45,11 @@ let router = new Router({
   routes: [
     {
       path: projectConfigurationPath,
-      component: Configuration
+      component: ConfigurationComponen
     },
     {
       path: '/:lang(en-us|es-es)/store',
-      component: Store,
+      component: StoreComponent,
       children: [
         {
           path: 'coffees',
@@ -67,35 +67,35 @@ let router = new Router({
     },
     {
       path: '/:lang(en-us|es-es)/articles',
-      component: Articles,
+      component: ArticlesComponent,
     },
     {
       path: '/:lang(en-us|es-es)/articles/:articleId',
-      component: Article,
+      component: ArticleComponent,
     },
     {
       path: '/:lang(en-us|es-es)/about',
-      component: About,
+      component: AboutComponent,
     },
     {
       path: '/:lang(en-us|es-es)/cafes',
-      component: Cafes,
+      component: CafesComponent,
     },
     {
       path: '/:lang(en-us|es-es)/contacts',
-      component: Contacts,
+      component: ContactsComponent,
     },
     {
       path: '/:lang(en-us|es-es)/coffees/:coffeeSlug',
-      component: Coffee,
+      component: CoffeeComponent,
     },
     {
       path: '/:lang(en-us|es-es)/brewers/:brewerSlug',
-      component: Brewer,
+      component: BrewerComponent,
     },
     {
       path: '/:lang(en-us|es-es)',
-      component: Home,
+      component: HomeComponent,
     },
     {
       path: '/:lang(en-us|es-es)/404',

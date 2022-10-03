@@ -107,7 +107,7 @@ const getWindowCenterPosition = (windowWidth, windowHeight) => {
 };
 
 export default {
-  name: 'Configuration',
+  name: 'ConfigurationComponen',
   data: () => ({
     currentProjectInputValue: '',
     preparingProject: false,

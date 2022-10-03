@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
+        <h2>{{$t('CafesComponent.ourCafesTitle')}}</h2>
         <div class="row">
             <div
                 v-for="(ourCafe, index) in ourCafesData"
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
+        <h2>{{$t('CafesComponent.partnerCafesTitle')}}</h2>
         <div class="row">
             <div
                 v-for="(location, index) in locations"
@@ -55,7 +55,7 @@ import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
 export default {
-  name: 'Cafes',
+  name: 'CafesComponent',
   props: ['language'],
   data: () => ({
     ourCafes: [],

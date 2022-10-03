@@ -21,7 +21,7 @@ import _ from 'lodash';
 const heroUnits = initLanguageCodeObject();
 
 export default {
-  name: 'banner',
+  name: 'BannerComponent',
   props: ['language'],
   data: () => ({
     heroUnit: null
@@ -29,7 +29,7 @@ export default {
   computed:{
     heroUnitData: function() {
       return {
-        bannerHeading: _.get(this.heroUnit, 'elements.title.value', this.$t('Banner.loading')),
+        bannerHeading: _.get(this.heroUnit, 'elements.title.value', this.$t('BannerComponent.loading')),
         bannerText: _.get(this.heroUnit, 'elements.marketingMessage', ''),
         sectionStyleObject: {
           backgroundImage: this.heroUnit ? `url(${this.heroUnit.elements.image.value[0].url})` : undefined,

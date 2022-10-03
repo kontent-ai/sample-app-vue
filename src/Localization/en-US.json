@@ -1,6 +1,6 @@
 {
     "locale": "en-US",
-    "Banner": {
+    "BannerComponent": {
         "heading": "Roasting premium coffee",
         "text": "Discover the fascinating world of Dancing Goat high-quality coffee and you will never miss a single coffee break again.",
         "loading": "Loading..."
@@ -8,7 +8,7 @@
     "LatestArticles": {
         "latestArticlesTitle": "Latest articles"
     },
-    "Home": {
+    "HomeComponent": {
         "moreArticles": "More articles",
         "aboutLinkText": "Read the whole story",
         "cafesLinkText": "Find out more"
@@ -20,7 +20,7 @@
     "TasteOurCoffee": {
         "title": "Taste Our Coffee"
     },
-    "Header": {
+    "HeaderComponent": {
         "homeLinkTitle": "Home",
         "storeLinkTitle": "Product catalog",
         "articlesLinkTitle": "Articles",
@@ -28,7 +28,7 @@
         "cafesLinkTitle": "Cafes",
         "contactsLinkTitle": "Contact"
     },
-    "Store": {
+    "StoreComponent": {
         "coffeesLinkTitle": "Coffees",
         "brewersLinkTitle": "Brewers"
     },
@@ -41,16 +41,16 @@
         "priceTitle": "Price",
         "statusTitle": "Status"
     },
-    "Cafes": {
+    "CafesComponent": {
         "ourCafesTitle": "Our cafes",
         "partnerCafesTitle": "Other places where you can drink our coffee"
     },
-    "Contacts": {
+    "ContactsComponent": {
         "roasteryTitle": "Roastery",
         "ourCafesTitle": "Our cafes",
         "mapTitle": "Drop in"
     },
-    "Footer": {
+    "FooterComponent": {
       "followUs": "Follow us",
       "followUsOnFacebook": "Follow us on Facebook",
       "followUsOnTwitter": "Follow us on Twitter",
@@ -58,7 +58,7 @@
       "cityStateZip": "Illinois 60601, USA",
       "allRightsReserved": "All rights reserved."
     },
-    "Article": {
+    "ArticleComponent": {
         "noTitleValue": "(Article  has no title)",
         "noTeaserValue": "(Article  has no teaser image)",
         "noSummaryValue": "No summary filled",

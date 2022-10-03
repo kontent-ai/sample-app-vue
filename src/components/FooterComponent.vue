@@ -5,16 +5,16 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-4 col-lg-4 footer-col">
-                            <h3 class="contact-title">{{$t('Footer.contact')}}</h3>
+                            <h3 class="contact-title">{{$t('FooterComponent.contact')}}</h3>
                             <p>
                                 (+0) 000-000-0000<br />
                                 <a href="mailto:dancinggoat@localhost.local">{{email}}</a>
                                 <br />
-                                <br /> Dancing Goat Ltd<br /> 62 E Lake St Chicago,<br /> {{$t('Footer.cityStateZip')}}
+                                <br /> Dancing Goat Ltd<br /> 62 E Lake St Chicago,<br /> {{$t('FooterComponent.cityStateZip')}}
                             </p>
                         </div>
                         <div class="col-md-4 col-lg-4 footer-col">
-                            <h3>{{$t('Footer.followUs')}}</h3>
+                            <h3>{{$t('FooterComponent.followUs')}}</h3>
                             <a 
                                 class="followus-link" 
                                 href="https://www.facebook.com/Dancing.Goat" 
@@ -24,7 +24,7 @@
                                     alt="Follow us on Facebook" 
                                     class="" 
                                     src="/Images/facebook-icon.png" 
-                                    :title="$t('Footer.followUsOnFacebook')"
+                                    :title="$t('FooterComponent.followUsOnFacebook')"
                                 />
                             </a>
                             <a 
@@ -36,7 +36,7 @@
                                     alt="Follow us on Twitter" 
                                     class="" 
                                     src="/Images/twitter-icon.png" 
-                                    :title="$t('Footer.followUsOnTwitter')"
+                                    :title="$t('FooterComponent.followUsOnTwitter')"
                                 />
                             </a>
                         </div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="container copyright">
-                Copyright &copy; 2016 Dancing Goat. {{$t('Footer.allRightsReserved')}}
+                Copyright &copy; 2016 Dancing Goat. {{$t('FooterComponent.allRightsReserved')}}
             </div>
         </footer>
     </div>
@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  name: 'Footer',
+  name: 'FooterComponent',
   data: () => ({
     email: 'dancinggoat@localhost.local',
   }),

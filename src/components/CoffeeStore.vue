@@ -8,7 +8,7 @@
                 :filter="filter"
                 @set-filter="setFilter"
             />
-            <Coffees 
+            <CoffeesComponent 
                 :language="this.language"
                 :coffees="coffees"
                 :filter="filter"
@@ -20,7 +20,7 @@
 <script>
 import { Filter } from '../Utilities/CoffeeFilter'
 import CoffeeFilter from './CoffeeFilter.vue'
-import Coffees from './Coffees.vue'
+import CoffeesComponent from './CoffeesComponent.vue'
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
@@ -35,7 +35,7 @@ export default {
   }),
   components: {
     CoffeeFilter,
-    Coffees
+    CoffeesComponent
   },
   methods: {
     fetchData: function(language) {

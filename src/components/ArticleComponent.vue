@@ -24,7 +24,7 @@
                     <span 
                         v-else 
                         class="img-responsive"
-                    >{{ $t('Article.noTeaserValue') }}</span>
+                    >{{ $t('ArticleComponent.noTeaserValue') }}</span>
                 </div>
             </div>
             <div class="row">
@@ -36,7 +36,7 @@
                 <span
                     v-else
                     class="article-detail-content"
-                >{{ $t('Article.noBodyCopyValue')}}</span>
+                >{{ $t('ArticleComponent.noBodyCopyValue')}}</span>
             </div>
         </article>
     </div>
@@ -51,7 +51,7 @@ import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import _ from 'lodash';
 
 export default {
-  name: 'Article',
+  name: 'ArticleComponent',
   props: ['language'],
   data: () => ({
     article: null,
@@ -59,10 +59,10 @@ export default {
   computed: {
     articleData: function() {
       return {
-        title: _.get(this.article, 'elements.title.value') || this.$t('Article.noTitleValue'),
+        title: _.get(this.article, 'elements.title.value') || this.$t('ArticleComponent.noTitleValue'),
         imageLink: _.get(this.article, 'elements.teaserImage.value[0].url'),
         postDate: this.formatDate(_.get(this.article, 'elements.postDate.value')),
-        bodyCopyElement: _.get(this.article, 'elements.bodyCopy') || this.$t('Article.noBodyCopyValue')
+        bodyCopyElement: _.get(this.article, 'elements.bodyCopy') || this.$t('ArticleComponent.noBodyCopyValue')
       };
     }
   },
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     formatDate: function(value){
-      return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('Article.noPostDateValue');
+      return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('ArticleComponent.noPostDateValue');
     },
     fetchArticle: function(articleId){
       const articleDetails = initLanguageCodeObject();

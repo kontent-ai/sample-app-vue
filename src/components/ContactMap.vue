@@ -1,5 +1,6 @@
 <template>
     <gmap-map 
+        v-if="mapLoaded" 
         class="map" 
         :style="mapStyle" 
         :center="centerLocation" 
@@ -9,7 +10,6 @@
     >
         <gmap-marker 
             v-for="(location, index) in markerLocations" 
-            v-if="mapLoaded" 
             :key="index" 
             :position="location"
         />

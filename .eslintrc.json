@@ -6,7 +6,7 @@
     "node": true
   },
   "parserOptions": {
-    "parser": "babel-eslint"
+    "parser": "@babel/eslint-parser"
   },
   "extends": [
     "eslint:recommended",
@@ -39,13 +39,10 @@
       }
     ],
     "vue/max-attributes-per-line": [
-      2,
+      "error",
       {
         "singleline": 1,
-        "multiline": {
-          "max": 1,
-          "allowFirstLine": false
-        }
+        "multiline": 1
       }
     ]
   }

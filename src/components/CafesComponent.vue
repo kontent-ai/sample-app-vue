@@ -39,9 +39,8 @@
             >
                 <h3>{{location}}</h3>
                 <p
-                    v-for="(partnerCafeModel, index) in partnerCafesData"
+                    v-for="(partnerCafeModel, index) in getFilteredPartnerCafesData(location)"
                     :key="index"
-                    v-if="partnerCafeModel.location === location"
                 >
                     {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
                 </p>
@@ -128,6 +127,9 @@ export default {
             cafesList[this.language].filter((cafe) => cafe.elements.country.value !== 'USA') :
             cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value !== 'USA');
         });
+    },
+    getFilteredPartnerCafesData(location) {
+      return this.partnerCafesData.filter(cafe => cafe.location === location);
     }
   },
   mounted: function() {

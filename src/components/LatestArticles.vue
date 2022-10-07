@@ -74,66 +74,61 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import dateFormat from 'dateformat'
 import { dateFormats } from '../Utilities/LanguageCodes'
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
 import { Client } from '../Client.js';
+import { useI18n } from 'vue-i18n';
+import { onMounted, ref } from 'vue';
 
-export default {
-  name: 'latest-articles',
-  props: ['language'],
-  data: () => ({
-    articles: [],
-    articleCount: 5,
-  }),
-  computed: {
-    articlesData: function(){
-      return this.articles.map(article => ({
-        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        postDate : this.formatDate(_.get(article, 'elements.postDate.value')),
-        summary :  _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue'),
-        title: _.get(article, 'elements.title.value'),
-        link : `/${this.language}/articles/${article.system.id}`,
-      }))
-    }
-  },
-  watch: {
-    language: function(){
-      this.fetchArticles();
-      dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    }
-  },
-  methods: {
-    formatDate: function(value){
-      return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
-    },
-    fetchArticles: function() {
-      const articleList = initLanguageCodeObject();
-      let query = Client.items()
-        .type('article')
-        .orderParameter('elements.post_date', 'desc');
+const { t, locale } = useI18n();
+const articlesData = ref([]);
+let articles = [];
+const articleCount = 5
+const language = locale.value
 
-      if (this.language) {
-        query.languageParameter(this.language);
-      }
-      
-      query.toPromise()
-        .then(response => {
-          if (this.language) {
-            articleList[this.language] = response.data.items;
-          } else {
-            articleList[defaultLanguage] = response.data.items
-          }
-          this.articles = this.language ? articleList[this.language].slice(0, this.articleCount) : articleList[defaultLanguage].slice(0, this.articleCount) ;
-        });
-      
-    }
-  },
-  mounted: function(){
-    dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    this.fetchArticles();
-  },
+const formatDate = (value) => {
+  return value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue');
 }
+
+const fetchArticles = () => {
+  const articleList = initLanguageCodeObject();
+  let query = Client.items()
+    .type('article')
+    .orderParameter('elements.post_date', 'desc');
+
+  if (language) {
+    query.languageParameter(language);
+  }
+  
+  query.toPromise()
+    .then(response => {
+      if (language) {
+        articleList[language] = response.data.items;
+      } else {
+        articleList[defaultLanguage] = response.data.items
+      }
+      articles = language ? articleList[language].slice(0, articleCount) : articleList[defaultLanguage].slice(0, articleCount) ;
+      articlesData.value = articles.map(article => ({
+        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
+        postDate : formatDate(_.get(article, 'elements.postDate.value')),
+        summary :  _.get(article, 'elements.summary.value') || t('Article.noSummaryValue'),
+        title: _.get(article, 'elements.title.value'),
+        link : `/${language}/articles/${article.system.id}`,
+      }))
+    });  
+}
+
+onMounted(() => {
+  dateFormat.i18n = dateFormats[language] || dateFormats[0];
+  fetchArticles();
+})
+  // watch: {
+  //   language: function(){
+  //     this.fetchArticles();
+  //     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+  //   }
+  // },
 </script>

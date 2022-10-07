@@ -2,49 +2,44 @@
     <div 
         v-html="richTextData" 
         @click="handleClick"
-    />
+    ></div>
 </template>
 
-<script>
+<script setup>
 import {resolveContentLink} from '../Utilities/ContentLinks'
 import { createRichTextHtmlResolver, linkedItemsHelper } from '@kontent-ai/delivery-sdk';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'RichTextElement',
-  props: ['element'],
-  data: () => ({
-    richTextData: null
-  }),
-  mounted: function() {
-    this.loadData();
-  },
-  watch: { 
-    element: function() {
-      this.loadData();
-    }
-  },
-  methods: {
-    handleClick: function(e){
-      if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
-        e.preventDefault();
+const props = defineProps(['element']);
 
-        const id = e.target.getAttribute('data-item-id');
-        const link = this.element.links.find(m => m.itemId === id);
+const richTextData = ref(null);
+const router = useRouter();
+const i18n = useI18n()
 
-        if (link) {
-          const path = resolveContentLink(link);
-          const language = this.$i18n.locale;
+const handleClick = (e) => {
+  if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
+    e.preventDefault();
 
-          if (path) {
-            this.$router.push(`/${language}${path}`);
-          }
-        }
+    const id = e.target.getAttribute('data-item-id');
+    const link = props.element.links.find(m => m.itemId === id);
+
+    if (link) {
+      const path = resolveContentLink(link);
+      const language = i18n.locale;
+
+      if (path) {
+        router.push(`/${language}${path}`);
       }
-    },
-    loadData: function() {
-      this.richTextData = createRichTextHtmlResolver().resolveRichText({
-        element: this.element,
-        linkedItems: linkedItemsHelper.convertLinkedItemsToArray(this.element.linkedItems),
+    }
+  }
+}
+
+const loadData = () => {
+      richTextData.value = createRichTextHtmlResolver().resolveRichText({
+        element: props.element,
+        linkedItems: linkedItemsHelper.convertLinkedItemsToArray(props.element.linkedItems),
         contentItemResolver: (itemCodename, contentItem) => {
           if(contentItem.system.type === 'tweet'){
             const tweet = contentItem.elements;
@@ -100,8 +95,16 @@ export default {
           };
         },
       }).html;
-
     }
-  }
-}
+
+  onMounted(() => {
+    loadData();
+  })
+
+
+  // watch: { 
+  //   element: function() {
+  //     this.loadData();
+  //   }
+  // },
 </script>

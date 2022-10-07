@@ -11,9 +11,8 @@
     </div>
 </template>
 
-<script>
-export default {
-  name: 'link-button',
-  props: ['text', 'link'],
-}
+<script setup>
+  
+  const {text, link} = defineProps(['text', 'link'])
+  
 </script>

@@ -1,41 +1,35 @@
 <template>
     <div class="container">
-        <banner :language="language"/>
-        <latest-articles :language="language"/>
-        <link-button 
+        <Banner :language="language"/>
+
+        <LatestArticles :language="language"/>
+        <LinkButton
             :text="$t('Home.moreArticles')" 
             :link="`/${language.toLowerCase()}/articles`"
         />
-        <our-story/>
-        <link-button 
+        <OurStory/>
+        <LinkButton 
             :text="$t('Home.aboutLinkText')" 
             :link="`/${language.toLowerCase()}/about`"
         />
-        <taste-our-coffee :language="language"/>
-        <link-button 
+        <TasteOurCoffee :language="language"/>
+        <LinkButton 
             :text="$t('Home.cafesLinkText')" 
             :link="`/${language.toLowerCase()}/cafes`"
         />
     </div>
 </template>
 
-<script>
-import Banner from './Banner'
-import LatestArticles from './LatestArticles'
-import LinkButton from './LinkButton'
-import OurStory from './OurStory'
-import TasteOurCoffee from './TasteOurCoffee'
+<script setup>
+import LinkButton from './LinkButton.vue'
+import OurStory from './OurStory.vue'
+import Banner from './Banner.vue'
+import LatestArticles from './LatestArticles.vue'
+import TasteOurCoffee from './TasteOurCoffee.vue'
+import { useI18n } from 'vue-i18n'
 
-export default {
-  name: 'Home',
-  props: ['language'],
-  components: {
-    Banner,
-    LatestArticles,
-    LinkButton,
-    OurStory,
-    TasteOurCoffee,
-  },
-}
+const { locale } = useI18n();
+const language = locale.value;
+
 </script>
 

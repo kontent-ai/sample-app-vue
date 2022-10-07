@@ -5,8 +5,8 @@ import packageInfo from '../package.json';
 // Kontent.ai
 import { camelCasePropertyNameResolver, DeliveryClient } from '@kontent-ai/delivery-sdk';
 
-const projectId = process.env.VUE_APP_PROJECT_ID || '';
-const previewApiKey = process.env.VUE_APP_PREVIEW_API_KEY || '';
+const projectId = import.meta.env.VUE_APP_PROJECT_ID || '';
+const previewApiKey = import.meta.env.VUE_APP_PREVIEW_API_KEY || '';
 
 const sourceTrackingHeaderName = 'X-KC-SOURCE';
 

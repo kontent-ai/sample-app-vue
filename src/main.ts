@@ -36,6 +36,14 @@ const  router = createRouter({
       component: Configuration
     },
     {
+      path: '/',
+      component: Home,
+    },
+    {
+      path: '/:lang(en-us|es-es)',
+      component: Home,
+    },
+    {
       path: '/:lang(en-us|es-es)/store',
       component: Store,
       children: [
@@ -81,24 +89,17 @@ const  router = createRouter({
       path: '/:lang(en-us|es-es)/brewers/:brewerSlug',
       component: Brewer,
     },
-    {
-      path: '/:lang(en-us|es-es)',
-      component: Home,
-    },
+    
     {
       path: '/:lang(en-us|es-es)/404',
       component: NotFound,
     },
     {
-      path: '/',
-      redirect: '/en-us',
-    },
-    {
-      path: '/:lang(en-us|es-es)/*',
+      path: '/:lang(en-us|es-es)/:pathMatch(.*)*',
       redirect: to => ({ path: `${to.params.lang}/404` })
     },
     {
-      path: '*',
+      path: '/:pathMatch(.*)*',
       redirect: '/en-us/404'
     }
   ]
@@ -107,6 +108,7 @@ const  router = createRouter({
 const app = createApp(App)
 app.use(router)
 const i18n = createI18n({
+  legacy: false,
   locale: 'en-US',
   allowComposition: true,
   messages: {

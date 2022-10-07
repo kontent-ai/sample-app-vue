@@ -51,11 +51,6 @@
     </div>
 </template>
 
-<script>
-export default {
-  name: 'Footer',
-  data: () => ({
-    email: 'dancinggoat@localhost.local',
-  }),
-}
+<script setup>
+  const email ='dancinggoat@localhost.local'
 </script>

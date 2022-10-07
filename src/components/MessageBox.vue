@@ -25,15 +25,12 @@
         </section>
     </div>
 </template>
-<script>
+
+<script setup>
 import infoImage from '../Images/Admin/info.svg';
 
-export default {
-  name: 'MessageBox',
-  data: () => ({
-    imageUrl: infoImage
-  }),
-  props:['message']
-}
+const {message} = defineProps(['message']);
+const imageUrl = infoImage;
+
 </script>
 

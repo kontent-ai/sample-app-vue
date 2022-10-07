@@ -60,34 +60,19 @@
     </header>
 </template>
 
-<script>
-import MessageBox from './MessageBox'
+<script setup>
+import { useI18n } from 'vue-i18n';
+import MessageBox from './MessageBox.vue';
 
-export default {
-  name: 'Header',
-  props: ['language', 'changeLang', 'infoMessageText'],
-  computed: {
-    homeRoute: function(){
-      return '/' + this.language.toLowerCase();
-    },
-    storeRoute: function(){
-      return '/' + this.language.toLowerCase() + '/' + 'store';
-    },
-    articlesRoute: function(){
-      return '/' + this.language.toLowerCase() + '/' + 'articles';
-    },
-    aboutRoute: function(){
-      return '/' + this.language.toLowerCase() + '/' + 'about';
-    },
-    cafesRoute: function(){
-      return '/' + this.language.toLowerCase() + '/' + 'cafes';
-    },
-    contactsRoute: function(){
-      return '/' + this.language.toLowerCase() + '/' + 'contacts';
-    }
-  },
-  components: {
-    MessageBox
-  }
-}
+const {locale} = useI18n();
+const language = locale.value;
+const {changeLang, infoMessageText} = defineProps(['changeLang', 'infoMessageText']);
+
+const homeRoute = `/${language.toLowerCase()}`;
+const storeRoute = `/${language.toLowerCase()}/store`;
+const articlesRoute = `/${language.toLowerCase()}/articles`;
+const aboutRoute = `/${language.toLowerCase()}/about`;
+const cafesRoute = `/${language.toLowerCase()}/cafes`;
+const contactsRoute = `/${language.toLowerCase()}/contacts`;
+
 </script>

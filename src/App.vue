@@ -4,13 +4,12 @@
         id="app" 
         class="application-content"
     >
-        <!-- <Header 
-            :language="language" 
+        <HeaderVue
             :changeLang="changeLang" 
             :infoMessageText="infoMessageText"
-        /> -->
+        />
         <router-view :language="language" />
-        <!-- <Footer :language="language"/> -->
+        <FooterVue :language="language"/>
     </div>
     <div v-else>
         <router-view/>
@@ -21,8 +20,8 @@
 import Cookies from 'universal-cookie';
 import qs from 'qs';
 
-// import Header from './components/Header.vue';
-// import Footer from './components/Footer.vue';
+import HeaderVue from './components/Header.vue';
+import FooterVue from './components/Footer.vue';
 
 import { selectedProjectCookieName, projectConfigurationPath } from './Utilities/SelectedProject';
 
@@ -50,10 +49,10 @@ export default {
       return this.$i18n.locale;
     }
   },
-  // components: {
-  //   Header,
-  //   Footer
-  // },
+  components: {
+    HeaderVue,
+    FooterVue
+  },
   created: function() {
     this.$i18n.locale = getLanguageCode(this.$route.path);
     this.infoMessageText = this.getInfoMessage();

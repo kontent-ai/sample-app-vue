@@ -6,7 +6,7 @@
         >
             <img
                 class="logo"
-                v-bind:src="kontentLogo"
+                v-bind:src="thisKontentLogo"
                 alt="Kontent.ai Logo"
             />
         </a>
@@ -15,7 +15,7 @@
                 <h1 class="headline-large">Sample Site—Configuration</h1>
                 <p class="margin-top-xl">For your sample app to work, you should have a Kontent.ai project containing content. Your app should be then configured with its project ID. You can either get it by signing in using your Kontent.ai credentials or by signing up for a trial. Later, it will be converted to a free plan.</p>
                 <SpinnerBox
-                    v-if="this.preparingProject"
+                    v-if="preparingProject"
                     message="Waiting for the sample project to become ready..."
                 ></SpinnerBox>
             </div>
@@ -57,7 +57,7 @@
         </section>
         <section class="section-secondary-two">
             <h2 class="headline-medium">Use the Shared Project</h2>
-            <p class="margin-top-l">Alternatively, you may wish to use the shared project (project ID "{{defaultProjectId}}").</p>
+            <p class="margin-top-l">Alternatively, you may wish to use the shared project (project ID "{{thisDefaultProjectId}}").</p>
             <p class="margin-top-l">
                 <strong>Note:</strong> You cannot edit content in the shared project.
             </p>
@@ -65,13 +65,13 @@
                 type="submit"
                 class="button-secondary margin-top-xl"
                 value="Use the shared project"
-                @click="setNewProjectId(defaultProjectId)"
+                @click="setNewProjectId(thisDefaultProjectId)"
             />
         </section>
     </div>
 </template>
 
-<script>
+<script setup>
 import Cookies from 'universal-cookie';
 import { isUUID } from 'validator';
 import { Subject } from 'rxjs';
@@ -85,6 +85,10 @@ import {
 } from '../../Utilities/SelectedProject';
 
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const getWindowCenterPosition = (windowWidth, windowHeight) => {
   const dualScreenLeft =
@@ -106,129 +110,122 @@ const getWindowCenterPosition = (windowWidth, windowHeight) => {
   return { left, top };
 };
 
-export default {
-  name: 'Configuration',
-  data: () => ({
-    currentProjectInputValue: '',
-    preparingProject: false,
-    sampleProjectItemCount: 0,
-    unsubscribeSubject: new Subject(),
-    defaultProjectId: defaultProjectId,
-    kontentLogo: kontentLogo,
-  }),
-  created() {
-    this.currentProjectInputValue = this.projectIdCookie;
-  },
-  mounted() {
-    window.addEventListener('message', this.receiveMessage, false);
-  },
-  beforeDestroy() {
-    window.removeEventListener('message', this.receiveMessage);
-  },
-  methods: {
-    handleSetProjectSubmit(event) {
-      event.preventDefault();
-      const newProjectId = this.currentProjectInputValue;
-      this.setNewProjectId(newProjectId);
-    },
-    unsubscribe() {
-      this.unsubscribe.next();
-      this.unsubscribe.complete();
-      this.unsubscribeSubject = new Subject();
-    },
-    getSampleProjectItemCount() {
-      resetClient(defaultProjectId);
+const currentProjectInputValue = ref('');
+const preparingProject = ref('false');
+const sampleProjectItemCount = ref(0);
+const unsubscribeSubject =  ref(new Subject());
+const thisDefaultProjectId = ref(defaultProjectId);
+const thisKontentLogo = ref(kontentLogo);
+const cookies = new Cookies(document.cookie);
+const projectIdCookie = cookies.get(selectedProjectCookieName);
 
-      Client.items()
-        .elementsParameter(['id'])
-        .depthParameter(0)
-        .toPromise()
-        .then(response => {
-          this.sampleProjectItemCount = response.data.items.length;
-        });
-    },
-    setNewProjectId(newProjectId, newlyGeneratedProject) {
-      if (!isUUID(newProjectId)) {
-        const message = `Selected project (${newProjectId}) is not a valid GUID`;
-        // eslint-disable-next-line
-        console.error(message);
-        alert(message);
-        this.currentProjectInputValue = this.projectIdCookie;
-        return;
-      }
+onMounted(() => {
+  currentProjectInputValue.value = projectIdCookie;
+  window.addEventListener('message', receiveMessage, false);
+})
 
-      resetClient(newProjectId);
-      if (newlyGeneratedProject) {
-        this.waitUntilProjectAccessible(newProjectId);
-        this.preparingProject = true;
-        return;
-      }
-      this.redirectToHome(newProjectId);
-    },
-    waitUntilProjectAccessible(newProjectId) {
-      setTimeout(() => {
-        Client.items()
-          .elementsParameter(['id'])
-          .depthParameter(0)
-          .toPromise()
-          .then(response => {
-            if (response.data.items.length >= this.sampleProjectItemCount) {
-              this.preparingProject = false;
-              this.redirectToHome(newProjectId);
-            } else {
-              this.waitUntilProjectAccessible(newProjectId);
-            }
-          });
-      }, 2000);
-    },
-    redirectToHome(newProjectId) {
-      const infoMessage =
-        newProjectId === defaultProjectId
-          ? 'You\'ve configured your app to with a project ID of a shared Kontent.ai project.'
-          : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-      const dataOriginInfo = 'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
-      this.$router.push(`/?infoMessage=${infoMessage}${dataOriginInfo}`);
-    },
-    receiveMessage(event) {
-      if (event.origin.toLowerCase() !== 'https://app.kontent.ai') return;
+onUnmounted(() => {
+  window.removeEventListener('message', receiveMessage);
+})
 
-      if (!event.data.projectGuid) {
-        return;
-      }
+const handleSetProjectSubmit = (event) => {
+  event.preventDefault();
+  const newProjectId = currentProjectInputValue;
+  setNewProjectId(newProjectId);
+}
 
-      this.setNewProjectId(
-        event.data.projectGuid,
-        event.data.newlyGeneratedProject
-      );
-    },
-    openKontentProjectSelector(event) {
-      event.preventDefault();
-      const windowWidth = 800;
-      const windowHeight = 800;
-      const { left, top } = getWindowCenterPosition(windowWidth, windowHeight);
+const unsubscribe = () => {
+  unsubscribe.next();
+  unsubscribe.complete();
+  unsubscribeSubject.value = new Subject();
+}
 
-      window.open(
-        'https://app.kontent.ai/sample-site-configuration',
-        'Kontent.ai',
-        `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
-        ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`
-      );
+const getSampleProjectItemCount = () => {
+  resetClient(thisDefaultProjectId.value);
 
-      this.getSampleProjectItemCount();
-    }
-  },
-  computed: {
-    cookies() {
-      return new Cookies(document.cookie);
-    },
-    projectIdCookie() {
-      return this.cookies.get(selectedProjectCookieName);
-    }
-  },
-  components: {
-    SpinnerBox
+  Client.items()
+    .elementsParameter(['id'])
+    .depthParameter(0)
+    .toPromise()
+    .then(response => {
+      sampleProjectItemCount = response.data.items.length;
+    });
+}
+
+const setNewProjectId = (newProjectId, newlyGeneratedProject) => {
+  if (!isUUID(newProjectId)) {
+    const message = `Selected project (${newProjectId}) is not a valid GUID`;
+    // eslint-disable-next-line
+    console.error(message);
+    alert(message);
+    currentProjectInputValue.value = projectIdCookie;
+    return;
   }
-};
+
+  resetClient(newProjectId);
+  if (newlyGeneratedProject) {
+    waitUntilProjectAccessible(newProjectId);
+    preparingProject.value = true;
+    return;
+  }
+  redirectToHome(newProjectId);
+}
+
+const waitUntilProjectAccessible = (newProjectId) => {
+  setTimeout(() => {
+    Client.items()
+      .elementsParameter(['id'])
+      .depthParameter(0)
+      .toPromise()
+      .then(response => {
+        if (response.data.items.length >= sampleProjectItemCount) {
+          preparingProject.value = false;
+          redirectToHome(newProjectId);
+        } else {
+          waitUntilProjectAccessible(newProjectId);
+        }
+      });
+  }, 2000);
+}
+
+const redirectToHome = (newProjectId) => {
+  const infoMessage =
+    newProjectId === thisDefaultProjectId
+      ? 'You\'ve configured your app to with a project ID of a shared Kontent.ai project.'
+      : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
+  const dataOriginInfo = 'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
+  router.push(`/`);
+}
+
+const receiveMessage = (event) => {
+  if (event.origin.toLowerCase() !== 'https://app.kontent.ai') return;
+
+  if (!event.data.projectGuid) {
+    return;
+  }
+
+  setNewProjectId(
+    event.data.projectGuid,
+    event.data.newlyGeneratedProject
+  );
+}
+
+const openKontentProjectSelector = (event) => {
+  event.preventDefault();
+  const windowWidth = 800;
+  const windowHeight = 800;
+  const { left, top } = getWindowCenterPosition(windowWidth, windowHeight);
+
+  window.open(
+    'https://app.kontent.ai/sample-site-configuration',
+    'Kontent.ai',
+    `status=no,width=${windowWidth},height=${windowHeight},resizable=yes,left=
+    ${left},top=${top},toolbar=no,menubar=no,location=no,directories=no`
+  );
+
+  getSampleProjectItemCount();
+}
+
 </script>
 
 <style scoped>

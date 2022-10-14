@@ -16,7 +16,7 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import Cookies from 'universal-cookie';
 import qs from 'qs';
 
@@ -30,77 +30,74 @@ import {
   languageCodesLowerCase,
   getLanguageCode
 } from './Utilities/LanguageCodes';
+import { onBeforeMount, onMounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
 
-export default {
-  name: 'app',
-  beforeCreate(){
-    const cookies = new Cookies(document.cookie);
+const infoMessageText = ref('');
+
+const i18n = useI18n();
+const language = i18n.locale.value
+const router = useRouter();
+const { path } = useRoute();
+
+onBeforeMount(() => {
+  const cookies = new Cookies(document.cookie);
     const projectId = cookies.get(selectedProjectCookieName)
     if (!projectId) {
-      this.$router.push(projectConfigurationPath);
+      router.push(projectConfigurationPath);
     }
-  },
-  data: () => ({
-    infoMessageText : '',
-    projectConfigurationPath : projectConfigurationPath
-  }),
-  computed: {
-    language: function() {
-      return this.$i18n.locale;
-    }
-  },
-  components: {
-    HeaderVue,
-    FooterVue
-  },
-  created: function() {
-    this.$i18n.locale = getLanguageCode(this.$route.path);
-    this.infoMessageText = this.getInfoMessage();
-  },
-  methods: {
-    getInfoMessage: function() {
-      return qs.parse(location.search.slice(1)).infoMessage;
-    },
-    changeLang: function(newLanguage) {
-      if (
-        this.language === newLanguage ||
-        languageCodes.indexOf(newLanguage) < 0
-      ) {
-        return;
-      }
+})
+  
+onMounted(() => {
+  i18n.locale.value = getLanguageCode(path);
+  infoMessageText.value = getInfoMessage();
+});
 
-      const urlParts = this.$route.path.split('/');
-      const currentLanguage = this.$route.path.split('/')[1];
-      if (
-        languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
-      ) {
-        urlParts[1] = newLanguage;
-      } else {
-        urlParts.splice(1, 0, newLanguage);
-      }
-      this.$router.push(urlParts.join('/').toLowerCase());
-      this.$i18n.locale = newLanguage;
+const getInfoMessage = () => {
+    return qs.parse(location.search.slice(1)).infoMessage;
+}
+
+const changeLang = (newLanguage) => {
+    if (
+      language === newLanguage ||
+      languageCodes.indexOf(newLanguage) < 0
+    ) {
+      return;
     }
-  },
-  watch: {
-    $route: {
-      deep: true,
-      handler: function() {
-        this.infoMessageText = this.getInfoMessage();
-        const newLanguage = this.$route.path.split('/')[1];
-        if (
-          this.language === newLanguage ||
-          languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0
-        ) {
-          return;
-        }
-        if (
-          languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1
-        ) {
-          this.$router.go(this.$route.path);
-        }
-      }
+
+    const urlParts = path.split('/');
+    const currentLanguage = path.split('/')[1];
+
+    if (
+      languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
+    ) {
+      urlParts[1] = newLanguage;
+    } else {
+      urlParts.splice(1, 0, newLanguage);
     }
+
+    router.push(urlParts.join('/').toLowerCase());
+    i18n.locale.value = newLanguage;
   }
-};
+  // watch: {
+  //   $route: {
+  //     deep: true,
+  //     handler: function() {
+  //       this.infoMessageText = this.getInfoMessage();
+  //       const newLanguage = this.$route.path.split('/')[1];
+  //       if (
+  //         this.language === newLanguage ||
+  //         languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0
+  //       ) {
+  //         return;
+  //       }
+  //       if (
+  //         languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1
+  //       ) {
+  //         this.$router.go(this.$route.path);
+  //       }
+  //     }
+  //   }
+  // }
 </script>

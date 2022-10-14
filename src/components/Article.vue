@@ -1,6 +1,6 @@
 <template>
     <div
-        v-if="!article"
+        v-if="!articleData"
         class="container"
     ></div>
     <div
@@ -42,71 +42,74 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import dateFormat from 'dateformat';
 import { dateFormats, initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import _ from 'lodash';
+import { useI18n } from 'vue-i18n';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-export default {
-  name: 'Article',
-  props: ['language'],
-  data: () => ({
-    article: null,
-  }),
-  computed: {
-    articleData: function() {
-      return {
-        title: _.get(this.article, 'elements.title.value') || this.$t('Article.noTitleValue'),
-        imageLink: _.get(this.article, 'elements.teaserImage.value[0].url'),
-        postDate: this.formatDate(_.get(this.article, 'elements.postDate.value')),
-        bodyCopyElement: _.get(this.article, 'elements.bodyCopy') || this.$t('Article.noBodyCopyValue')
-      };
-    }
-  },
-  watch: {
-    language: function(){
-      this.fetchArticle(this.$route.params.articleId);
-      dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    }
-  },
-  methods: {
-    formatDate: function(value){
-      return value ? dateFormat(value, 'dddd, mmmm d, yyyy') : this.$t('Article.noPostDateValue');
-    },
-    fetchArticle: function(articleId){
-      const articleDetails = initLanguageCodeObject();
-      let query = Client.items()
-        .type('article')
-        .equalsFilter('system.id', articleId)
-        .elementsParameter(['title', 'teaser_image', 'post_date', 'body_copy', 'video_host', 'video_id', 'tweet_link', 'theme', 'display_options'])
 
-      if (this.language) {
-        query.languageParameter(this.language);
+const { locale, t } = useI18n();
+const language = locale.value;
+let article = null;
+const articleData = ref(null);
+const route = useRoute();
+
+const router = useRouter();
+
+const formatDate = (value) => 
+    value ? dateFormat(value, 'dddd, mmmm d, yyyy') : t('Article.noPostDateValue');
+
+const fetchArticle = (articleId) => {
+  const articleDetails = initLanguageCodeObject();
+  let query = Client.items()
+    .type('article')
+    .equalsFilter('system.id', articleId)
+    .elementsParameter(['title', 'teaser_image', 'post_date', 'body_copy', 'video_host', 'video_id', 'tweet_link', 'theme', 'display_options'])
+
+  if (language) {
+    query.languageParameter(language);
+  }
+
+  query.toPromise()
+    .then(response => {
+      if (language) {
+        articleDetails[language][articleId] = response.data.items[0];
+      } else {
+        articleDetails[defaultLanguage][articleId] = response.data.items[0];
       }
 
-      query.toPromise()
-        .then(response => {
-          if (this.language) {
-            articleDetails[this.language][articleId] = response.data.items[0];
-          } else {
-            articleDetails[defaultLanguage][articleId] = response.data.items[0];
-          }
-          this.article = this.language ? articleDetails[this.language][articleId] : articleDetails[defaultLanguage][articleId]
+      article = language ? articleDetails[language][articleId] : articleDetails[defaultLanguage][articleId];
 
-          if(this.article.system.language !== this.language) {
-            this.$router.replace({path: resolveChangeLanguageLink(this.$route.path, this.article.system.language)})
-          }
-        });
-    }
-  },
-  mounted: function(){
-    this.fetchArticle(this.$route.params.articleId);
-  },
-  components: {
-    RichTextElement
-  }
+      if(article.system.language !== language) {
+        router.replace({path: resolveChangeLanguageLink(route.path, article.system.language)});
+      }
+
+      articleData.value = {
+        title: _.get(article, 'elements.title.value') || t('Article.noTitleValue'),
+        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
+        postDate: formatDate(_.get(article, 'elements.postDate.value')),
+        bodyCopyElement: _.get(article, 'elements.bodyCopy') || t('Article.noBodyCopyValue')
+      };
+    });
 }
+
+onMounted(() => {
+    fetchArticle(route.params.articleId);
+})
+
 </script>
+
+
+  // watch: {
+  //   language: function(){
+  //     this.fetchArticle(this.$route.params.articleId);
+  //     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+  //   }
+  // }
+

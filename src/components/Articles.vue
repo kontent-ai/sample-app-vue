@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <template  v-for="(article, index) in articlesData">
-            <div :key="article.id">
+        <template  v-for="(article, index) in articlesData" :key="article.id">
+            <div>
                 <div
                     v-if="index % 4 === 0"
                     class="clear"
@@ -40,65 +40,60 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import dateFormat from 'dateformat';
 import { dateFormats } from '../Utilities/LanguageCodes';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
 import { Client } from '../Client.js';
+import { useI18n } from 'vue-i18n';
+import { onMounted, ref } from 'vue';
 
-export default {
-  name: 'Articles',
-  props: ['language'],
-  data: () => ({
-    articles: [],
-    articleCount: 10
-  }),
-  computed: {
-    articlesData: function() {
-      return this.articles.map(article => ({
-        title: _.get(article, 'elements.title.value') || this.$t('Article.noTitleValue'),
+const { locale, t } = useI18n();
+const language = locale.value;
+
+//const articleCount = 10;
+let articles = [];
+
+const articlesData = ref([]);
+
+const formatDate = (value) =>
+  value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
+
+const fetchArticles = () => {
+  const articleList = initLanguageCodeObject();
+  let query = Client.items()
+    .type('article')
+    .orderParameter('elements.post_date', 'desc');
+
+  if (language) {
+    query.languageParameter(language);
+  }
+
+  query.toPromise()
+    .then(response => {
+      if (language) {
+        articleList[language] = response.data.items;
+      } else {
+        articleList[defaultLanguage] = response.data.items
+      }
+      articles = language ? articleList[language] : articleList[defaultLanguage];
+      articlesData.value = articles.map(article => ({
+        title: _.get(article, 'elements.title.value') || t('Article.noTitleValue'),
         imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        link: `/${this.language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
-        postDate: this.formatDate(_.get(article, 'elements.postDate.value')),
+        link: `/${language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
+        postDate: formatDate(_.get(article, 'elements.postDate.value')),
         summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
       }));
-    }
-  },
-  watch: {
-    language: function() {
-      this.fetchArticles();
-      dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-    }
-  },
-  methods: {
-    formatDate: function(value) {
-      return value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
-    },
-    fetchArticles: function() {
-      const articleList = initLanguageCodeObject();
-      let query = Client.items()
-        .type('article')
-        .orderParameter('elements.post_date', 'desc');
+    });  
+}
 
-      if (this.language) {
-        query.languageParameter(this.language);
-      }
+onMounted(() => fetchArticles())
 
-      query.toPromise()
-        .then(response => {
-          if (this.language) {
-            articleList[this.language] = response.data.items;
-          } else {
-            articleList[defaultLanguage] = response.data.items
-          }
-          this.articles = this.language ? articleList[this.language] : articleList[defaultLanguage];
-        });
-    }
-  },
-  mounted: function() {
-    this.fetchArticles();
-    dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-  },
-};
+  // watch: {
+  //   language: function() {
+  //     this.fetchArticles();
+  //     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
+  //   }
+  // },
 </script>

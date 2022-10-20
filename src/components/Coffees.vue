@@ -37,38 +37,44 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from '@vue/reactivity';
+import { onUpdated, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { resolveContentLink } from '../Utilities/ContentLinks'
+import CoffeeStoreVue from './CoffeeStore.vue';
 
-export default {
-  name: 'Coffees',
-  props: ['language', 'coffees', 'filter'],
-  computed: {
-    filteredCoffees: function () {
-      if (this.coffees.length === 0 || !this.filter) {
-        return [];
-      }
-      return this.coffees.filter(coffee => this.filter.matches(coffee));
-    },
-    coffeesData: function () {
-      return this.filteredCoffees.map(coffee => ({
-        price: this.formatPrice(coffee.elements.price.value, this.language),
-        name: coffee.elements.productName.value,
-        imageLink: coffee.elements.image.value[0].url,
-        link: resolveContentLink({ type: 'coffee', urlSlug: coffee.elements.urlPattern.value }, this.language),
-        hasNoProductStatus: coffee.elements.productStatus.value.length === 0,
-        productStatusText: coffee.elements.productStatus.value.map(x => x.name).join(', ')
-      }))
-    }
-  },
-  methods: {
-    formatPrice: function (price, language) {
-      return price.toLocaleString(language, {
-        style: 'currency',
-        currency: 'USD'
-      });
-    },
-    resolveContentLink,
-  },
+const props = defineProps(['coffees', 'filter']);
+
+const { locale } = useI18n();
+const language = locale.value
+
+//const filteredCoffees = ref( props.coffees.length === 0 || !props.filter ? [] : props.coffees.filter(coffee => props.filter.matches(coffee)));
+
+const filteredCoffees = computed(() => {
+  if(props.coffees.length === 0 || !props.filter)
+  {
+    return []
+  }
+
+  return props.coffees.filter(coffee => props.filter.matches(coffee));
+})
+
+const coffeesData = computed(() => filteredCoffees.value.map(coffee => ({
+  price: formatPrice(coffee.elements.price.value, language),
+  name: coffee.elements.productName.value,
+  imageLink: coffee.elements.image.value[0].url,
+  link: resolveContentLink({ type: 'coffee', urlSlug: coffee.elements.urlPattern.value }, language),
+  hasNoProductStatus: coffee.elements.productStatus.value.length === 0,
+  productStatusText: coffee.elements.productStatus.value.map(x => x.name).join(', ')
+  }))
+)
+
+const formatPrice = (price, language) => {
+  return price.toLocaleString(language, {
+    style: 'currency',
+    currency: 'USD'
+  });
 }
+
 </script>

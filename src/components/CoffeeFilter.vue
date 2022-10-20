@@ -9,15 +9,15 @@
                 <input
                     :id="processing.codename"
                     type="checkbox"
-                    :checked="processing.checked"
+                    :value="processing.checked"
                 />
                 <label
                     :htmlFor="processing.codename"
-                    @click="processingOnChange(processing.codename)"
+                    @click="() => processingOnChange(processing.codename)"
                 >{{processing.name}}</label>
             </span>
         </div>
-        <h4>{{$t('CoffeeFilter.statusTitle')}}</h4>
+        <h4>{{t('CoffeeFilter.statusTitle')}}</h4>
         <div
             v-for="productStatus in productStatusesData"
             :key="productStatus.codename"
@@ -26,7 +26,7 @@
                 <input
                     :id="productStatus.codename"
                     type="checkbox"
-                    :checked="productStatus.checked"
+                    :value="productStatus.checked"
                 />
                 <label
                     :htmlFor="productStatus.codename"
@@ -37,37 +37,38 @@
     </aside>
 </template>
 
-<script>
+<script setup>
+import { computed } from '@vue/reactivity';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'CoffeeFilter',
-  props: ['language', 'processings', 'productStatuses', 'filter'],
-  computed: {
-    processingsData: function() {
-      return this.processings.map(processing => ({
-        codename: processing.codename,
-        name: processing.name,
-        checked: this.filter.processings.includes(processing.codename)
-      }));
-    },
-    productStatusesData: function() {
-      return this.productStatuses.map(productStatus => ({
-        codename: productStatus.codename,
-        checked: this.filter.productStatuses.includes(productStatus.codename),
-        name: productStatus.name
-      }));
-    }
-  },
-  methods: {
-    processingOnChange: function(codename) {
-      this.filter.toggleProcessing(codename);
-      this.$emit('set-filter', this.filter);
-    },
-    productStatusOnChange: function(codename) {
-      this.filter.toggleProductStatus(codename);
-      this.$emit('set-filter', this.filter);
-    },
-  },
-};
+const props = defineProps(['processings', 'productStatuses', 'filter']);
+const emit = defineEmits(['set-filter'])
+const { t } = useI18n();
+
+const processingsData = computed(() => props.processings.map(processing => ({
+    codename: processing.codename,
+    name: processing.name,
+    checked: props.filter.processings.includes(processing.codename)
+  }))
+);
+
+const productStatusesData = computed(() => props.productStatuses.map(productStatus => ({
+    codename: productStatus.codename,
+    checked: props.filter.productStatuses.includes(productStatus.codename),
+    name: productStatus.name
+  })
+)
+);  
+
+const processingOnChange = (codename) => {
+  props.filter.toggleProcessing(codename);
+  emit('set-filter', props.filter);
+}
+
+const productStatusOnChange = (codename) => {
+  props.filter.toggleProductStatus(codename);
+  emit('set-filter', props.filter);
+}
+
 </script>
 

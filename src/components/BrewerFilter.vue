@@ -7,9 +7,9 @@
             :key="manufacturer.id"
         >
             <input
-                v-bind:id="manufacturer.id"
+                :id="manufacturer.id"
                 type="checkbox"
-                v-bind:checked="manufacturer.checked"
+                :value="manufacturer.checked"
             />
             <label
                 v-bind:htmlFor="manufacturer.id"
@@ -26,7 +26,7 @@
             <input
                 v-bind:id="priceRange.id"
                 type="checkbox"
-                :checked="priceRange.checked"
+                :value="priceRange.checked"
             />
             <label
                 v-bind:htmlFor="priceRange.id"
@@ -42,7 +42,7 @@
             <input
                 :id="productStatus.id"
                 type="checkbox"
-                :checked="productStatus.checked"
+                :value="productStatus.checked"
             />
             <label
                 :htmlFor="productStatus.id"
@@ -52,70 +52,71 @@
     </aside>
 </template>
 
-<script>
+<script setup>
+import { computed } from '@vue/reactivity';
+import { useI18n } from 'vue-i18n';
 
-export default {
-  name: 'BrewerFilter',
-  props: ['language', 'manufacturers', 'productStatuses', 'filter'],
-  data: () => ({
-    priceRanges: [
-      { min: 0, max: 50 },
-      { min: 50, max: 250 },
-      { min: 250, max: 5000 }
-    ]
-  }),
-  computed: {
-    manufacturersData: function() {
-      return this.manufacturers.map(manufacturer => ({
-        codename: manufacturer.codename,
-        name: manufacturer.name,
-        id: 'Manufacturer-' + manufacturer.codename,
-        checked: this.filter.manufacturers.includes(manufacturer.codename)
-      }));
-    },
-    priceRangesData: function() {
-      return this.priceRanges.map((priceRange, index) => ({
-        id: 'PriceRange-' + index,
-        checked:
-          this.filter.priceRanges.findIndex(
-            x => x.min === priceRange.min && x.max === priceRange.max
-          ) >= 0,
-        formattedPriceRange:
-          this.formatPrice(priceRange.min, this.language) +
-          ' – ' +
-          this.formatPrice(priceRange.max, this.language),
-        rawPriceRange: priceRange
-      }));
-    },
-    productStatusesData: function() {
-      return this.productStatuses.map(productStatus => ({
-        id: 'ProductStatus-' + productStatus.codename,
-        name: productStatus.name,
-        checked: this.filter.productStatuses.includes(productStatus.codename),
-        codename: productStatus.codename
-      }));
-    }
-  },
-  methods: {
-    manufacturerOnChange: function(codename) {
-      this.filter.toggleManufacturer(codename);
-      this.$emit('set-filter', this.filter);
-    },
-    priceRangeOnChange: function(priceRange) {
-      this.filter.togglePriceRange(priceRange);
-      this.$emit('set-filter', this.filter);
-    },
-    productStatusOnChange: function(codename) {
-      this.filter.toggleProductStatus(codename);
-      this.$emit('set-filter', this.filter);
-    },
-    formatPrice: function(price, language) {
-      return price.toLocaleString(language, {
-        style: 'currency',
-        currency: 'USD',
-        maximumFractionDigits: 2
-      });
-    },
-  },
-};
+
+const { locale } = useI18n();
+const language = locale.value;
+
+const props = defineProps(['productStatuses', 'manufacturers', 'filter']);
+const emit = defineEmits(['set-filter']);
+const priceRanges = [
+  { min: 0, max: 50 },
+  { min: 50, max: 250 },
+  { min: 250, max: 5000 }
+];
+
+
+const manufacturersData = computed(() => props.manufacturers.map(manufacturer => ({
+  codename: manufacturer.codename,
+  name: manufacturer.name,
+  id: 'Manufacturer-' + manufacturer.codename,
+  checked: props.filter.manufacturers.includes(manufacturer.codename)
+})));
+
+const priceRangesData = computed(() => priceRanges.map((priceRange, index) => ({
+  id: 'PriceRange-' + index,
+  checked:
+    props.filter.priceRanges.findIndex(
+      x => x.min === priceRange.min && x.max === priceRange.max
+    ) >= 0,
+  formattedPriceRange:
+    formatPrice(priceRange.min, language) +
+    ' – ' +
+    formatPrice(priceRange.max, language),
+  rawPriceRange: priceRange
+})));
+
+const productStatusesData = computed(() => props.productStatuses.map(productStatus => ({
+  id: 'ProductStatus-' + productStatus.codename,
+  name: productStatus.name,
+  checked: props.filter.productStatuses.includes(productStatus.codename),
+  codename: productStatus.codename
+})));
+
+const manufacturerOnChange = (codename) => {
+  props.filter.toggleManufacturer(codename);
+  emit('set-filter', props.filter);
+}
+
+const priceRangeOnChange = (priceRange) => {
+  props.filter.togglePriceRange(priceRange);
+  emit('set-filter', props.filter);
+}
+
+const productStatusOnChange = (codename) => {
+  props.filter.toggleProductStatus(codename);
+  emit('set-filter', props.filter);
+}
+
+const formatPrice = (price, language) => 
+  price.toLocaleString(language, {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 2
+  }
+);
+
 </script>

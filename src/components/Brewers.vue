@@ -37,46 +37,39 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { useI18n } from 'vue-i18n';
 import { resolveContentLink } from '../Utilities/ContentLinks'
+import { computed } from '@vue/reactivity';
 
-export default {
-  name: 'Brewers',
-  props: ['language', 'brewers', 'filter'],
-  data: () => ({
-  }),
-  computed: {
-    filteredBrewers: function () {
-      if (this.brewers.length === 0 || !this.filter) {
+const {locale} = useI18n();
+const language = locale.value;
+
+const props = defineProps(['brewers', 'filter']);
+
+const filteredBrewers = computed(() => {
+  if (props.brewers.length === 0 || !props.filter) {
         return [];
       }
-      return this.brewers.filter(brewer => this.filter.matches(brewer));
-    },
-    brewersData: function () {
-      return this.filteredBrewers.map(brewer => ({
-        price: this.formatPrice(brewer.elements.price.value, this.language),
-        productName: brewer.elements.productName.value,
-        link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, this.language),
-        hasNoProductStatus: brewer.elements.productStatus.value.length === 0,
-        productStatusText: brewer.elements.productStatus.value.map((x) => x.name).join(', '),
-        imageLink: brewer.elements.image.value[0].url
-      }))
+
+  return props.brewers.filter(brewer => props.filter.matches(brewer));
+})
+
+const brewersData = computed(() =>
+  filteredBrewers.value.map(brewer => ({
+    price: formatPrice(brewer.elements.price.value, language),
+    productName: brewer.elements.productName.value,
+    link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, language),
+    hasNoProductStatus: brewer.elements.productStatus.value.length === 0,
+    productStatusText: brewer.elements.productStatus.value.map((x) => x.name).join(', '),
+    imageLink: brewer.elements.image.value[0].url
+  }))
+);
+
+const formatPrice = (price, language) => 
+  price.toLocaleString(language, {
+      style: 'currency',
+      currency: 'USD'
     }
-  },
-  methods: {
-    formatPrice: function (price, language) {
-      return price.toLocaleString(language, {
-        style: 'currency',
-        currency: 'USD'
-      });
-    },
-    resolveContentLink,
-    onChange: function () {
-      
-    }
-  },
-  mounted: function () {
-    this.onChange();
-  },
-}
+  );
 </script>

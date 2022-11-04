@@ -30,16 +30,18 @@ import {
   languageCodesLowerCase,
   getLanguageCode
 } from './Utilities/LanguageCodes';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 const infoMessageText = ref('');
 
-const i18n = useI18n();
+const i18n = useI18n({useScope: 'global'});
 const language = i18n.locale.value
 const router = useRouter();
-const { path } = useRoute();
+const route = useRoute();
+
+console.log(language);
 
 onBeforeMount(() => {
   const cookies = new Cookies(document.cookie);
@@ -50,7 +52,7 @@ onBeforeMount(() => {
 })
   
 onMounted(() => {
-  i18n.locale.value = getLanguageCode(path);
+  //locale.value = getLanguageCode(path);
   infoMessageText.value = getInfoMessage();
 });
 
@@ -60,14 +62,14 @@ const getInfoMessage = () => {
 
 const changeLang = (newLanguage) => {
     if (
-      language === newLanguage ||
+      i18n.locale.value === newLanguage ||
       languageCodes.indexOf(newLanguage) < 0
     ) {
       return;
     }
 
-    const urlParts = path.split('/');
-    const currentLanguage = path.split('/')[1];
+    const urlParts = route.path.split('/');
+    const currentLanguage = route.path.split('/')[1];
 
     if (
       languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
@@ -77,9 +79,25 @@ const changeLang = (newLanguage) => {
       urlParts.splice(1, 0, newLanguage);
     }
 
-    router.push(urlParts.join('/').toLowerCase());
     i18n.locale.value = newLanguage;
+
+    router.push(urlParts.join('/').toLowerCase());
   }
+
+watch(route, (oldValue, newValue) => {
+  const newLanguage = newValue.path.split('/')[1];
+  if (
+    language === newLanguage ||
+    languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0
+  ) {
+    return;
+  }
+  if (
+    languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1
+  ) {
+    i18n.locale.value = languageCodes[languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase())]
+  }
+})
   // watch: {
   //   $route: {
   //     deep: true,

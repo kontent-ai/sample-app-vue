@@ -21,10 +21,10 @@
     </div>
 </template>
 
-<script>
-export default {
-  name: 'Store',
-  props: ['language'],
-}
+<script setup>
+import { useI18n } from 'vue-i18n';
+
+const { locale } = useI18n();
+const language = locale.value
 </script>
 

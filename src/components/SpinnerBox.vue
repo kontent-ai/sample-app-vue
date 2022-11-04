@@ -1,13 +1,10 @@
 <template>
     <div class="spinner-box">
         <span class="spinner"></span>
-        <span class="spinner-message">{{message}}</span>
+        <span class="spinner-message">{{props.message}}</span>
     </div>
 </template>
 
-<script>
-export default {
-  name: 'SpinnerBox',
-  props:['message']
-}
+<script setup>
+const props = defineProps(['message']);
 </script>

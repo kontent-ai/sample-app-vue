@@ -91,7 +91,7 @@ const loadData = () => {
         },
         urlResolver: (linkId, linkText, link) => {
           return {
-            linkHtml: `<a href="${resolveContentLink(link, this.$i18n.locale)}">${linkText}</a>`,
+            linkHtml: `<a href="${resolveContentLink(link, i18n.locale.value)}">${linkText}</a>`,
           };
         },
       }).html;

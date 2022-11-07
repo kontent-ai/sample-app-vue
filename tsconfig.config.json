@@ -5,6 +5,6 @@
     "composite": true,
     "types": ["node"],
     "resolveJsonModule": true,
-    "allowJs": true
+    "allowJs": true,
   }
 }

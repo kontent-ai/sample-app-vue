@@ -42,45 +42,51 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import dateFormat from 'dateformat';
 import {initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
-import _ from 'lodash';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { computed } from '@vue/reactivity';
+import type { Article } from '@/models';
+import type { Elements } from '@kontent-ai/delivery-sdk';
 
+interface ArticleData {
+  title: string,
+  imageLink: string,
+  postDate: string,
+  bodyCopyElement: Elements.RichTextElement
+}
 
 const { locale, t } = useI18n();
-const article = ref(null);
-const articleData = computed(() => { 
+const article = ref<Article | null>(null);
+const articleData = computed<ArticleData | null>(() => { 
   if(article.value === null){
     return null;
   }
 
   return {
-    title: _.get(article.value, 'elements.title.value') || t('Article.noTitleValue'),
-    imageLink: _.get(article.value, 'elements.teaserImage.value[0].url'),
-    postDate: formatDate(_.get(article.value, 'elements.postDate.value')),
-    bodyCopyElement: _.get(article.value, 'elements.bodyCopy') || t('Article.noBodyCopyValue')
+    title: article.value?.elements.title.value ?? t('Article.noTitleValue'),
+    imageLink: article.value?.elements.teaserImage.value[0].url,
+    postDate: formatDate(article.value?.elements.postDate.value ?? ""),
+    bodyCopyElement: article.value?.elements.bodyCopy ?? t('Article.noBodyCopyValue')
   }
 })
-
 
 const route = useRoute();
 
 const router = useRouter();
 
-const formatDate = (value) => 
+const formatDate = (value: string) => 
     value ? dateFormat(value, 'dddd, mmmm d, yyyy') : t('Article.noPostDateValue');
 
-const fetchArticle = (articleId) => {
+const fetchArticle = (articleId: string) => {
   const articleDetails = initLanguageCodeObject();
-  let query = Client.items()
+  let query = Client.items<Article>()
     .type('article')
     .equalsFilter('system.id', articleId)
     .elementsParameter(['title', 'teaser_image', 'post_date', 'body_copy', 'video_host', 'video_id', 'tweet_link', 'theme', 'display_options'])
@@ -99,18 +105,18 @@ const fetchArticle = (articleId) => {
 
       article.value = locale.value ? articleDetails[locale.value][articleId] : articleDetails[defaultLanguage][articleId];
 
-      if(article.value.system.language !== locale.value) {
-        router.replace({path: resolveChangeLanguageLink(route.path, article.system.language)});
+      if(article.value?.system.language !== locale.value) {
+        router.replace({path: resolveChangeLanguageLink(route.path, article.value?.system.language)});
       }
     });
 }
 
 onMounted(() => {
-    fetchArticle(route.params.articleId);
+  fetchArticle(route.params.articleId as string);
 })
 
 watch(locale, () => {
-  fetchArticle(route.params.articleId)
+  fetchArticle(route.params.articleId as string)
 });
 
 </script>

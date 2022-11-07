@@ -49,25 +49,33 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { computed } from '@vue/reactivity';
+import type { Elements } from '@kontent-ai/delivery-sdk';
+import type { AboutUs, FactAboutUs } from '@/models';
+
+interface FactsData {
+  title: string,
+  descriptionElement: Elements.RichTextElement,
+  imageLink: string,
+}
 
 const { locale } = useI18n();
-const facts = ref([]);
-const factsData = computed(() => facts.value.map(fact => ({
+const facts = ref<Array<FactAboutUs>>([]);
+const factsData = computed<Array<FactsData>>(() => facts.value.map(fact => ({
   title: fact.elements.title.value,
   descriptionElement: fact.elements.description,
   imageLink: fact.elements.image.value[0].url,
 })));
 
-const fetchFacts =() => {
+const fetchFacts = (): void  => {
   const factsList = initLanguageCodeObject();
-  var query = Client.items().type('about_us');
+  var query = Client.items<AboutUs>().type('about_us');
 
   if (locale.value) {
   query.languageParameter(locale.value);

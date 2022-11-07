@@ -4,37 +4,53 @@
         v-bind:style="heroUnitData?.sectionStyleObject"
     >
         <h2 class="banner-heading">{{heroUnitData?.bannerHeading}}</h2>
-        <RichTextElement
-            v-if="heroUnitData?.bannerText"
-            class="banner-text"
-            :element="heroUnitData?.bannerText"
-        />
+          <RichTextElement
+              v-if="heroUnitData"
+              class="banner-text"
+              :element="heroUnitData?.bannerText"
+          />
     </section>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
-import _ from 'lodash';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
 import { computed } from '@vue/reactivity';
+import type { HeroUnit } from '@/models';
+import type { Elements } from '@kontent-ai/delivery-sdk';
 
-const props = defineProps(['language']);
+interface HeroUnitData {
+  bannerHeading: string,
+  bannerText: Elements.RichTextElement,
+  sectionStyleObject: {
+    backgroundImage: string | undefined,
+    backgroundColor: string
+  }
+}
+
+const log = (message: any) => {
+  console.log(message)
+  return true
+}
+
 const { t, locale } =  useI18n();
 
-const heroUnit = ref(null);
-const heroUnitData = computed(() => {
-  if (!heroUnit.value){
+const heroUnit = ref<HeroUnit | null>(null);
+const heroUnitData = computed<HeroUnitData | null>(() => {
+  if (heroUnit.value === null){
     return null;
   }
 
+  console.log(heroUnit.value?.elements);
+
   return {
-    bannerHeading: _.get(heroUnit.value, 'elements.title.value', t('Banner.loading')),
-    bannerText: _.get(heroUnit.value, 'elements.marketingMessage', ''),
+    bannerHeading: heroUnit.value?.elements.title.value ?? t('Banner.loading'),
+    bannerText: heroUnit.value?.elements.marketingMessage ?? "Loading",
     sectionStyleObject: {
-      backgroundImage: heroUnit ? `url(${heroUnit.value.elements.image.value[0].url})` : undefined,
+      backgroundImage: heroUnit.value ? `url(${heroUnit.value.elements.image.value[0].url})` : undefined,
       backgroundColor: '#B24143'
     }
   }
@@ -42,7 +58,7 @@ const heroUnitData = computed(() => {
 
 const fetchHeroUnit = () => {
   const heroUnits = initLanguageCodeObject();
-  var query = Client.items().type('hero_unit').elementsParameter(['title', 'image', 'marketing_message']);
+  var query = Client.items<HeroUnit>().type('hero_unit').elementsParameter(['title', 'image', 'marketing_message']);
   
   if (locale.value) {
     query.languageParameter(locale.value);

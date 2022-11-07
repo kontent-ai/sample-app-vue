@@ -40,23 +40,36 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import dateFormat from 'dateformat';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
-import _ from 'lodash';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
+import { computed } from '@vue/reactivity';
+import type { Article } from '@/models';
+
+interface ArticleData {
+  title: string,
+  imageLink: string,
+  link: string,
+  postDate: string,
+  summary: string
+}
 
 const { locale, t } = useI18n();
+const articles = ref<Array<Article>>([]);
 
-//const articleCount = 10;
-let articles = [];
+const articlesData = computed<Array<ArticleData>>(() =>  articles.value.map(article => ({
+  title: article.elements.title.value,
+  imageLink: article.elements.title.value,
+  link: `/${locale.value.toLowerCase()}/articles/${article.system.id}`,
+  postDate: formatDate(article.elements.postDate.value ?? ""),
+  summary: article.elements.summary.value
+})));
 
-const articlesData = ref([]);
-
-const formatDate = (value) =>
-  value ? dateFormat(value, 'mmmm d') : this.$t('Article.noPostDateValue');
+const formatDate = (value: string): string =>
+  value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue');
 
 const fetchArticles = () => {
   const articleList = initLanguageCodeObject();
@@ -75,14 +88,7 @@ const fetchArticles = () => {
       } else {
         articleList[defaultLanguage] = response.data.items
       }
-      articles = locale.value ? articleList[locale.value] : articleList[defaultLanguage];
-      articlesData.value = articles.map(article => ({
-        title: _.get(article, 'elements.title.value') || t('Article.noTitleValue'),
-        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        link: `/${locale.value.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
-        postDate: formatDate(_.get(article, 'elements.postDate.value')),
-        summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
-      }));
+      articles.value = locale.value ? articleList[locale.value] : articleList[defaultLanguage];
     });  
 }
 

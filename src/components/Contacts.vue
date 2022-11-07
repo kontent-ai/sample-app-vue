@@ -60,10 +60,9 @@ import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCo
 import VueScrollTo from 'vue-scrollto'
 import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const { locale } = useI18n();
-const language = locale.value;
 
 const cafes = ref([]);
 const selectedAddress = ref(null);
@@ -130,27 +129,27 @@ const fetchCafes = () => {
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 
-  if (language) {
-    query.languageParameter(language);
+  if (locale.value) {
+    query.languageParameter(locale.value);
   }
 
   query.toPromise()
     .then(response => {
-      if (language) {
-        cafesList[language] = response.data.items;
+      if (locale.value) {
+        cafesList[locale.value] = response.data.items;
       } else {
         cafesList[defaultLanguage] = response.data.items;
       }
-      cafes.value = language ? 
-        cafesList[language].filter((cafe) => cafe.elements.country.value === 'USA') :
+      cafes.value = locale.value ? 
+        cafesList[locale.value].filter((cafe) => cafe.elements.country.value === 'USA') :
         cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
     });
 }
 
 onMounted(() => fetchCafes());
-  // watch: {
-  //   language: function(){
-  //     fetchCafes();
-  //   }
-  // },
+
+watch(locale, () => {
+  fetchCafes();
+});
+
 </script>

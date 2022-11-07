@@ -22,16 +22,12 @@ import Coffees from './Coffees.vue'
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const { locale } = useI18n();
-const language = locale.value;
-
 const coffees = ref([]);
 const processings = ref([]);
 const productStatuses = ref([]);
-
-console.log(coffees);
 
 const filter = ref(new Filter());
 
@@ -75,19 +71,18 @@ const fetchProductStatuses = () => {
 const setFilter = (newFilter) => {
   filter.value = newFilter
 }
-  // watch: {
-  //   language: function () {
-  //     this.fetchData(this.language);
-  //     this.fetchProcessings();
-  //     this.fetchProductStatuses();
-  //   }
-  // },
 
-onMounted(() => {
-  fetchData(language);
+watch(locale, () => {
+  fetchData(locale.value);
   fetchProcessings();
   fetchProductStatuses();
-})
+});
+
+onMounted(() => {
+  fetchData(locale.value);
+  fetchProcessings();
+  fetchProductStatuses();
+});
 
 </script>
 

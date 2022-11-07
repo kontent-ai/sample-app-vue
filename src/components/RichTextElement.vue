@@ -8,12 +8,11 @@
 <script setup>
 import {resolveContentLink} from '../Utilities/ContentLinks'
 import { createRichTextHtmlResolver, linkedItemsHelper } from '@kontent-ai/delivery-sdk';
-import { onMounted, ref } from 'vue';
+import { onMounted, onUpdated, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps(['element']);
-
 const richTextData = ref(null);
 const router = useRouter();
 const i18n = useI18n()
@@ -99,12 +98,10 @@ const loadData = () => {
 
   onMounted(() => {
     loadData();
-  })
+  });
 
+  onUpdated(() => {
+    loadData();
+  });
 
-  // watch: { 
-  //   element: function() {
-  //     this.loadData();
-  //   }
-  // },
 </script>

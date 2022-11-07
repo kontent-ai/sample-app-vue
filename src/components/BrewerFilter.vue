@@ -56,9 +56,7 @@
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 
-
 const { locale } = useI18n();
-const language = locale.value;
 
 const props = defineProps(['productStatuses', 'manufacturers', 'filter']);
 const emit = defineEmits(['set-filter']);
@@ -83,9 +81,9 @@ const priceRangesData = computed(() => priceRanges.map((priceRange, index) => ({
       x => x.min === priceRange.min && x.max === priceRange.max
     ) >= 0,
   formattedPriceRange:
-    formatPrice(priceRange.min, language) +
+    formatPrice(priceRange.min, locale.value) +
     ' – ' +
-    formatPrice(priceRange.max, language),
+    formatPrice(priceRange.max, locale.value),
   rawPriceRange: priceRange
 })));
 

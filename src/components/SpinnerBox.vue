@@ -6,5 +6,5 @@
 </template>
 
 <script setup>
-const props = defineProps(['message']);
+  const props = defineProps(['message']);
 </script>

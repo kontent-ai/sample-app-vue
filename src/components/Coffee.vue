@@ -60,12 +60,12 @@ import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const { locale } = useI18n();
-const language = locale.value;
 const route = useRoute();
+const router = useRouter();
 const coffee = ref(null);
 
 const coffeeData = computed(() => ({
@@ -84,8 +84,8 @@ const fetchData = () => {
     .type('coffee')
     .equalsFilter('url_pattern', route.params.coffeeSlug);
 
-  if(language){
-    query.languageParameter(language);
+  if(locale.value){
+    query.languageParameter(locale.value);
   }
   
   query
@@ -93,19 +93,18 @@ const fetchData = () => {
     .then(response => {
       coffee.value = response.data.items[0];
 
-      if(coffee.value.system.language !== language) {
-        router.replace({path: resolveChangeLanguageLink(route.path, coffee.system.language)})
+      if(coffee.value.system.language !== locale.value) {
+        router.replace({path: resolveChangeLanguageLink(route.path, coffee.value.system.language)})
       }
     })
 }
 
 onMounted(() => {
   fetchData();
-})
+});
 
-  // watch: {
-  //   language: function () {
-  //     this.fetchData();
-  //   }
-  // },
+watch(locale, () => {
+  fetchData();
+});
+
 </script>

@@ -43,8 +43,6 @@ import { resolveContentLink } from '../Utilities/ContentLinks'
 import { computed } from '@vue/reactivity';
 
 const {locale} = useI18n();
-const language = locale.value;
-
 const props = defineProps(['brewers', 'filter']);
 
 const filteredBrewers = computed(() => {
@@ -57,9 +55,9 @@ const filteredBrewers = computed(() => {
 
 const brewersData = computed(() =>
   filteredBrewers.value.map(brewer => ({
-    price: formatPrice(brewer.elements.price.value, language),
+    price: formatPrice(brewer.elements.price.value, locale.value),
     productName: brewer.elements.productName.value,
-    link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, language),
+    link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, locale.value),
     hasNoProductStatus: brewer.elements.productStatus.value.length === 0,
     productStatusText: brewer.elements.productStatus.value.map((x) => x.name).join(', '),
     imageLink: brewer.elements.image.value[0].url

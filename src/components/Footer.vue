@@ -52,5 +52,5 @@
 </template>
 
 <script setup>
-  const email ='dancinggoat@localhost.local'
+  const email ='dancinggoat@localhost.local';
 </script>

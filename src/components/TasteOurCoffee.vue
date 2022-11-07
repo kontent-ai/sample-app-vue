@@ -28,16 +28,19 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed } from '@vue/reactivity';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
 const { locale, t } = useI18n();
-const language = locale.value
-let cafes = []
-const cafesData = ref([]);
-const cafesLink = `${language}/cafes`
+const cafes = ref([]);
+const cafesData = computed(() => cafes.value.map(cafe => ({
+  name: cafe.system.name,
+  imageLink: cafe.elements.photo.value[0].url,
+})));
+const cafesLink = `${locale.value}/cafes`
 
 const fetchCafes = () => {
   const cafesList = initLanguageCodeObject();
@@ -46,35 +49,28 @@ const fetchCafes = () => {
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 
-  if (language) {
-    query.languageParameter(language);
+  if (locale.value) {
+    query.languageParameter(locale.value);
   }
 
   query.toPromise()
     .then(response => {
-      if (language) {
-        cafesList[language] = response.data.items;
+      if (locale.value) {
+        cafesList[locale.value] = response.data.items;
       } else {
         cafesList[defaultLanguage] = response.data.items;
       }
-      cafes = language ? 
-        cafesList[language].filter((cafe) => cafe.elements.country.value === 'USA') :
+      cafes.value = locale.value ? 
+        cafesList[locale.value].filter((cafe) => cafe.elements.country.value === 'USA') :
         cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
-      cafesData.value = cafes.map(cafe => ({
-        name: cafe.system.name,
-        imageLink: cafe.elements.photo.value[0].url,
-      }))
     });
-
   }
 
-  onMounted(() => {
-    fetchCafes();
-  })
-  // watch: {
-  //   language: function(){
-  //     this.fetchCafes();
-  //   }
-  // },
-    
+onMounted(() => {
+  fetchCafes();
+})
+
+watch(locale, () => {
+  fetchCafes();
+}); 
 </script>

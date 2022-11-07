@@ -12,7 +12,5 @@
 </template>
 
 <script setup>
-  
-  const {text, link} = defineProps(['text', 'link'])
-  
+  const {text, link} = defineProps(['text', 'link']);
 </script>

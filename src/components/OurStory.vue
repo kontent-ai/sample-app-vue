@@ -18,6 +18,6 @@ import StoryImage from '../Images/our-story.jpg';
 
 const { t } = useI18n();
 
-const sectionStyleObject = { backgroundImage: `url(${StoryImage})` }
+const sectionStyleObject = { backgroundImage: `url(${StoryImage})` };
 
 </script>

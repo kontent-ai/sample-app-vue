@@ -54,50 +54,42 @@ import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCo
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { computed } from '@vue/reactivity';
 
 const { locale } = useI18n();
-const language = locale.value;
-
-let facts = [];
-const factsData = ref([]);
+const facts = ref([]);
+const factsData = computed(() => facts.value.map(fact => ({
+  title: fact.elements.title.value,
+  descriptionElement: fact.elements.description,
+  imageLink: fact.elements.image.value[0].url,
+})));
 
 const fetchFacts =() => {
-      const factsList = initLanguageCodeObject();
-      var query = Client.items().type('about_us');
+  const factsList = initLanguageCodeObject();
+  var query = Client.items().type('about_us');
 
-      if (language) {
-        query.languageParameter(language);
-      }
+  if (locale.value) {
+  query.languageParameter(locale.value);
+  }
 
-      query.toPromise()
-        .then(response => {
-          console.log(response)
-          if (language) { 
-            factsList[language] = response.data.items[0].elements.facts.linkedItems;
-          } else {
-            factsList[defaultLanguage] = response.data.items[0].elements.facts.linkedItems;
-          }
-          facts = language ? factsList[language] : factsList[defaultLanguage];
-          factsData.value = facts.map(fact => ({
-          title: fact.elements.title.value,
-          descriptionElement: fact.elements.description,
-          imageLink: fact.elements.image.value[0].url,
-         }))
-         console.log(factsData.value)
-        });
-  
-      
+  query.toPromise()
+  .then(response => {
+    if (locale.value) { 
+      factsList[locale.value] = response.data.items[0].elements.facts.linkedItems;
+    } else {
+      factsList[defaultLanguage] = response.data.items[0].elements.facts.linkedItems;
     }
 
-  // watch: {
-  //   language: function () {
-  //     this.fetchFacts();
-  //   }
-  // },
-  
-  onMounted(() => {
-    fetchFacts();
-  })
+    facts.value = locale.value ? factsList[locale.value] : factsList[defaultLanguage];
+  });
+}
+
+onMounted(() => {
+  fetchFacts();
+})
+
+watch(locale, () => {
+  fetchFacts()
+});
 </script>

@@ -17,50 +17,53 @@ import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import _ from 'lodash';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
+import { computed } from '@vue/reactivity';
 
-const heroUnits = initLanguageCodeObject();
 const props = defineProps(['language']);
-let heroUnit = null;
-const heroUnitData = ref(null);
+const { t, locale } =  useI18n();
+
+const heroUnit = ref(null);
+const heroUnitData = computed(() => {
+  if (!heroUnit.value){
+    return null;
+  }
+
+  return {
+    bannerHeading: _.get(heroUnit.value, 'elements.title.value', t('Banner.loading')),
+    bannerText: _.get(heroUnit.value, 'elements.marketingMessage', ''),
+    sectionStyleObject: {
+      backgroundImage: heroUnit ? `url(${heroUnit.value.elements.image.value[0].url})` : undefined,
+      backgroundColor: '#B24143'
+    }
+  }
+})
 
 const fetchHeroUnit = () => {
-      var query = Client.items().type('hero_unit').elementsParameter(['title', 'image', 'marketing_message']);
-      const { t, locale } =  useI18n();
+  const heroUnits = initLanguageCodeObject();
+  var query = Client.items().type('hero_unit').elementsParameter(['title', 'image', 'marketing_message']);
+  
+  if (locale.value) {
+    query.languageParameter(locale.value);
+  }
 
-      if (locale) {
-        query.languageParameter(locale.value);
+  query.toPromise()
+    .then(response => {
+      if (locale.value) {
+        heroUnits[locale.value] = response.data.items;
+      } else {
+        heroUnits[defaultLanguage] = response.data.items;
       }
+      heroUnit.value = heroUnits[locale.value][0];
+    });
+}
 
-      query.toPromise()
-        .then(response => {
-          if (locale.value) {
-            heroUnits[locale.value] = response.data.items;
-          } else {
-            heroUnits[defaultLanguage] = response.data.items;
-          }
-          heroUnit = heroUnits[locale.value][0];
-          heroUnitData.value = {
-            bannerHeading: _.get(heroUnit, 'elements.title.value', t('Banner.loading')),
-            bannerText: _.get(heroUnit, 'elements.marketingMessage', ''),
-            sectionStyleObject: {
-              backgroundImage: heroUnit ? `url(${heroUnit.elements.image.value[0].url})` : undefined,
-              backgroundColor: '#B24143'
-            }
-          }
-        });
-    }
+onMounted(() => {
+  fetchHeroUnit();
+})
 
-  onMounted(() => {
-    fetchHeroUnit();
-  })
-
-
-  // watch: {
-  //   language: function(){
-  //     this.fetchHeroUnit();
-  //   }
-  // },
-
+watch(locale, () => {
+  fetchHeroUnit();
+})
 </script>

@@ -43,16 +43,15 @@ import { Client } from '../Client.js';
 import RichTextElement from './RichTextElement.vue'
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import { useI18n } from 'vue-i18n';
-import {onMounted, ref} from 'vue';
+import { onMounted, ref, watch} from 'vue';
 import { computed } from '@vue/reactivity';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
-const {locale} = useI18n();
+const { locale } = useI18n();
 const route = useRoute();
-const language = locale.value;
+const router = useRouter();
 
 const brewer = ref(null);
-
 const data = computed(() => ({
   name: brewer.value?.elements.productName.value ?? '',
   imageLink: brewer.value?.elements.image.value[0].url ?? '',
@@ -64,8 +63,8 @@ const fetchBrewer = () => {
         .type('brewer')
         .equalsFilter('url_pattern', route.params.brewerSlug)
 
-  if(language){
-    query.languageParameter(language)
+  if(locale.value){
+    query.languageParameter(locale.value)
   }
 
   query
@@ -73,8 +72,8 @@ const fetchBrewer = () => {
     .then(response => {
       brewer.value = response.data.items[0]
       
-      if(brewer.value.system.language !== language) {
-        router.replace({path: resolveChangeLanguageLink(route.path, brewer.system.language)})
+      if(brewer.value.system.language !== locale.value) {
+        router.replace({path: resolveChangeLanguageLink(route.path, brewer.value.system.language)})
       }
     })
 }
@@ -83,17 +82,7 @@ onMounted(() => {
   fetchBrewer();
 })
 
-  // watch: {
-  //   brewer: function(newBrewer){
-  //     if(!newBrewer){
-  //       return;
-  //     }
-  //     this.name = newBrewer.elements.productName.value;
-  //     this.imageLink = newBrewer.elements.image.value[0].url;
-  //     this.descriptionElement = newBrewer.elements.longDescription;
-  //   },
-  //   language: function(){
-  //     this.fetchBrewer();
-  //   }
-  // },
+watch(locale, () => {
+  fetchBrewer();
+});
 </script>

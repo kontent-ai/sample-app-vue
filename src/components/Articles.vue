@@ -42,15 +42,13 @@
 
 <script setup>
 import dateFormat from 'dateformat';
-import { dateFormats } from '../Utilities/LanguageCodes';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import _ from 'lodash';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const { locale, t } = useI18n();
-const language = locale.value;
 
 //const articleCount = 10;
 let articles = [];
@@ -66,22 +64,22 @@ const fetchArticles = () => {
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 
-  if (language) {
-    query.languageParameter(language);
+  if (locale.value) {
+    query.languageParameter(locale.value);
   }
 
   query.toPromise()
     .then(response => {
-      if (language) {
-        articleList[language] = response.data.items;
+      if (locale.value) {
+        articleList[locale.value] = response.data.items;
       } else {
         articleList[defaultLanguage] = response.data.items
       }
-      articles = language ? articleList[language] : articleList[defaultLanguage];
+      articles = locale.value ? articleList[locale.value] : articleList[defaultLanguage];
       articlesData.value = articles.map(article => ({
         title: _.get(article, 'elements.title.value') || t('Article.noTitleValue'),
         imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        link: `/${language.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
+        link: `/${locale.value.toLowerCase()}/articles/${_.get(article, 'system.id')}`,
         postDate: formatDate(_.get(article, 'elements.postDate.value')),
         summary: _.get(article, 'elements.summary.value') || this.$t('Article.noSummaryValue')
       }));
@@ -90,10 +88,7 @@ const fetchArticles = () => {
 
 onMounted(() => fetchArticles())
 
-  // watch: {
-  //   language: function() {
-  //     this.fetchArticles();
-  //     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-  //   }
-  // },
+watch(locale, () => { 
+  fetchArticles()
+});
 </script>

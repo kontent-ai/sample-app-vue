@@ -22,10 +22,9 @@ import { Client } from '../Client.js';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 import { Filter } from '../Utilities/BrewerFilter';
 import { useI18n } from 'vue-i18n';
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 
 const { locale } = useI18n();
-const language = locale.value;
 
 const brewers = ref([]);
 const manufacturers = ref([]);
@@ -65,7 +64,6 @@ const fetchProductStatuses = () => {
   Client.taxonomy('product_status')
     .toPromise()
     .then(response => {
-      console.log(response)
       productStatuses.value = response.data.taxonomy.terms;
     });
 }
@@ -74,15 +72,15 @@ const setFilter = (newFilter) => {
   brewerFilter.value = newFilter
 }
 
-  // watch: {
-  //   language: function () {
-  //     this.fetchData(this.language);
-  //   }
-  // },
 onMounted(() => {
-    fetchData(language);
+    fetchData(locale.value);
     fetchManufacturers();
     fetchProductStatuses();
   }
 )
+
+watch(locale.value, () => {
+  fetchData(locale.value)
+});
+
 </script>

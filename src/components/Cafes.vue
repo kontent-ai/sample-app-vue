@@ -53,14 +53,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
 import { computed } from '@vue/reactivity';
 import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
 
 const  { locale } = useI18n();
-const language = locale.value;
 
 const ourCafes = ref([]);
 const partnerCafes = ref([]);
@@ -74,9 +73,9 @@ const locations = computed(() => partnerCafesData
     }
     return result;
   }, [])
-  .sort())
+  .sort());
 
-const partnerCafesData = computed(() => partnerCafes.value.map(cafe => getModel(cafe)))
+const partnerCafesData = computed(() => partnerCafes.value.map(cafe => getModel(cafe)));
 
 const ourCafesData = computed(() => ourCafes.value.map(cafe => getModel(cafe)));
 
@@ -107,32 +106,32 @@ const fetchCafes = () => {
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 
-  if (language) {
-    query.languageParameter(language);
+  if (locale.value) {
+    query.languageParameter(locale.value);
   }
 
   query.toPromise()
     .then(response => {
-      console.log(language)
-      if (language) {
-        cafesList[language] = response.data.items;
+      if (locale.value) {
+        cafesList[locale.value] = response.data.items;
       } else {
         cafesList[defaultLanguage] = response.data.items;
       }
 
-      ourCafes.value = language ? 
-        cafesList[language].filter((cafe) => cafe.elements.country.value === 'USA') :
+      ourCafes.value = locale.value ? 
+        cafesList[locale.value].filter((cafe) => cafe.elements.country.value === 'USA') :
         cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
 
-      partnerCafes.value = language ? 
-        cafesList[language].filter((cafe) => cafe.elements.country.value !== 'USA') :
+      partnerCafes.value = locale.value ? 
+        cafesList[locale.value].filter((cafe) => cafe.elements.country.value !== 'USA') :
         cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value !== 'USA');
     });
 }
 
 onMounted(() => fetchCafes());
-  // watch: {
-  //   language: function() {
-  //     this.fetchCafes()
-  //   }
+
+watch(locale, () => {
+  fetchCafes();
+});
+
 </script>

@@ -81,13 +81,19 @@ import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCo
 import _ from 'lodash';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { computed } from '@vue/reactivity';
 
 const { t, locale } = useI18n();
-const articlesData = ref([]);
-let articles = [];
-const articleCount = 5
-const language = locale.value
+const articleCount = 5;
+const articles = ref([]);
+const articlesData = computed(() => articles.value.map(article => ({
+  imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
+  postDate : formatDate(_.get(article, 'elements.postDate.value')),
+  summary :  _.get(article, 'elements.summary.value') || t('Article.noSummaryValue'),
+  title: _.get(article, 'elements.title.value'),
+  link : `/${locale.value}/articles/${article.system.id}`,
+})));
 
 const formatDate = (value) => {
   return value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue');
@@ -99,36 +105,29 @@ const fetchArticles = () => {
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 
-  if (language) {
-    query.languageParameter(language);
+  if (locale.value) {
+    query.languageParameter(locale.value);
   }
   
   query.toPromise()
     .then(response => {
-      if (language) {
-        articleList[language] = response.data.items;
+      if (locale.value) {
+        articleList[locale.value] = response.data.items;
       } else {
         articleList[defaultLanguage] = response.data.items
       }
-      articles = language ? articleList[language].slice(0, articleCount) : articleList[defaultLanguage].slice(0, articleCount) ;
-      articlesData.value = articles.map(article => ({
-        imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-        postDate : formatDate(_.get(article, 'elements.postDate.value')),
-        summary :  _.get(article, 'elements.summary.value') || t('Article.noSummaryValue'),
-        title: _.get(article, 'elements.title.value'),
-        link : `/${language}/articles/${article.system.id}`,
-      }))
+      articles.value = locale.value ? articleList[locale.value].slice(0, articleCount) : articleList[defaultLanguage].slice(0, articleCount) ;
     });  
 }
 
 onMounted(() => {
-  dateFormat.i18n = dateFormats[language] || dateFormats[0];
+  dateFormat.i18n = dateFormats[locale.value] || dateFormats[0];
   fetchArticles();
-})
-  // watch: {
-  //   language: function(){
-  //     this.fetchArticles();
-  //     dateFormat.i18n = dateFormats[this.language] || dateFormats[0];
-  //   }
-  // },
+});
+
+watch(locale, () => {
+  dateFormat.i18n = dateFormats[locale.value]|| dateFormats[0];
+  fetchArticles();
+});
+
 </script>

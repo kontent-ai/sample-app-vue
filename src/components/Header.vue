@@ -61,18 +61,18 @@
 </template>
 
 <script setup>
+import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 import MessageBox from './MessageBox.vue';
 
-const {locale} = useI18n();
-const language = locale.value;
-const {changeLang, infoMessageText} = defineProps(['changeLang', 'infoMessageText']);
+const { locale } = useI18n({useScope: 'global'});
+const { changeLang, infoMessageText } = defineProps(['changeLang', 'infoMessageText']);
 
-const homeRoute = `/${language.toLowerCase()}`;
-const storeRoute = `/${language.toLowerCase()}/store`;
-const articlesRoute = `/${language.toLowerCase()}/articles`;
-const aboutRoute = `/${language.toLowerCase()}/about`;
-const cafesRoute = `/${language.toLowerCase()}/cafes`;
-const contactsRoute = `/${language.toLowerCase()}/contacts`;
+const homeRoute = computed(() => `/${locale.value.toLowerCase()}`);
+const storeRoute = computed(() => `/${locale.value.toLowerCase()}/store`);
+const articlesRoute = computed(() => `/${locale.value.toLowerCase()}/articles`);
+const aboutRoute = computed(() => `/${locale.value.toLowerCase()}/about`);
+const cafesRoute = computed(() => `/${locale.value.toLowerCase()}/cafes`);
+const contactsRoute = computed(() => `/${locale.value.toLowerCase()}/contacts`);
 
 </script>

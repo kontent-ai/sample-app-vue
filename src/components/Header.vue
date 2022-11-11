@@ -60,15 +60,18 @@
     </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from '@vue/reactivity';
-import { useI18n } from 'vue-i18n';
+import { useI18n, type Locale } from 'vue-i18n';
 import MessageBox from './MessageBox.vue';
 
-const { locale } = useI18n({useScope: 'global'});
-const { changeLang, infoMessageText } = defineProps(['changeLang', 'infoMessageText']);
+const { locale } = useI18n();
+const { changeLang, infoMessageText } = defineProps<{
+  changeLang: (language: string) => void,
+  infoMessageText?: string
+}>();
 
-const homeRoute = computed(() => `/${locale.value.toLowerCase()}`);
+const homeRoute = computed(() => `/${locale.value.toLocaleLowerCase()}`);
 const storeRoute = computed(() => `/${locale.value.toLowerCase()}/store`);
 const articlesRoute = computed(() => `/${locale.value.toLowerCase()}/articles`);
 const aboutRoute = computed(() => `/${locale.value.toLowerCase()}/about`);

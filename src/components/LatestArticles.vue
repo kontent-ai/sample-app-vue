@@ -74,34 +74,42 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang = "ts">
 import dateFormat from 'dateformat'
-import { dateFormats } from '../Utilities/LanguageCodes'
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
-import _ from 'lodash';
+import { initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
+import { defaultLanguage } from '../Utilities/LanguageCodes';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import { computed } from '@vue/reactivity';
+import type { Article } from '@/models';
+
+interface ArticleData{
+  imageLink: string,
+  postDate: string,
+  summary: string,
+  title: string,
+  link: string
+}
 
 const { t, locale } = useI18n();
 const articleCount = 5;
-const articles = ref([]);
+const articles = ref<Array<Article>>([]);
 const articlesData = computed(() => articles.value.map(article => ({
-  imageLink: _.get(article, 'elements.teaserImage.value[0].url'),
-  postDate : formatDate(_.get(article, 'elements.postDate.value')),
-  summary :  _.get(article, 'elements.summary.value') || t('Article.noSummaryValue'),
-  title: _.get(article, 'elements.title.value'),
+  imageLink: article.elements.teaserImage.value[0].url,
+  postDate : formatDate(article.elements.postDate.value),
+  summary : article.elements.summary.value || t('Article.noSummaryValue'),
+  title: article.elements.title.value,
   link : `/${locale.value}/articles/${article.system.id}`,
 })));
 
-const formatDate = (value) => {
-  return value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue');
+const formatDate = (value: string | null): string => {
+  return value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue') ?? '';
 }
 
 const fetchArticles = () => {
-  const articleList = initLanguageCodeObject();
-  let query = Client.items()
+  const articleList = initLanguageCodeObjectWithArray<Article>();
+  let query = Client.items<Article>()
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 
@@ -114,19 +122,19 @@ const fetchArticles = () => {
       if (locale.value) {
         articleList[locale.value] = response.data.items;
       } else {
-        articleList[defaultLanguage] = response.data.items
+        articleList[defaultLanguage] = response.data.items;
       }
       articles.value = locale.value ? articleList[locale.value].slice(0, articleCount) : articleList[defaultLanguage].slice(0, articleCount) ;
     });  
 }
 
 onMounted(() => {
-  dateFormat.i18n = dateFormats[locale.value] || dateFormats[0];
+  //dateFormat.i18n = dateFormats[locale.value] || dateFormats[0];
   fetchArticles();
 });
 
 watch(locale, () => {
-  dateFormat.i18n = dateFormats[locale.value]|| dateFormats[0];
+  //dateFormat.i18n = dateFormats[locale.value]|| dateFormats[0];
   fetchArticles();
 });
 

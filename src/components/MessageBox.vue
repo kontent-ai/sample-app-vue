@@ -26,10 +26,12 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import infoImage from '../Images/Admin/info.svg';
 
-const {message} = defineProps(['message']);
+const {message} = defineProps<{
+  message: string
+}>();
 const imageUrl = infoImage;
 
 </script>

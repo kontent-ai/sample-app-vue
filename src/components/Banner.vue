@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n'
@@ -57,7 +57,7 @@ const heroUnitData = computed<HeroUnitData | null>(() => {
 })
 
 const fetchHeroUnit = () => {
-  const heroUnits = initLanguageCodeObject();
+  const heroUnits = initLanguageCodeObjectWithArray<HeroUnit>();
   var query = Client.items<HeroUnit>().type('hero_unit').elementsParameter(['title', 'image', 'marketing_message']);
   
   if (locale.value) {

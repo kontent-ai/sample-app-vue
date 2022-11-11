@@ -15,25 +15,27 @@
     </div>
 </template>
 
-<script setup>
-import BrewerFilter  from './BrewerFilter.vue'
-import Brewers from './Brewers.vue'
+<script setup lang="ts">
+import BrewerFilter  from './BrewerFilter.vue';
+import Brewers from './Brewers.vue';
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import { Filter } from '../Utilities/BrewerFilter';
 import { useI18n } from 'vue-i18n';
 import {onMounted, ref, watch} from 'vue';
+import type { Brewer } from '@/models';
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
 const { locale } = useI18n();
 
-const brewers = ref([]);
-const manufacturers = ref([]);
-const productStatuses = ref([]);
-const brewerFilter = ref(new Filter());
+const brewers = ref<Array<Brewer>>([]);
+const manufacturers = ref<Array<ITaxonomyTerms>>([]);
+const productStatuses = ref<Array<ITaxonomyTerms>>([]);
+const brewerFilter = ref<Filter>(new Filter());
 
-const fetchData = (language) => {
-  const brewersList = initLanguageCodeObject();
-  var query = Client.items()
+const fetchData = (language: string): void => {
+  const brewersList = initLanguageCodeObjectWithArray<Brewer>();
+  var query = Client.items<Brewer>()
     .type('brewer')
     .orderParameter('elements.product_name', 'desc');
 
@@ -52,7 +54,7 @@ const fetchData = (language) => {
     });
 }
 
-const fetchManufacturers = () => {
+const fetchManufacturers = (): void => {
   Client.taxonomy('manufacturer')
     .toPromise()
     .then(response => {
@@ -60,7 +62,7 @@ const fetchManufacturers = () => {
     });
 }
 
-const fetchProductStatuses = () => {
+const fetchProductStatuses = (): void => {
   Client.taxonomy('product_status')
     .toPromise()
     .then(response => {
@@ -68,7 +70,7 @@ const fetchProductStatuses = () => {
     });
 }
 
-const setFilter = (newFilter) => {
+const setFilter = (newFilter: Filter): void => {
   brewerFilter.value = newFilter
 }
 
@@ -79,7 +81,7 @@ onMounted(() => {
   }
 )
 
-watch(locale.value, () => {
+watch(locale, () => {
   fetchData(locale.value)
 });
 

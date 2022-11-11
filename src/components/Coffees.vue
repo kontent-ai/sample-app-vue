@@ -37,16 +37,30 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Coffee } from '@/models';
+import { Filter } from '@/Utilities/CoffeeFilter';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 import { resolveContentLink } from '../Utilities/ContentLinks'
 
-const props = defineProps(['coffees', 'filter']);
+interface CoffeesData {
+  price: string,
+  name: string,
+  imageLink: string,
+  link: string,
+  hasNoProductStatus: boolean,
+  productStatusText: string
+}
+
+const props = defineProps<{
+  coffees: Array<Coffee>,
+  filter: Filter
+}>();
 
 const { locale } = useI18n();
 
-const filteredCoffees = computed(() => {
+const filteredCoffees = computed<Array<Coffee>>(() => {
   if(props.coffees.length === 0 || !props.filter)
   {
     return []
@@ -55,7 +69,7 @@ const filteredCoffees = computed(() => {
   return props.coffees.filter(coffee => props.filter.matches(coffee));
 });
 
-const coffeesData = computed(() => filteredCoffees.value.map(coffee => ({
+const coffeesData = computed<Array<CoffeesData>>(() => filteredCoffees.value.map(coffee => ({
   price: formatPrice(coffee.elements.price.value, locale.value),
   name: coffee.elements.productName.value,
   imageLink: coffee.elements.image.value[0].url,
@@ -65,11 +79,11 @@ const coffeesData = computed(() => filteredCoffees.value.map(coffee => ({
   }))
 );
 
-const formatPrice = (price, language) => {
-  return price.toLocaleString(language, {
+const formatPrice = (price: number | null, language: string): string => {
+  return price?.toLocaleString(language, {
     style: 'currency',
     currency: 'USD'
-  });
+  }) ?? '';
 }
 
 </script>

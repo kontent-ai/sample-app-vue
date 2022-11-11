@@ -27,25 +27,31 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Cafe } from '@/models';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
+
+interface CafesData {
+  name: string,
+  imageLink: string
+}
 
 const { locale, t } = useI18n();
-const cafes = ref([]);
-const cafesData = computed(() => cafes.value.map(cafe => ({
+const cafes = ref<Array<Cafe>>([]);
+const cafesData = computed<Array<CafesData>>(() => cafes.value.map(cafe => ({
   name: cafe.system.name,
   imageLink: cafe.elements.photo.value[0].url,
 })));
 const cafesLink = `${locale.value}/cafes`
 
 const fetchCafes = () => {
-  const cafesList = initLanguageCodeObject();
+  const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items()
+  let query = Client.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

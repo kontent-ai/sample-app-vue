@@ -71,10 +71,9 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Cookies from 'universal-cookie';
-import { isUUID } from 'validator';
-import { Subject } from 'rxjs';
+import validator  from 'validator';
 
 import SpinnerBox from '../SpinnerBox.vue';
 
@@ -90,7 +89,7 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const getWindowCenterPosition = (windowWidth, windowHeight) => {
+const getWindowCenterPosition = (windowWidth: number, windowHeight: number) => {
   const dualScreenLeft =
     window.screenLeft !== undefined ? window.screenLeft : window.screenX;
   const dualScreenTop =
@@ -111,9 +110,9 @@ const getWindowCenterPosition = (windowWidth, windowHeight) => {
 };
 
 const currentProjectInputValue = ref('');
-const preparingProject = ref('false');
+const preparingProject = ref(false);
 const sampleProjectItemCount = ref(0);
-const unsubscribeSubject =  ref(new Subject());
+// const unsubscribeSubject =  ref(new Subject());
 const thisDefaultProjectId = ref(defaultProjectId);
 const thisKontentLogo = ref(kontentLogo);
 const cookies = new Cookies(document.cookie);
@@ -128,17 +127,17 @@ onUnmounted(() => {
   window.removeEventListener('message', receiveMessage);
 })
 
-const handleSetProjectSubmit = (event) => {
+const handleSetProjectSubmit = (event: Event) => {
   event.preventDefault();
   const newProjectId = currentProjectInputValue;
-  setNewProjectId(newProjectId);
+  setNewProjectId(newProjectId.value);
 }
 
-const unsubscribe = () => {
-  unsubscribe.next();
-  unsubscribe.complete();
-  unsubscribeSubject.value = new Subject();
-}
+// const unsubscribe = () => {
+//   unsubscribeSubject.value.next();
+//   unsubscribeSubject.value.complete();
+//   unsubscribeSubject.value = new Subject();
+// }
 
 const getSampleProjectItemCount = () => {
   resetClient(thisDefaultProjectId.value);
@@ -148,12 +147,12 @@ const getSampleProjectItemCount = () => {
     .depthParameter(0)
     .toPromise()
     .then(response => {
-      sampleProjectItemCount = response.data.items.length;
+      sampleProjectItemCount.value = response.data.items.length;
     });
 }
 
-const setNewProjectId = (newProjectId, newlyGeneratedProject) => {
-  if (!isUUID(newProjectId)) {
+const setNewProjectId = (newProjectId: string, newlyGeneratedProject?: string) => {
+  if (!validator.isUUID(newProjectId)) {
     const message = `Selected project (${newProjectId}) is not a valid GUID`;
     // eslint-disable-next-line
     console.error(message);
@@ -171,14 +170,14 @@ const setNewProjectId = (newProjectId, newlyGeneratedProject) => {
   redirectToHome(newProjectId);
 }
 
-const waitUntilProjectAccessible = (newProjectId) => {
+const waitUntilProjectAccessible = (newProjectId:string) => {
   setTimeout(() => {
     Client.items()
       .elementsParameter(['id'])
       .depthParameter(0)
       .toPromise()
       .then(response => {
-        if (response.data.items.length >= sampleProjectItemCount) {
+        if (response.data.items.length >= sampleProjectItemCount.value) {
           preparingProject.value = false;
           redirectToHome(newProjectId);
         } else {
@@ -188,16 +187,16 @@ const waitUntilProjectAccessible = (newProjectId) => {
   }, 2000);
 }
 
-const redirectToHome = (newProjectId) => {
+const redirectToHome = (newProjectId: string) => {
   const infoMessage =
-    newProjectId === thisDefaultProjectId
+    newProjectId === thisDefaultProjectId.value
       ? 'You\'ve configured your app to with a project ID of a shared Kontent.ai project.'
       : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
   const dataOriginInfo = 'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
   router.push(`/`);
 }
 
-const receiveMessage = (event) => {
+const receiveMessage = (event: MessageEvent) => {
   if (event.origin.toLowerCase() !== 'https://app.kontent.ai') return;
 
   if (!event.data.projectGuid) {
@@ -210,7 +209,7 @@ const receiveMessage = (event) => {
   );
 }
 
-const openKontentProjectSelector = (event) => {
+const openKontentProjectSelector = (event: Event) => {
   event.preventDefault();
   const windowWidth = 800;
   const windowHeight = 800;

@@ -85,7 +85,8 @@ const formatDate = (value: string) =>
     value ? dateFormat(value, 'dddd, mmmm d, yyyy') : t('Article.noPostDateValue');
 
 const fetchArticle = (articleId: string) => {
-  const articleDetails = initLanguageCodeObject();
+  const articleDetails = initLanguageCodeObject<Article>();
+  
   let query = Client.items<Article>()
     .type('article')
     .equalsFilter('system.id', articleId)
@@ -98,12 +99,12 @@ const fetchArticle = (articleId: string) => {
   query.toPromise()
     .then(response => {
       if (locale.value) {
-        articleDetails[locale.value][articleId] = response.data.items[0];
+        articleDetails[locale.value] = response.data.items[0];
       } else {
-        articleDetails[defaultLanguage][articleId] = response.data.items[0];
+        articleDetails[defaultLanguage] = response.data.items[0];
       }
 
-      article.value = locale.value ? articleDetails[locale.value][articleId] : articleDetails[defaultLanguage][articleId];
+      article.value = locale.value ? articleDetails[locale.value] : articleDetails[defaultLanguage];
 
       if(article.value?.system.language !== locale.value) {
         router.replace({path: resolveChangeLanguageLink(route.path, article.value?.system.language)});

@@ -37,22 +37,41 @@
     </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Filter } from '@/Utilities/CoffeeFilter';
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 
-const props = defineProps(['processings', 'productStatuses', 'filter']);
+interface ProcessingData {
+  codename: string,
+  name: string,
+  checked: boolean
+};
+
+interface ProductStatuses {
+  codename: string,
+  name: string,
+  checked: boolean
+};
+
+const props = defineProps<{
+  processings: Array<ITaxonomyTerms>,
+  productStatuses: Array<ITaxonomyTerms>,
+  filter: Filter
+}>();
+
 const emit = defineEmits(['set-filter'])
 const { t } = useI18n();
 
-const processingsData = computed(() => props.processings.map(processing => ({
+const processingsData = computed<Array<ProcessingData>>(() => props.processings.map(processing => ({
     codename: processing.codename,
     name: processing.name,
     checked: props.filter.processings.includes(processing.codename)
   }))
 );
 
-const productStatusesData = computed(() => props.productStatuses.map(productStatus => ({
+const productStatusesData = computed<Array<ProductStatuses>>(() => props.productStatuses.map(productStatus => ({
     codename: productStatus.codename,
     checked: props.filter.productStatuses.includes(productStatus.codename),
     name: productStatus.name
@@ -60,12 +79,12 @@ const productStatusesData = computed(() => props.productStatuses.map(productStat
 )
 );  
 
-const processingOnChange = (codename) => {
+const processingOnChange = (codename: string): void => {
   props.filter.toggleProcessing(codename);
   emit('set-filter', props.filter);
 }
 
-const productStatusOnChange = (codename) => {
+const productStatusOnChange = (codename: string): void => {
   props.filter.toggleProductStatus(codename);
   emit('set-filter', props.filter);
 }

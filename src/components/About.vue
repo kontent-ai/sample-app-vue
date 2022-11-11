@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes';
+import { defaultLanguage, initLanguageCodeObject, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
@@ -74,7 +74,7 @@ const factsData = computed<Array<FactsData>>(() => facts.value.map(fact => ({
 })));
 
 const fetchFacts = (): void  => {
-  const factsList = initLanguageCodeObject();
+  const factsList = initLanguageCodeObject<AboutUs>();
   var query = Client.items<AboutUs>().type('about_us');
 
   if (locale.value) {
@@ -84,12 +84,13 @@ const fetchFacts = (): void  => {
   query.toPromise()
   .then(response => {
     if (locale.value) { 
-      factsList[locale.value] = response.data.items[0].elements.facts.linkedItems;
+      factsList[locale.value] = response.data.items[0];
     } else {
-      factsList[defaultLanguage] = response.data.items[0].elements.facts.linkedItems;
+      factsList[defaultLanguage] = response.data.items[0];
     }
 
-    facts.value = locale.value ? factsList[locale.value] : factsList[defaultLanguage];
+    facts.value = locale.value ? (factsList[locale.value]?.elements.facts.linkedItems as Array<FactAboutUs>) 
+      : (factsList[defaultLanguage]?.elements.facts.linkedItems as Array<FactAboutUs>);
   });
 }
 

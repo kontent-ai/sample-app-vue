@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import dateFormat from 'dateformat';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import { Client } from '../Client.js';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
@@ -62,7 +62,7 @@ const articles = ref<Array<Article>>([]);
 
 const articlesData = computed<Array<ArticleData>>(() =>  articles.value.map(article => ({
   title: article.elements.title.value,
-  imageLink: article.elements.title.value,
+  imageLink: article.elements.teaserImage.value[0].url,
   link: `/${locale.value.toLowerCase()}/articles/${article.system.id}`,
   postDate: formatDate(article.elements.postDate.value ?? ""),
   summary: article.elements.summary.value
@@ -72,8 +72,8 @@ const formatDate = (value: string): string =>
   value ? dateFormat(value, 'mmmm d') : t('Article.noPostDateValue');
 
 const fetchArticles = () => {
-  const articleList = initLanguageCodeObject();
-  let query = Client.items()
+  const articleList = initLanguageCodeObjectWithArray<Article>();
+  let query = Client.items<Article>()
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 

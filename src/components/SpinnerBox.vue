@@ -5,6 +5,8 @@
     </div>
 </template>
 
-<script setup>
-  const props = defineProps(['message']);
+<script setup lang="ts">
+  const props = defineProps<{
+    message: string
+  }>();
 </script>

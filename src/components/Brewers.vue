@@ -37,15 +37,29 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { resolveContentLink } from '../Utilities/ContentLinks'
 import { computed } from '@vue/reactivity';
+import type { Brewer } from '@/models';
+import { Filter } from '@/Utilities/BrewerFilter';
+
+interface BrewersData {
+  price: string,
+  productName: string,
+  link: string,
+  hasNoProductStatus: boolean,
+  productStatusText: string,
+  imageLink: string
+}
 
 const {locale} = useI18n();
-const props = defineProps(['brewers', 'filter']);
+const props = defineProps<{
+  brewers: Array<Brewer>,
+  filter: Filter
+}>();
 
-const filteredBrewers = computed(() => {
+const filteredBrewers = computed<Array<Brewer>>(() => {
   if (props.brewers.length === 0 || !props.filter) {
         return [];
       }
@@ -53,7 +67,7 @@ const filteredBrewers = computed(() => {
   return props.brewers.filter(brewer => props.filter.matches(brewer));
 })
 
-const brewersData = computed(() =>
+const brewersData = computed<Array<BrewersData>>(() =>
   filteredBrewers.value.map(brewer => ({
     price: formatPrice(brewer.elements.price.value, locale.value),
     productName: brewer.elements.productName.value,
@@ -64,10 +78,10 @@ const brewersData = computed(() =>
   }))
 );
 
-const formatPrice = (price, language) => 
-  price.toLocaleString(language, {
+const formatPrice = (price: number|null, language: string): string => 
+  price?.toLocaleString(language, {
       style: 'currency',
       currency: 'USD'
     }
-  );
+  ) ?? "";
 </script>

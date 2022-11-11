@@ -5,24 +5,27 @@
     ></div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {resolveContentLink} from '../Utilities/ContentLinks'
-import { createRichTextHtmlResolver, linkedItemsHelper } from '@kontent-ai/delivery-sdk';
+import { createRichTextHtmlResolver, linkedItemsHelper, type Elements } from '@kontent-ai/delivery-sdk';
 import { onMounted, onUpdated, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n';
+import type { HostedVideo } from '@/models';
 
-const props = defineProps(['element']);
-const richTextData = ref(null);
+const props = defineProps<{
+  element: Elements.RichTextElement
+}>();
+const richTextData = ref<string | null>(null);
 const router = useRouter();
 const i18n = useI18n()
 
-const handleClick = (e) => {
-  if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
+const handleClick = (e: Event) => {
+  if ((e.target as HTMLElement).tagName === 'A' && (e.target as HTMLElement).hasAttribute('data-item-id')) {
     e.preventDefault();
 
-    const id = e.target.getAttribute('data-item-id');
-    const link = props.element.links.find(m => m.itemId === id);
+    const id = (e.target as HTMLElement).getAttribute('data-item-id');
+    const link = props.element.links.find(m => m.linkId === id);
 
     if (link) {
       const path = resolveContentLink(link);
@@ -38,9 +41,9 @@ const handleClick = (e) => {
 const loadData = () => {
       richTextData.value = createRichTextHtmlResolver().resolveRichText({
         element: props.element,
-        linkedItems: linkedItemsHelper.convertLinkedItemsToArray(props.element.linkedItems),
+        linkedItems: props.element.linkedItems,
         contentItemResolver: (itemCodename, contentItem) => {
-          if(contentItem.system.type === 'tweet'){
+          if(contentItem?.system.type === 'tweet'){
             const tweet = contentItem.elements;
             let tweetLink = tweet.tweetLink.value;
             let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
@@ -60,10 +63,10 @@ const loadData = () => {
 
             return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
           }
-          if (contentItem.system.type === 'hosted_video') {
-            const video = contentItem.elements;
+          if (contentItem?.system.type === 'hosted_video') {
+            const video = (contentItem as HostedVideo).elements;
             if (video.videoHost.value.find(item => item.codename === 'vimeo')) {
-              return `<iframe class="hosted-video__wrapper"
+              return {contentItemHtml:`<iframe class="hosted-video__wrapper"
                                 src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
                                 width="640"
                                 height="360"
@@ -72,7 +75,7 @@ const loadData = () => {
                                 mozallowfullscreen
                                 allowfullscreen
                                 >
-                        </iframe>`;
+                        </iframe>`};
             }
             else if (video.videoHost.value.find(item => item.codename === 'youtube')) {
               return { contentItemHtml: `<iframe class="hosted-video__wrapper"
@@ -86,7 +89,7 @@ const loadData = () => {
             }
           }
 
-          return '<div></div>';
+          return {contentItemHtml: '<div></div>'};
         },
         urlResolver: (linkId, linkText, link) => {
           return {

@@ -15,25 +15,26 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Filter } from '../Utilities/CoffeeFilter'
 import CoffeeFilter from './CoffeeFilter.vue'
 import Coffees from './Coffees.vue'
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import {defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
+import type { Coffee } from '@/models';
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
 const { locale } = useI18n();
-const coffees = ref([]);
-const processings = ref([]);
-const productStatuses = ref([]);
+const coffees = ref<Array<Coffee>>([]);
+const processings = ref<Array<ITaxonomyTerms>>([]);
+const productStatuses = ref<Array<ITaxonomyTerms>>([]);
+const filter = ref<Filter>(new Filter());
 
-const filter = ref(new Filter());
-
-const fetchData = (language) => {
-  const coffeesList = initLanguageCodeObject();
-  var query = Client.items()
+const fetchData = (language: string) => {
+  const coffeesList = initLanguageCodeObjectWithArray<Coffee>();
+  var query = Client.items<Coffee>()
     .type('coffee')
     .orderParameter('elements.product_name', 'desc');
 
@@ -52,7 +53,7 @@ const fetchData = (language) => {
     });
 }
 
-const fetchProcessings = () => {
+const fetchProcessings = (): void => {
   Client.taxonomy('processing')
     .toPromise()
     .then(response => {
@@ -60,7 +61,7 @@ const fetchProcessings = () => {
     });     
 }
 
-const fetchProductStatuses = () => {
+const fetchProductStatuses = (): void => {
   Client.taxonomy('product_status')
     .toPromise()
     .then(response => {
@@ -68,7 +69,7 @@ const fetchProductStatuses = () => {
     });
 }
 
-const setFilter = (newFilter) => {
+const setFilter = (newFilter: Filter): void => {
   filter.value = newFilter
 }
 

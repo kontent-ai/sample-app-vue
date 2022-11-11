@@ -51,6 +51,6 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   const email ='dancinggoat@localhost.local';
 </script>

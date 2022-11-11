@@ -52,22 +52,38 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
 import { computed } from '@vue/reactivity';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
+import type { Cafe } from '@/models';
+
+interface CafeModel {
+  name: string;
+  email: string;
+  imageLink: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  state: string;
+  phone: string;
+  dataAddress: string;
+  countryWithState: string;
+  location: string;
+};
 
 const  { locale } = useI18n();
+const ourCafes = ref<Array<Cafe>>([]);
+const partnerCafes = ref<Array<Cafe>>([]);
 
-const ourCafes = ref([]);
-const partnerCafes = ref([]);
 
-const locations = computed(() => partnerCafesData
+const locations = computed<Array<string>>(() => partnerCafesData
   .value
   .map(model => model.location)
-  .reduce((result, location) => {
+  .reduce<Array<string>>((result, location) => {
     if (result.indexOf(location) < 0) {
       result.push(location);
     }
@@ -75,13 +91,14 @@ const locations = computed(() => partnerCafesData
   }, [])
   .sort());
 
-const partnerCafesData = computed(() => partnerCafes.value.map(cafe => getModel(cafe)));
+const partnerCafesData = computed<Array<CafeModel>>(() => partnerCafes.value.map(cafe => getModel(cafe)));
 
-const ourCafesData = computed(() => ourCafes.value.map(cafe => getModel(cafe)));
+const ourCafesData = computed<Array<CafeModel>>(() => ourCafes.value.map(cafe => getModel(cafe)));
 
-const getModel = (cafe) => {
-  let model = {
+const getModel = (cafe: Cafe): CafeModel => {
+  const  model = {
     name: cafe.system.name,
+    email: cafe.elements.email.value,
     imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
     street: cafe.elements.street.value,
     city: cafe.elements.city.value,
@@ -91,18 +108,22 @@ const getModel = (cafe) => {
     phone: cafe.elements.phone.value
   };
 
-  model.dataAddress = model.city + ', ' + model.street;
-  model.countryWithState =
-    model.country + (model.state ? ', ' + model.state : '');
-  model.location = model.city + ', ' + model.countryWithState;
+  const addressModel = {
+    dataAddress: model.city + ', ' + model.street,
+    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
+  };
 
-  return model;
+  const locationModel = {
+    location: model.city + ', ' + addressModel.countryWithState,
+  };
+
+  return { ...model, ...addressModel, ...locationModel };
 }
 
-const fetchCafes = () => {
-  const cafesList = initLanguageCodeObject();
+const fetchCafes = (): void => {
+  const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items()
+  let query = Client.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

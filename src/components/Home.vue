@@ -20,7 +20,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import LinkButton from './LinkButton.vue'
 import OurStory from './OurStory.vue'
 import Banner from './Banner.vue'

@@ -11,6 +11,9 @@
     </div>
 </template>
 
-<script setup>
-  const {text, link} = defineProps(['text', 'link']);
+<script setup lang="ts">
+  const {text, link} = defineProps<{
+    text: string,
+    link: string
+  }>();
 </script>

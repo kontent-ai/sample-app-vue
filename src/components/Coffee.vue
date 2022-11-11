@@ -54,7 +54,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import RichTextElement from './RichTextElement.vue'
 import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
@@ -62,27 +62,39 @@ import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import type { Elements } from '@kontent-ai/delivery-sdk';
+import type { Coffee } from '@/models';
+
+interface CoffeeData {
+  name: string,
+  imageLink: string,
+  descriptionElement: Elements.RichTextElement | null,
+  farm: string,
+  variety: string,
+  processing: string,
+  altitude: string
+}
 
 const { locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const coffee = ref(null);
+const coffee = ref<Coffee | null>(null);
 
-const coffeeData = computed(() => ({
-  name: coffee ? coffee.value.elements.productName.value : '',
-  imageLink: coffee ? coffee.value.elements.image.value[0].url : '',
-  descriptionElement: coffee ? coffee.value.elements.longDescription : null,
-  farm: coffee ? coffee.value.elements.farm.value : '',
-  variety: coffee ? coffee.value.elements.variety.value : '',
-  processing: coffee && coffee.value.elements.processing.value.length > 0 ? coffee.value.elements.processing.value[0].name : '',
-  altitude: coffee ? coffee.value.elements.altitude.value + ' feet' : ''
+const coffeeData = computed<CoffeeData>(() => ({
+  name: coffee.value?.elements.productName.value ?? '',
+  imageLink: coffee.value?.elements.image.value[0].url ?? '',
+  descriptionElement: coffee.value?.elements.longDescription ?? null,
+  farm: coffee.value?.elements.farm.value ?? '',
+  variety: coffee.value?.elements.variety.value ?? '',
+  processing: coffee.value && coffee.value.elements.processing.value.length > 0 ? coffee.value.elements.processing.value[0].name : '',
+  altitude: coffee.value?.elements.altitude.value + ' feet' ??  ''
 
 }))
 
 const fetchData = () => {
-  var query = Client.items()
+  var query = Client.items<Coffee>()
     .type('coffee')
-    .equalsFilter('url_pattern', route.params.coffeeSlug);
+    .equalsFilter('url_pattern', route.params.coffeeSlug as string);
 
   if(locale.value){
     query.languageParameter(locale.value);

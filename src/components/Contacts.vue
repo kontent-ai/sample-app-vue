@@ -54,22 +54,37 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import {defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
 import VueScrollTo from 'vue-scrollto'
 import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+import type { Cafe } from '@/models';
+import { first } from 'rxjs';
+
+interface CafeModel {
+  name: string;
+  email: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  state: string;
+  phone: string;
+  dataAddress: string;
+  countryWithState: string;
+};
 
 const { locale } = useI18n();
 
-const cafes = ref([]);
-const selectedAddress = ref(null);
+const cafes = ref<Array<Cafe>>([]);
+const selectedAddress = ref<string | null>(null);
 
 const cafeModels = computed(() => cafes.value.map((cafe) => getModel(cafe)));
 
-const firstCafe = computed(() => {
+const firstCafe = computed<CafeModel | null>(() => {
   if(cafes.value.length === 0){
     return null;
   }
@@ -77,18 +92,18 @@ const firstCafe = computed(() => {
   return getModel(cafes.value[0]);
 })
 
-const cafesAddresses = computed(() => {
-  if (cafes.length === 0){
+const cafesAddresses = computed<Array<string>>(() => {
+  if (cafes.value.length === 0){
     return [];
   }
 
-  return cafes.map((cafe) => {
+  return cafes.value.map((cafe) => {
     return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
   })
 })
 
-const getModel = (cafe) => {
-  let model = {
+const getModel = (cafe: Cafe): CafeModel => {
+  const model = {
     name: cafe.system.name,
     street: cafe.elements.street.value,
     city: cafe.elements.city.value,
@@ -99,23 +114,25 @@ const getModel = (cafe) => {
     email: cafe.elements.email.value,
   };
 
-  model.dataAddress = model.city + ', ' + model.street;
-  model.countryWithState = model.country + (model.state ? ', ' + model.state : '');
+  const addressModel = {
+    dataAddress: model.city + ', ' + model.street,
+    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
+  };
 
-  return model;
+  return {...model, ...addressModel};
 }
 
-const handleRoasteryClick = () => {
-  if(selectedAddress === firstCafe.dataAddress){
+const handleRoasteryClick = (): void => {
+  if(selectedAddress.value === firstCafe.value?.dataAddress){
     VueScrollTo.scrollTo('#map');
     return;
   }
 
-  selectedAddress.value = firstCafe.dataAddress
+  selectedAddress.value = firstCafe.value?.dataAddress ?? '';
 }
 
-const handleAddressClick = (model) => {
-  if(selectedAddress === model.dataAddress){
+const handleAddressClick = (model: CafeModel): void => {
+  if(selectedAddress.value === model.dataAddress){
     VueScrollTo.scrollTo('#map');
     return;
   }
@@ -123,9 +140,9 @@ const handleAddressClick = (model) => {
 }
 
 const fetchCafes = () => {
-  const cafesList = initLanguageCodeObject();
+  const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items()
+  let query = Client.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

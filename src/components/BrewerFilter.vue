@@ -52,29 +52,63 @@
     </aside>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import { Filter } from '@/Utilities/BrewerFilter';
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 
+interface ManufacturersData {
+  codename: string,
+  name: string,
+  id: string,
+  checked: boolean
+}
+
+interface PriceRange {
+  min: number,
+  max: number
+}
+
+interface PriceRangesData {
+  id: string,
+  checked: boolean,
+  formattedPriceRange: string,
+  rawPriceRange: PriceRange
+}
+
+interface ProductStatusesData {
+  id: string,
+  name: string,
+  checked: boolean,
+  codename: string
+}
+
 const { locale } = useI18n();
 
-const props = defineProps(['productStatuses', 'manufacturers', 'filter']);
-const emit = defineEmits(['set-filter']);
-const priceRanges = [
+//const props = defineProps(['productStatuses', 'manufacturers', 'filter']);
+const props = defineProps<{
+  productStatuses: Array<ITaxonomyTerms>
+  manufacturers: Array<ITaxonomyTerms>
+  filter: Filter
+}>()
+
+const emit = defineEmits<{(e: 'set-filter', newFilter: Filter) : void}>();
+const priceRanges: Array<PriceRange> = [
   { min: 0, max: 50 },
   { min: 50, max: 250 },
   { min: 250, max: 5000 }
 ];
 
 
-const manufacturersData = computed(() => props.manufacturers.map(manufacturer => ({
+const manufacturersData = computed<Array<ManufacturersData>>(() => props.manufacturers.map(manufacturer => ({
   codename: manufacturer.codename,
   name: manufacturer.name,
   id: 'Manufacturer-' + manufacturer.codename,
   checked: props.filter.manufacturers.includes(manufacturer.codename)
 })));
 
-const priceRangesData = computed(() => priceRanges.map((priceRange, index) => ({
+const priceRangesData = computed<Array<PriceRangesData>>(() => priceRanges.map((priceRange, index) => ({
   id: 'PriceRange-' + index,
   checked:
     props.filter.priceRanges.findIndex(
@@ -87,29 +121,29 @@ const priceRangesData = computed(() => priceRanges.map((priceRange, index) => ({
   rawPriceRange: priceRange
 })));
 
-const productStatusesData = computed(() => props.productStatuses.map(productStatus => ({
+const productStatusesData = computed<Array<ProductStatusesData>>(() => props.productStatuses.map(productStatus => ({
   id: 'ProductStatus-' + productStatus.codename,
   name: productStatus.name,
   checked: props.filter.productStatuses.includes(productStatus.codename),
   codename: productStatus.codename
 })));
 
-const manufacturerOnChange = (codename) => {
+const manufacturerOnChange = (codename: string): void => {
   props.filter.toggleManufacturer(codename);
   emit('set-filter', props.filter);
 }
 
-const priceRangeOnChange = (priceRange) => {
+const priceRangeOnChange = (priceRange: PriceRange): void => {
   props.filter.togglePriceRange(priceRange);
   emit('set-filter', props.filter);
 }
 
-const productStatusOnChange = (codename) => {
+const productStatusOnChange = (codename: string): void => {
   props.filter.toggleProductStatus(codename);
   emit('set-filter', props.filter);
 }
 
-const formatPrice = (price, language) => 
+const formatPrice = (price: number, language: string): string => 
   price.toLocaleString(language, {
     style: 'currency',
     currency: 'USD',

@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { Filter } from '@/Utilities/BrewerFilter';
+import { Filter, type PriceRange } from '@/Utilities/BrewerFilter';
 import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
@@ -65,10 +65,7 @@ interface ManufacturersData {
   checked: boolean
 }
 
-interface PriceRange {
-  min: number,
-  max: number
-}
+
 
 interface PriceRangesData {
   id: string,

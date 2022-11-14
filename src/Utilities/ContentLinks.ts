@@ -1,4 +1,6 @@
-export function resolveContentLink(link, language) {
+import type { ILink } from "@kontent-ai/delivery-sdk";
+
+export const resolveContentLink = (link: ILink, language: string): string => {
   let resultLink;
   switch (link.type) {
   case 'article':

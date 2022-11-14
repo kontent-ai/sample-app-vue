@@ -117,11 +117,6 @@ const i18n = createI18n({
   },
 });
 app.use(i18n);
-// app.use(VueGoogleMaps, {
-//   load: {
-//     key: 'AIzaSyAVOq4C-rf7JVeHt6ws9vsf-KHIRpueASg',
-//   }
-// });
 app.mount('#app')
 
 

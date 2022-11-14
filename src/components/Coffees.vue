@@ -73,7 +73,14 @@ const coffeesData = computed<Array<CoffeesData>>(() => filteredCoffees.value.map
   price: formatPrice(coffee.elements.price.value, locale.value),
   name: coffee.elements.productName.value,
   imageLink: coffee.elements.image.value[0].url,
-  link: resolveContentLink({ type: 'coffee', urlSlug: coffee.elements.urlPattern.value }, locale.value),
+  link: resolveContentLink(
+    { 
+      type: 'coffee', 
+      urlSlug: coffee.elements.urlPattern.value,
+      codename: "",
+      linkId: "" 
+    }, 
+    locale.value),
   hasNoProductStatus: coffee.elements.productStatus.value.length === 0,
   productStatusText: coffee.elements.productStatus.value.map(x => x.name).join(', ')
   }))

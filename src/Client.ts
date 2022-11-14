@@ -10,7 +10,7 @@ const previewApiKey = import.meta.env.VUE_APP_PREVIEW_API_KEY || '';
 
 const sourceTrackingHeaderName = 'X-KC-SOURCE';
 
-const cookies = new Cookies(document.cookies);
+const cookies = new Cookies(document.cookie);
 let currentProjectId = projectId || cookies.get(selectedProjectCookieName);
 if (currentProjectId) {
   cookies.set(selectedProjectCookieName, currentProjectId, { path: '/' });
@@ -24,7 +24,7 @@ let Client = new DeliveryClient({
   projectId: currentProjectId,
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
-  globalQueryConfig: {
+  defaultQueryConfig: {
     usePreviewMode: isPreview()
   },
   globalHeaders: () => [
@@ -36,12 +36,12 @@ let Client = new DeliveryClient({
 });
 
 
-const resetClient = (newProjectId) => {
+const resetClient = (newProjectId: string) => {
   Client = new DeliveryClient({
     projectId: newProjectId,
     propertyNameResolver: camelCasePropertyNameResolver,
     previewApiKey: previewApiKey,
-    globalQueryConfig: {
+    defaultQueryConfig: {
       usePreviewMode: isPreview()
     },
     globalHeaders: () => [
@@ -51,7 +51,7 @@ const resetClient = (newProjectId) => {
       },
     ],
   });
-  const cookies = new Cookies(document.cookies);
+  const cookies = new Cookies(document.cookie);
   cookies.set(selectedProjectCookieName, newProjectId, { path: '/' });
 }
 

@@ -71,7 +71,14 @@ const brewersData = computed<Array<BrewersData>>(() =>
   filteredBrewers.value.map(brewer => ({
     price: formatPrice(brewer.elements.price.value, locale.value),
     productName: brewer.elements.productName.value,
-    link: resolveContentLink({ type: 'brewer', urlSlug: brewer.elements.urlPattern.value }, locale.value),
+    link: resolveContentLink(
+      { 
+        type: 'brewer', 
+        urlSlug: brewer.elements.urlPattern.value,
+        codename: "",
+        linkId: ""
+      }, 
+      locale.value),
     hasNoProductStatus: brewer.elements.productStatus.value.length === 0,
     productStatusText: brewer.elements.productStatus.value.map((x) => x.name).join(', '),
     imageLink: brewer.elements.image.value[0].url

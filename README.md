@@ -22,7 +22,7 @@ This sample wants to showcase either loading content from Kontent.ai as well as 
 
 > Basically, the content that you can't find in the [`Localization`](https://github.com/kontent-ai/sample-app-vue/tree/master/src/Localization) folder is loaded from Kontent.ai.
 
-* The data provided from [`Localization`](https://github.com/kontent-ai/kontent-sample-app-vue/tree/master/src/Localization) are using the `vue-i18n` plugin, so every call in components using `$t('KEYWORD')` in components is loading data from these JSONs as "Banner" section" ([component here](https://github.com/kontent-ai/kontent-sample-app-vue/blob/master/src/components/Banner.vue#L6))
+- The data provided from [`Localization`](https://github.com/kontent-ai/kontent-sample-app-vue/tree/master/src/Localization) are using the `vue-i18n` plugin, so every call in components using `$t('KEYWORD')` in components is loading data from these JSONs as "Banner" section" ([component here](https://github.com/kontent-ai/kontent-sample-app-vue/blob/master/src/components/Banner.vue#L6))
 
 ### Data fetching
 
@@ -55,7 +55,7 @@ To deal with content that is not available in the current language, this project
 var query = Client.items().type('about_us');
 
 if (this.language) {
-    query
+  query
     .languageParameter(this.language)
     .equalsFilter('system.language', 'es-ES');
 }
@@ -108,8 +108,8 @@ You can learn [more about content editing](https://kontent.ai/learn/tutorials/wr
 
 You can retrieve content either through the Kontent.ai Delivery SDKs or the Kontent.ai Delivery API:
 
-* For published content, use `https://deliver.kontent.ai/PROJECT_ID/items`.
-* For unpublished content, use `https://preview-deliver.kontent.ai/PROJECT_ID/items`.
+- For published content, use `https://deliver.kontent.ai/PROJECT_ID/items`.
+- For unpublished content, use `https://preview-deliver.kontent.ai/PROJECT_ID/items`.
 
 For more info about the API, see the [API reference](hhttps://kontent.ai/learn/reference/kontent-apis-overview/).
 

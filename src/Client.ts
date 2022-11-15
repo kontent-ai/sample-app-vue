@@ -1,9 +1,15 @@
 import Cookies from 'universal-cookie';
-import { selectedProjectCookieName, defaultProjectId } from './Utilities/SelectedProject';
+import {
+  selectedProjectCookieName,
+  defaultProjectId,
+} from './Utilities/SelectedProject';
 import packageInfo from '../package.json';
 
 // Kontent.ai
-import { camelCasePropertyNameResolver, DeliveryClient } from '@kontent-ai/delivery-sdk';
+import {
+  camelCasePropertyNameResolver,
+  DeliveryClient,
+} from '@kontent-ai/delivery-sdk';
 
 const projectId = import.meta.env.VUE_APP_PROJECT_ID || '';
 const previewApiKey = import.meta.env.VUE_APP_PREVIEW_API_KEY || '';
@@ -25,7 +31,7 @@ let Client = new DeliveryClient({
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
   defaultQueryConfig: {
-    usePreviewMode: isPreview()
+    usePreviewMode: isPreview(),
   },
   globalHeaders: () => [
     {
@@ -35,14 +41,13 @@ let Client = new DeliveryClient({
   ],
 });
 
-
 const resetClient = (newProjectId: string) => {
   Client = new DeliveryClient({
     projectId: newProjectId,
     propertyNameResolver: camelCasePropertyNameResolver,
     previewApiKey: previewApiKey,
     defaultQueryConfig: {
-      usePreviewMode: isPreview()
+      usePreviewMode: isPreview(),
     },
     globalHeaders: () => [
       {
@@ -53,9 +58,6 @@ const resetClient = (newProjectId: string) => {
   });
   const cookies = new Cookies(document.cookie);
   cookies.set(selectedProjectCookieName, newProjectId, { path: '/' });
-}
-
-export {
-  Client,
-  resetClient
 };
+
+export { Client, resetClient };

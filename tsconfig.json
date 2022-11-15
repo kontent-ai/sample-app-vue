@@ -7,7 +7,7 @@
       "@/*": ["./src/*"]
     },
     "allowJs": true,
-    "importsNotUsedAsValues" : "remove",
+    "importsNotUsedAsValues": "remove",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

@@ -1,4 +1,4 @@
-import type { Coffee, Processing, ProductStatus } from "@/models";
+import type { Coffee, Processing, ProductStatus } from '@/models';
 
 export class Filter {
   processings: Array<string>;
@@ -10,7 +10,9 @@ export class Filter {
   }
 
   matches(coffee: Coffee) {
-    return this.matchesProcessings(coffee) && this.matchesProductStatuses(coffee);
+    return (
+      this.matchesProcessings(coffee) && this.matchesProductStatuses(coffee)
+    );
   }
 
   matchesProcessings(coffee: Coffee) {
@@ -18,9 +20,11 @@ export class Filter {
       return true;
     }
 
-    const processings = coffee.elements.processing.value.map(x => x.codename) as Array<string>;
+    const processings = coffee.elements.processing.value.map(
+      (x) => x.codename
+    ) as Array<string>;
 
-    return this.processings.some(x => processings.includes(x));
+    return this.processings.some((x) => processings.includes(x));
   }
 
   matchesProductStatuses(coffee: Coffee) {
@@ -28,20 +32,24 @@ export class Filter {
       return true;
     }
 
-    const statuses = coffee.elements.productStatus.value.map(x => x.codename) as Array<string>;
+    const statuses = coffee.elements.productStatus.value.map(
+      (x) => x.codename
+    ) as Array<string>;
 
-    return this.productStatuses.some(x => statuses.includes(x));
+    return this.productStatuses.some((x) => statuses.includes(x));
   }
 
   toggleProcessing(processing: string) {
     const index = this.processings.indexOf(processing);
 
-    if (index < 0) this.processings.push(processing); else this.processings.splice(index, 1);
+    if (index < 0) this.processings.push(processing);
+    else this.processings.splice(index, 1);
   }
 
   toggleProductStatus(status: string) {
     const index = this.productStatuses.indexOf(status);
 
-    if (index < 0) this.productStatuses.push(status); else this.productStatuses.splice(index, 1);
+    if (index < 0) this.productStatuses.push(status);
+    else this.productStatuses.splice(index, 1);
   }
 }

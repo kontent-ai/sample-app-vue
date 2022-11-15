@@ -1,55 +1,51 @@
 <template>
-    <div class="container">
-        <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
-        <div class="row">
-            <div
-                v-for="(ourCafe, index) in ourCafesData"
-                class="col-md-6"
-                :key="index"
-            >
-                <div
-                    class="cafe-image-tile js-scroll-to-map"
-                    :data-address="ourCafe.dataAddress"
-                >
-                    <div
-                        class="cafe-image-tile-image-wrapper"
-                        :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }"
-                    >
-                    </div>
-                    <div class="cafe-image-tile-content">
-                        <h3 class="cafe-image-tile-name">{{ourCafe.name}}</h3>
-                        <address class="cafe-tile-address">
-                            <span
-                                :name="ourCafe.name"
-                                class="cafe-tile-address-anchor"
-                            >
-                                {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
-                            </span>
-                        </address>
-                        <p>{{ourCafe.phone}}</p>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <h2>{{ $t('Cafes.ourCafesTitle') }}</h2>
+    <div class="row">
+      <div
+        v-for="(ourCafe, index) in ourCafesData"
+        class="col-md-6"
+        :key="index"
+      >
+        <div
+          class="cafe-image-tile js-scroll-to-map"
+          :data-address="ourCafe.dataAddress"
+        >
+          <div
+            class="cafe-image-tile-image-wrapper"
+            :style="{
+              backgroundImage: ourCafe.imageLink,
+              backgroundSize: 'cover',
+              backgroundPosition: 'right',
+            }"
+          ></div>
+          <div class="cafe-image-tile-content">
+            <h3 class="cafe-image-tile-name">{{ ourCafe.name }}</h3>
+            <address class="cafe-tile-address">
+              <span :name="ourCafe.name" class="cafe-tile-address-anchor">
+                {{ ourCafe.street }}, {{ ourCafe.city }}<br />{{
+                  ourCafe.zipCode
+                }}, {{ ourCafe.countryWithState }}
+              </span>
+            </address>
+            <p>{{ ourCafe.phone }}</p>
+          </div>
         </div>
-        <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
-        <div class="row">
-            <div
-                v-for="(location, index) in locations"
-                :key="index"
-            >
-                <h3>{{location}}</h3>
-                <template
-                  v-for="(partnerCafeModel, index) in partnerCafesData" >
-                <p
-                    :key="index"
-                    v-if="partnerCafeModel.location === location"
-                >
-                    {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
-                </p>
-              </template>
-            </div>
-        </div>
+      </div>
     </div>
+    <h2>{{ $t('Cafes.partnerCafesTitle') }}</h2>
+    <div class="row">
+      <div v-for="(location, index) in locations" :key="index">
+        <h3>{{ location }}</h3>
+        <template v-for="(partnerCafeModel, index) in partnerCafesData">
+          <p :key="index" v-if="partnerCafeModel.location === location">
+            {{ partnerCafeModel.name }}, {{ partnerCafeModel.street }},
+            {{ partnerCafeModel.phone }}
+          </p>
+        </template>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -57,7 +53,11 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
 import { computed } from '@vue/reactivity';
-import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
+import {
+  initLanguageCodeObject,
+  defaultLanguage,
+  initLanguageCodeObjectWithArray,
+} from '../Utilities/LanguageCodes';
 import type { Cafe } from '@/models';
 
 interface CafeModel {
@@ -73,30 +73,34 @@ interface CafeModel {
   dataAddress: string;
   countryWithState: string;
   location: string;
-};
+}
 
-const  { locale } = useI18n();
+const { locale } = useI18n();
 const ourCafes = ref<Array<Cafe>>([]);
 const partnerCafes = ref<Array<Cafe>>([]);
 
+const locations = computed<Array<string>>(() =>
+  partnerCafesData.value
+    .map((model) => model.location)
+    .reduce<Array<string>>((result, location) => {
+      if (result.indexOf(location) < 0) {
+        result.push(location);
+      }
+      return result;
+    }, [])
+    .sort()
+);
 
-const locations = computed<Array<string>>(() => partnerCafesData
-  .value
-  .map(model => model.location)
-  .reduce<Array<string>>((result, location) => {
-    if (result.indexOf(location) < 0) {
-      result.push(location);
-    }
-    return result;
-  }, [])
-  .sort());
+const partnerCafesData = computed<Array<CafeModel>>(() =>
+  partnerCafes.value.map((cafe) => getModel(cafe))
+);
 
-const partnerCafesData = computed<Array<CafeModel>>(() => partnerCafes.value.map(cafe => getModel(cafe)));
-
-const ourCafesData = computed<Array<CafeModel>>(() => ourCafes.value.map(cafe => getModel(cafe)));
+const ourCafesData = computed<Array<CafeModel>>(() =>
+  ourCafes.value.map((cafe) => getModel(cafe))
+);
 
 const getModel = (cafe: Cafe): CafeModel => {
-  const  model = {
+  const model = {
     name: cafe.system.name,
     email: cafe.elements.email.value,
     imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
@@ -105,7 +109,7 @@ const getModel = (cafe: Cafe): CafeModel => {
     zipCode: cafe.elements.zipCode.value,
     country: cafe.elements.country.value,
     state: cafe.elements.state.value,
-    phone: cafe.elements.phone.value
+    phone: cafe.elements.phone.value,
   };
 
   const addressModel = {
@@ -118,7 +122,7 @@ const getModel = (cafe: Cafe): CafeModel => {
   };
 
   return { ...model, ...addressModel, ...locationModel };
-}
+};
 
 const fetchCafes = (): void => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
@@ -131,28 +135,34 @@ const fetchCafes = (): void => {
     query.languageParameter(locale.value);
   }
 
-  query.toPromise()
-    .then(response => {
-      if (locale.value) {
-        cafesList[locale.value] = response.data.items;
-      } else {
-        cafesList[defaultLanguage] = response.data.items;
-      }
+  query.toPromise().then((response) => {
+    if (locale.value) {
+      cafesList[locale.value] = response.data.items;
+    } else {
+      cafesList[defaultLanguage] = response.data.items;
+    }
 
-      ourCafes.value = locale.value ? 
-        cafesList[locale.value].filter((cafe) => cafe.elements.country.value === 'USA') :
-        cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
+    ourCafes.value = locale.value
+      ? cafesList[locale.value].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        )
+      : cafesList[defaultLanguage].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        );
 
-      partnerCafes.value = locale.value ? 
-        cafesList[locale.value].filter((cafe) => cafe.elements.country.value !== 'USA') :
-        cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value !== 'USA');
-    });
-}
+    partnerCafes.value = locale.value
+      ? cafesList[locale.value].filter(
+          (cafe) => cafe.elements.country.value !== 'USA'
+        )
+      : cafesList[defaultLanguage].filter(
+          (cafe) => cafe.elements.country.value !== 'USA'
+        );
+  });
+};
 
 onMounted(() => fetchCafes());
 
 watch(locale, () => {
   fetchCafes();
 });
-
 </script>

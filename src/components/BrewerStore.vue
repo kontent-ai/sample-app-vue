@@ -1,28 +1,29 @@
 <template>
-    <div class="product-page row">
-        <div class="flex">
-            <BrewerFilter 
-                :manufacturers="manufacturers" 
-                :productStatuses="productStatuses"
-                :filter="brewerFilter"
-                @set-filter="setFilter"
-            />
-            <Brewers 
-                :brewers="brewers"
-                :filter="brewerFilter"
-            />
-        </div>
+  <div class="product-page row">
+    <div class="flex">
+      <BrewerFilter
+        :manufacturers="manufacturers"
+        :productStatuses="productStatuses"
+        :filter="brewerFilter"
+        @set-filter="setFilter"
+      />
+      <Brewers :brewers="brewers" :filter="brewerFilter" />
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import BrewerFilter  from './BrewerFilter.vue';
+import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
+import {
+  initLanguageCodeObject,
+  defaultLanguage,
+  initLanguageCodeObjectWithArray,
+} from '../Utilities/LanguageCodes';
 import { Filter } from '../Utilities/BrewerFilter';
 import { useI18n } from 'vue-i18n';
-import {onMounted, ref, watch} from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import type { Brewer } from '@/models';
 import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
@@ -43,46 +44,43 @@ const fetchData = (language: string): void => {
     query.languageParameter(language);
   }
 
-  query.toPromise()
-    .then(response => {
-      if (language) {
-        brewersList[language] = response.data.items;
-      } else {
-        brewersList[defaultLanguage] = response.data.items;
-      }
-      brewers.value = brewersList[language];
-    });
-}
+  query.toPromise().then((response) => {
+    if (language) {
+      brewersList[language] = response.data.items;
+    } else {
+      brewersList[defaultLanguage] = response.data.items;
+    }
+    brewers.value = brewersList[language];
+  });
+};
 
 const fetchManufacturers = (): void => {
   Client.taxonomy('manufacturer')
     .toPromise()
-    .then(response => {
+    .then((response) => {
       manufacturers.value = response.data.taxonomy.terms;
     });
-}
+};
 
 const fetchProductStatuses = (): void => {
   Client.taxonomy('product_status')
     .toPromise()
-    .then(response => {
+    .then((response) => {
       productStatuses.value = response.data.taxonomy.terms;
     });
-}
+};
 
 const setFilter = (newFilter: Filter): void => {
-  brewerFilter.value = newFilter
-}
+  brewerFilter.value = newFilter;
+};
 
 onMounted(() => {
-    fetchData(locale.value);
-    fetchManufacturers();
-    fetchProductStatuses();
-  }
-)
-
-watch(locale, () => {
-  fetchData(locale.value)
+  fetchData(locale.value);
+  fetchManufacturers();
+  fetchProductStatuses();
 });
 
+watch(locale, () => {
+  fetchData(locale.value);
+});
 </script>

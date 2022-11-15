@@ -1,31 +1,36 @@
 <template>
-    <div 
-        v-html="richTextData" 
-        @click="handleClick"
-    ></div>
+  <div v-html="richTextData" @click="handleClick"></div>
 </template>
 
 <script setup lang="ts">
-import {resolveContentLink} from '../Utilities/ContentLinks'
-import { createRichTextHtmlResolver, linkedItemsHelper, type Elements } from '@kontent-ai/delivery-sdk';
+import { resolveContentLink } from '../Utilities/ContentLinks';
+import {
+  createRichTextHtmlResolver,
+  linkedItemsHelper,
+  type Elements,
+type ILink,
+} from '@kontent-ai/delivery-sdk';
 import { onMounted, onUpdated, ref, watch } from 'vue';
-import { useRouter } from 'vue-router'
+import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import type { HostedVideo } from '@/models';
 
 const props = defineProps<{
-  element: Elements.RichTextElement
+  element: Elements.RichTextElement;
 }>();
 const richTextData = ref<string | null>(null);
 const router = useRouter();
-const i18n = useI18n()
+const i18n = useI18n();
 
 const handleClick = (e: Event) => {
-  if ((e.target as HTMLElement).tagName === 'A' && (e.target as HTMLElement).hasAttribute('data-item-id')) {
+  if (
+    (e.target as HTMLElement).tagName === 'A' &&
+    (e.target as HTMLElement).hasAttribute('data-item-id')
+  ) {
     e.preventDefault();
 
     const id = (e.target as HTMLElement).getAttribute('data-item-id');
-    const link = props.element.links.find(m => m.linkId === id);
+    const link = props.element.links.find((m) => m.linkId === id);
 
     if (link) {
       const path = resolveContentLink(link);
@@ -36,37 +41,38 @@ const handleClick = (e: Event) => {
       }
     }
   }
-}
+};
 
 const loadData = () => {
-      richTextData.value = createRichTextHtmlResolver().resolveRichText({
-        element: props.element,
-        linkedItems: props.element.linkedItems,
-        contentItemResolver: (itemCodename, contentItem) => {
-          if(contentItem?.system.type === 'tweet'){
-            const tweet = contentItem.elements;
-            let tweetLink = tweet.tweetLink.value;
-            let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
+  richTextData.value = createRichTextHtmlResolver().resolveRichText({
+    element: props.element,
+    linkedItems: props.element.linkedItems,
+    contentItemResolver: (itemCodename, contentItem) => {
+      if (contentItem?.system.type === 'tweet') {
+        const tweet = contentItem.elements;
+        let tweetLink = tweet.tweetLink.value;
+        let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
 
-            let selectedTheme = tweet.theme.value[0].codename;
-            selectedTheme = selectedTheme ? selectedTheme : 'light';
+        let selectedTheme = tweet.theme.value[0].codename;
+        selectedTheme = selectedTheme ? selectedTheme : 'light';
 
-            setTimeout(() => {
-              window.twttr.widgets.createTweet(
-                tweetID,
-                document.getElementById(`tweet${tweetID}`),
-                {
-                  theme: selectedTheme,
-                }
-              );
-            }, 150);
+        setTimeout(() => {
+          window.twttr.widgets.createTweet(
+            tweetID,
+            document.getElementById(`tweet${tweetID}`),
+            {
+              theme: selectedTheme,
+            }
+          );
+        }, 150);
 
-            return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
-          }
-          if (contentItem?.system.type === 'hosted_video') {
-            const video = (contentItem as HostedVideo).elements;
-            if (video.videoHost.value.find(item => item.codename === 'vimeo')) {
-              return {contentItemHtml:`<iframe class="hosted-video__wrapper"
+        return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
+      }
+      if (contentItem?.system.type === 'hosted_video') {
+        const video = (contentItem as HostedVideo).elements;
+        if (video.videoHost.value.find((item) => item.codename === 'vimeo')) {
+          return {
+            contentItemHtml: `<iframe class="hosted-video__wrapper"
                                 src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
                                 width="640"
                                 height="360"
@@ -75,36 +81,42 @@ const loadData = () => {
                                 mozallowfullscreen
                                 allowfullscreen
                                 >
-                        </iframe>`};
-            }
-            else if (video.videoHost.value.find(item => item.codename === 'youtube')) {
-              return { contentItemHtml: `<iframe class="hosted-video__wrapper"
+                        </iframe>`,
+          };
+        } else if (
+          video.videoHost.value.find((item) => item.codename === 'youtube')
+        ) {
+          return {
+            contentItemHtml: `<iframe class="hosted-video__wrapper"
                                 width="560"
                                 height="315"
                                 src="https://www.youtube.com/embed/${video.videoId.value}"
                                 frameborder="0"
                                 allowfullscreen
                                 >
-                        </iframe>` };
-            }
-          }
-
-          return {contentItemHtml: '<div></div>'};
-        },
-        urlResolver: (linkId, linkText, link) => {
-          return {
-            linkHtml: `<a href="${resolveContentLink(link, i18n.locale.value)}">${linkText}</a>`,
+                        </iframe>`,
           };
-        },
-      }).html;
-    }
+        }
+      }
 
-  onMounted(() => {
-    loadData();
-  });
+      return { contentItemHtml: '<div></div>' };
+    },
+    urlResolver: (linkId, linkText, link) => {
+      return {
+        linkHtml: `<a href="${resolveContentLink(
+          link as ILink,
+          i18n.locale.value
+        )}">${linkText}</a>`,
+      };
+    },
+  }).html;
+};
 
-  onUpdated(() => {
-    loadData();
-  });
+onMounted(() => {
+  loadData();
+});
 
+onUpdated(() => {
+  loadData();
+});
 </script>

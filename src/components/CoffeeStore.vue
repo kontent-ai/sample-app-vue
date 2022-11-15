@@ -1,26 +1,26 @@
 <template>
-    <div class="product-page row">
-        <div class="flex">
-            <CoffeeFilter
-                :processings="processings"
-                :productStatuses="productStatuses"
-                :filter="filter"
-                @set-filter="setFilter"
-            />
-            <Coffees 
-                :coffees="coffees"
-                :filter="filter"
-            />
-        </div>
+  <div class="product-page row">
+    <div class="flex">
+      <CoffeeFilter
+        :processings="processings"
+        :productStatuses="productStatuses"
+        :filter="filter"
+        @set-filter="setFilter"
+      />
+      <Coffees :coffees="coffees" :filter="filter" />
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Filter } from '../Utilities/CoffeeFilter'
-import CoffeeFilter from './CoffeeFilter.vue'
-import Coffees from './Coffees.vue'
+import { Filter } from '../Utilities/CoffeeFilter';
+import CoffeeFilter from './CoffeeFilter.vue';
+import Coffees from './Coffees.vue';
 import { Client } from '../Client.js';
-import {defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes';
+import {
+  defaultLanguage,
+  initLanguageCodeObjectWithArray,
+} from '../Utilities/LanguageCodes';
 import { useI18n } from 'vue-i18n';
 import { onMounted, ref, watch } from 'vue';
 import type { Coffee } from '@/models';
@@ -42,36 +42,35 @@ const fetchData = (language: string) => {
     query.languageParameter(language);
   }
 
-  query.toPromise()
-    .then(response => {
-      if (language) {
-        coffeesList[language] = response.data.items;
-      } else {
-        coffeesList[defaultLanguage] = response.data.items;
-      }
-      coffees.value = coffeesList[language];
-    });
-}
+  query.toPromise().then((response) => {
+    if (language) {
+      coffeesList[language] = response.data.items;
+    } else {
+      coffeesList[defaultLanguage] = response.data.items;
+    }
+    coffees.value = coffeesList[language];
+  });
+};
 
 const fetchProcessings = (): void => {
   Client.taxonomy('processing')
     .toPromise()
-    .then(response => {
+    .then((response) => {
       processings.value = response.data.taxonomy.terms;
-    });     
-}
+    });
+};
 
 const fetchProductStatuses = (): void => {
   Client.taxonomy('product_status')
     .toPromise()
-    .then(response => {
+    .then((response) => {
       productStatuses.value = response.data.taxonomy.terms;
     });
-}
+};
 
 const setFilter = (newFilter: Filter): void => {
-  filter.value = newFilter
-}
+  filter.value = newFilter;
+};
 
 watch(locale, () => {
   fetchData(locale.value);
@@ -84,6 +83,4 @@ onMounted(() => {
   fetchProcessings();
   fetchProductStatuses();
 });
-
 </script>
-

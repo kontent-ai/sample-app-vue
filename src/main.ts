@@ -1,39 +1,39 @@
-import { createApp }  from 'vue'
-import { createRouter, createWebHistory } from 'vue-router'
-import VueScrollTo from 'vue-scrollto'
-import { createI18n } from 'vue-i18n'
+import { createApp } from 'vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import VueScrollTo from 'vue-scrollto';
+import { createI18n } from 'vue-i18n';
 
-import App from './App.vue'
-import Configuration from './components/Admin/Configuration.vue'
-import Home from './components/Home.vue'
-import Store from './components/Store.vue'
-import CoffeeStore from './components/CoffeeStore.vue'
-import BrewerStore from './components/BrewerStore.vue'
-import Articles from './components/Articles.vue'
-import About from './components/About.vue'
-import Cafes from './components/Cafes.vue'
-import Coffee from './components/Coffee.vue'
-import Brewer from './components/Brewer.vue'
-import Contacts from './components/Contacts.vue'
-import Article from './components/Article.vue'
-import NotFound from './components/NotFound.vue'
+import App from './App.vue';
+import Configuration from './components/Admin/Configuration.vue';
+import Home from './components/Home.vue';
+import Store from './components/Store.vue';
+import CoffeeStore from './components/CoffeeStore.vue';
+import BrewerStore from './components/BrewerStore.vue';
+import Articles from './components/Articles.vue';
+import About from './components/About.vue';
+import Cafes from './components/Cafes.vue';
+import Coffee from './components/Coffee.vue';
+import Brewer from './components/Brewer.vue';
+import Contacts from './components/Contacts.vue';
+import Article from './components/Article.vue';
+import NotFound from './components/NotFound.vue';
 
-import { projectConfigurationPath } from './Utilities/SelectedProject'
+import { projectConfigurationPath } from './Utilities/SelectedProject';
 
-import en from './Localization/en-US.json'
-import es from './Localization/es-ES.json'
+import en from './Localization/en-US.json';
+import es from './Localization/es-ES.json';
 
 import './index.css';
 import './components/Admin/Admin.css';
 
 // TODO
 // Vue.config.productionTip = false;
-const  router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
       path: projectConfigurationPath,
-      component: Configuration
+      component: Configuration,
     },
     {
       path: '/',
@@ -58,8 +58,8 @@ const  router = createRouter({
         {
           path: '',
           component: CoffeeStore,
-        }
-      ]
+        },
+      ],
     },
     {
       path: '/:lang(en-us|es-es)/articles',
@@ -89,24 +89,24 @@ const  router = createRouter({
       path: '/:lang(en-us|es-es)/brewers/:brewerSlug',
       component: Brewer,
     },
-    
+
     {
       path: '/:lang(en-us|es-es)/404',
       component: NotFound,
     },
     {
       path: '/:lang(en-us|es-es)/:pathMatch(.*)*',
-      redirect: to => ({ path: `${to.params.lang}/404` })
+      redirect: (to) => ({ path: `${to.params.lang}/404` }),
     },
     {
       path: '/:pathMatch(.*)*',
-      redirect: '/en-us/404'
-    }
-  ]
+      redirect: '/en-us/404',
+    },
+  ],
 });
 
-const app = createApp(App)
-app.use(router)
+const app = createApp(App);
+app.use(router);
 const i18n = createI18n({
   legacy: false,
   locale: 'en-US',
@@ -117,7 +117,4 @@ const i18n = createI18n({
   },
 });
 app.use(i18n);
-app.mount('#app')
-
-
-
+app.mount('#app');

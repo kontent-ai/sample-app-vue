@@ -35,11 +35,6 @@ interface HeroUnitData {
   };
 }
 
-const log = (message: any) => {
-  console.log(message);
-  return true;
-};
-
 const { t, locale } = useI18n();
 
 const heroUnit = ref<HeroUnit | null>(null);
@@ -47,8 +42,6 @@ const heroUnitData = computed<HeroUnitData | null>(() => {
   if (heroUnit.value === null) {
     return null;
   }
-
-  console.log(heroUnit.value?.elements);
 
   return {
     bannerHeading: heroUnit.value?.elements.title.value ?? t('Banner.loading'),

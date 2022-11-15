@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="
-      this.$route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()
+      route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()
     "
     id="app"
     class="application-content"
@@ -15,7 +15,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import Cookies from 'universal-cookie';
 import qs from 'qs';
 
@@ -42,7 +42,6 @@ const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
 
-console.log(language);
 
 onBeforeMount(() => {
   const cookies = new Cookies(document.cookie);
@@ -56,11 +55,11 @@ onMounted(() => {
   infoMessageText.value = getInfoMessage();
 });
 
-const getInfoMessage = () => {
-  return qs.parse(location.search.slice(1)).infoMessage;
+const getInfoMessage = (): string => {
+  return qs.parse(location.search.slice(1)).infoMessage as string;
 };
 
-const changeLang = (newLanguage) => {
+const changeLang = (newLanguage: string) => {
   if (
     i18n.locale.value === newLanguage ||
     languageCodes.indexOf(newLanguage) < 0

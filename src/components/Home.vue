@@ -3,11 +3,20 @@
     <Banner />
 
     <LatestArticles />
-    <LinkButton :text="$t('Home.moreArticles')" :link="latestArticlesLink" />
+    <LinkButton
+      :text="$t('Home.moreArticles')"
+      :link="latestArticlesLink"
+    />
     <OurStory />
-    <LinkButton :text="$t('Home.aboutLinkText')" :link="ourStoryLink" />
+    <LinkButton
+      :text="$t('Home.aboutLinkText')"
+      :link="ourStoryLink"
+    />
     <TasteOurCoffee />
-    <LinkButton :text="$t('Home.cafesLinkText')" :link="tasterOurCoffeeLink" />
+    <LinkButton
+      :text="$t('Home.cafesLinkText')"
+      :link="tasterOurCoffeeLink"
+    />
   </div>
 </template>
 
@@ -18,7 +27,7 @@ import Banner from './Banner.vue';
 import LatestArticles from './LatestArticles.vue';
 import TasteOurCoffee from './TasteOurCoffee.vue';
 import { useI18n } from 'vue-i18n';
-import { computed } from '@vue/reactivity';
+import { computed } from 'vue';
 
 const { locale } = useI18n();
 const latestArticlesLink = computed(

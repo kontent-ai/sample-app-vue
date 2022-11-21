@@ -4,7 +4,7 @@
     <div class="col-sm-12">
       <div
         class="ourstory-section center-text"
-        v-bind:style="sectionStyleObject"
+        :style="sectionStyleObject"
       >
         {{ t('OurStory.text') }}
       </div>

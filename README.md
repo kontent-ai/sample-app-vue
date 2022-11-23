@@ -13,8 +13,8 @@ This is a sample website written in JavaScript utilizing the Kontent.ai Delivery
 2. Clone the sample application repository.
 3. Navigate to the root folder of the application in the command line.
 4. Type `npm install` to install required npm packages.
-5. Type `npm run serve` to start a development server.
-6. The application opens in your browser at <http://localhost:8080>.
+5. Type `npm run dev` to start a development server.
+6. The application opens in your browser at <http://localhost:5173>.
 
 ### Data origin
 

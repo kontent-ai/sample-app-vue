@@ -77,14 +77,6 @@ import { onMounted, ref, watch } from 'vue';
 import { computed } from '@vue/reactivity';
 import type { Article } from '@/models';
 
-interface ArticleData {
-  imageLink: string;
-  postDate: string;
-  summary: string;
-  title: string;
-  link: string;
-}
-
 const { t, locale } = useI18n();
 const articleCount = 5;
 const articles = ref<Array<Article>>([]);

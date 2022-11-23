@@ -121,7 +121,6 @@ const getWindowCenterPosition = (windowWidth: number, windowHeight: number) => {
 const currentProjectInputValue = ref('');
 const preparingProject = ref(false);
 const sampleProjectItemCount = ref(0);
-// const unsubscribeSubject =  ref(new Subject());
 const thisDefaultProjectId = ref(defaultProjectId);
 const thisKontentLogo = ref(kontentLogo);
 const cookies = new Cookies(document.cookie);
@@ -141,12 +140,6 @@ const handleSetProjectSubmit = (event: Event) => {
   const newProjectId = currentProjectInputValue;
   setNewProjectId(newProjectId.value);
 };
-
-// const unsubscribe = () => {
-//   unsubscribeSubject.value.next();
-//   unsubscribeSubject.value.complete();
-//   unsubscribeSubject.value = new Subject();
-// }
 
 const getSampleProjectItemCount = () => {
   resetClient(thisDefaultProjectId.value);

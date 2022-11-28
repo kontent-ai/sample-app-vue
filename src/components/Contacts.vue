@@ -1,160 +1,174 @@
 <template>
-    <div class="container">
-        <div class="col-md-12">
-            <h2 class="contact-title">{{$t('Contacts.roasteryTitle')}}</h2>
-            <ul
-                v-if="firstCafe"
-                class="contact-info"
-            >
-                <li>{{firstCafe.phone}}</li>
-                <li><a
-                    :href="'mailto:' + firstCafe.email"
-                    target="_top"
-                >{{firstCafe.email}}</a></li>
-                <li>
-                    <a
-                        @click="handleRoasteryClick"
-                        :data-address="firstCafe.dataAddress"
-                        class="js-scroll-to-map"
-                    >{{firstCafe.dataAddress}},<br/>
-                        {{firstCafe.zipCode}}, {{firstCafe.countryWithState}}<br/>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        <div>
-            <h2>{{$t('Contacts.ourCafesTitle')}}</h2>
-            <div class="row">
-                <div
-                    v-for="(model, index) in cafeModels"
-                    class="col-md-6 col-lg-3"
-                    :key="index"
-                >
-                    <div
-                        @click="handleAddressClick(model)"
-                        class="cafe-tile cursor-hand js-scroll-to-map"
-                        :data-address="model.dataAddress"
-                    >
-                        <div class="cafe-tile-content">
-                            <h3 class="cafe-tile-name">{{model.name}}</h3>
-                            <address class="cafe-tile-address">
-                                <a
-                                    :name="model.name"
-                                    class="cafe-tile-address-anchor"
-                                >
-                                    {{model.street}}, {{model.city}}<br/>{{model.zipCode}}, {{model.countryWithState}}
-                                </a>
-                            </address>
-                            <p>{{model.phone}}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <h2 class="map-title">{{$t('Contacts.mapTitle')}}</h2>
-        <ContactMap
-            :cafesAddresses="cafesAddresses"
-            :focusOnAddress="selectedAddress"
-        />
+  <div class="container">
+    <div class="col-md-12">
+      <h2 class="contact-title">{{ $t('Contacts.roasteryTitle') }}</h2>
+      <ul v-if="firstCafe" class="contact-info">
+        <li>{{ firstCafe.phone }}</li>
+        <li>
+          <a :href="'mailto:' + firstCafe.email" target="_top">{{
+            firstCafe.email
+          }}</a>
+        </li>
+        <li>
+          <p
+            @click="handleRoasteryClick"
+            :data-address="firstCafe.dataAddress"
+            class="js-scroll-to-map"
+          >
+            {{ firstCafe.dataAddress }},<br />
+            {{ firstCafe.zipCode }}, {{ firstCafe.countryWithState }}<br />
+          </p>
+        </li>
+      </ul>
     </div>
+    <div>
+      <h2>{{ $t('Contacts.ourCafesTitle') }}</h2>
+      <div class="row">
+        <div
+          v-for="(model, index) in cafeModels"
+          class="col-md-6 col-lg-3"
+          :key="index"
+        >
+          <div
+            @click="handleAddressClick(model)"
+            class="cafe-tile cursor-hand js-scroll-to-map"
+            :data-address="model.dataAddress"
+          >
+            <div class="cafe-tile-content">
+              <h3 class="cafe-tile-name">{{ model.name }}</h3>
+              <address class="cafe-tile-address">
+                <p :name="model.name" class="cafe-tile-address-anchor">
+                  {{ model.street }}, {{ model.city }}<br />{{ model.zipCode }},
+                  {{ model.countryWithState }}
+                </p>
+              </address>
+              <p>{{ model.phone }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
-import ContactMap from './ContactMap.vue'
-import VueScrollTo from 'vue-scrollto'
+import {
+  defaultLanguage,
+  initLanguageCodeObjectWithArray,
+} from '../Utilities/LanguageCodes';
+import VueScrollTo from 'vue-scrollto';
+import { useI18n } from 'vue-i18n';
+import { computed } from '@vue/reactivity';
+import { onMounted, ref, watch } from 'vue';
+import type { Cafe } from '@/models';
+import { first } from 'rxjs';
 
-export default {
-  name: 'Contacts',
-  props: ['language'],
-  data: () => ({
-    cafes: [],
-    selectedAddress: null,
-  }),
-  computed: {
-    cafeModels: function () {
-      return this.cafes.map((cafe) => this.getModel(cafe));
-    },
-    firstCafe: function () {
-      if(this.cafes.length === 0){
-        return null;
-      }
-      return this.getModel(this.cafes[0]);
-    },
-    cafesAddresses: function(){
-      if (this.cafes.length === 0){
-        return [];
-      }
-      return this.cafes.map((cafe) => {
-        return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
-      })
-    }
-  },
-  watch: {
-    language: function(){
-      this.fetchCafes();
-    }
-  },
-  methods: {
-    getModel: function (cafe) {
-      let model = {
-        name: cafe.system.name,
-        street: cafe.elements.street.value,
-        city: cafe.elements.city.value,
-        zipCode: cafe.elements.zipCode.value,
-        country: cafe.elements.country.value,
-        state: cafe.elements.state.value,
-        phone: cafe.elements.phone.value,
-        email: cafe.elements.email.value,
-      };
-      model.dataAddress = model.city + ', ' + model.street;
-      model.countryWithState = model.country + (model.state ? ', ' + model.state : '');
-      return model;
-    },
-    handleRoasteryClick: function(){
-      if(this.selectedAddress === this.firstCafe.dataAddress){
-        VueScrollTo.scrollTo('#map');
-        return;
-      }
-      this.selectedAddress = this.firstCafe.dataAddress
-    },
-    handleAddressClick: function(model){
-      if(this.selectedAddress === model.dataAddress){
-        VueScrollTo.scrollTo('#map');
-        return;
-      }
-      this.selectedAddress = model.dataAddress
-    },
-    fetchCafes() {
-      const cafesList = initLanguageCodeObject();
-
-      let query = Client.items()
-        .type('cafe')
-        .orderParameter('elements.name', 'desc');
-
-      if (this.language) {
-        query.languageParameter(this.language);
-      }
-
-      query.toPromise()
-        .then(response => {
-          if (this.language) {
-            cafesList[this.language] = response.data.items;
-          } else {
-            cafesList[defaultLanguage] = response.data.items;
-          }
-          this.cafes = this.language ? 
-            cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
-            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
-        });
-    }
-  },
-  mounted: function() {
-    this.fetchCafes();
-  },
-  components: {
-    ContactMap,
-  },
+interface CafeModel {
+  name: string;
+  email: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  state: string;
+  phone: string;
+  dataAddress: string;
+  countryWithState: string;
 }
+
+const { locale } = useI18n();
+
+const cafes = ref<Array<Cafe>>([]);
+const selectedAddress = ref<string | null>(null);
+
+const cafeModels = computed(() => cafes.value.map((cafe) => getModel(cafe)));
+
+const firstCafe = computed<CafeModel | null>(() => {
+  if (cafes.value.length === 0) {
+    return null;
+  }
+
+  return getModel(cafes.value[0]);
+});
+
+const cafesAddresses = computed<Array<string>>(() => {
+  if (cafes.value.length === 0) {
+    return [];
+  }
+
+  return cafes.value.map((cafe) => {
+    return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
+  });
+});
+
+const getModel = (cafe: Cafe): CafeModel => {
+  const model = {
+    name: cafe.system.name,
+    street: cafe.elements.street.value,
+    city: cafe.elements.city.value,
+    zipCode: cafe.elements.zipCode.value,
+    country: cafe.elements.country.value,
+    state: cafe.elements.state.value,
+    phone: cafe.elements.phone.value,
+    email: cafe.elements.email.value,
+  };
+
+  const addressModel = {
+    dataAddress: model.city + ', ' + model.street,
+    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
+  };
+
+  return { ...model, ...addressModel };
+};
+
+const handleRoasteryClick = (): void => {
+  if (selectedAddress.value === firstCafe.value?.dataAddress) {
+    VueScrollTo.scrollTo('#map');
+    return;
+  }
+
+  selectedAddress.value = firstCafe.value?.dataAddress ?? '';
+};
+
+const handleAddressClick = (model: CafeModel): void => {
+  if (selectedAddress.value === model.dataAddress) {
+    VueScrollTo.scrollTo('#map');
+    return;
+  }
+  selectedAddress.value = model.dataAddress;
+};
+
+const fetchCafes = () => {
+  const cafesList = initLanguageCodeObjectWithArray<Cafe>();
+
+  let query = Client.items<Cafe>()
+    .type('cafe')
+    .orderParameter('elements.name', 'desc');
+
+  if (locale.value) {
+    query.languageParameter(locale.value);
+  }
+
+  query.toPromise().then((response) => {
+    if (locale.value) {
+      cafesList[locale.value] = response.data.items;
+    } else {
+      cafesList[defaultLanguage] = response.data.items;
+    }
+    cafes.value = locale.value
+      ? cafesList[locale.value].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        )
+      : cafesList[defaultLanguage].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        );
+  });
+};
+
+onMounted(() => fetchCafes());
+
+watch(locale, () => {
+  fetchCafes();
+});
 </script>

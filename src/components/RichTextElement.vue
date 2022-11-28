@@ -1,75 +1,78 @@
 <template>
-    <div 
-        v-html="richTextData" 
-        @click="handleClick"
-    />
+  <div v-html="richTextData" @click="handleClick"></div>
 </template>
 
-<script>
-import {resolveContentLink} from '../Utilities/ContentLinks'
-import { createRichTextHtmlResolver, linkedItemsHelper } from '@kontent-ai/delivery-sdk';
+<script setup lang="ts">
+import { resolveContentLink } from '../Utilities/ContentLinks';
+import {
+  createRichTextHtmlResolver,
+  linkedItemsHelper,
+  type Elements,
+type ILink,
+} from '@kontent-ai/delivery-sdk';
+import { onMounted, onUpdated, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import type { HostedVideo } from '@/models';
 
-export default {
-  name: 'RichTextElement',
-  props: ['element'],
-  data: () => ({
-    richTextData: null
-  }),
-  mounted: function() {
-    this.loadData();
-  },
-  watch: { 
-    element: function() {
-      this.loadData();
-    }
-  },
-  methods: {
-    handleClick: function(e){
-      if (e.target.tagName === 'A' && e.target.hasAttribute('data-item-id')) {
-        e.preventDefault();
+const props = defineProps<{
+  element: Elements.RichTextElement;
+}>();
+const richTextData = ref<string | null>(null);
+const router = useRouter();
+const i18n = useI18n();
 
-        const id = e.target.getAttribute('data-item-id');
-        const link = this.element.links.find(m => m.itemId === id);
+const handleClick = (e: Event) => {
+  if (
+    (e.target as HTMLElement).tagName === 'A' &&
+    (e.target as HTMLElement).hasAttribute('data-item-id')
+  ) {
+    e.preventDefault();
 
-        if (link) {
-          const path = resolveContentLink(link);
-          const language = this.$i18n.locale;
+    const id = (e.target as HTMLElement).getAttribute('data-item-id');
+    const link = props.element.links.find((m) => m.linkId === id);
 
-          if (path) {
-            this.$router.push(`/${language}${path}`);
-          }
-        }
+    if (link) {
+      const path = resolveContentLink(link);
+      const language = i18n.locale;
+
+      if (path) {
+        router.push(`/${language}${path}`);
       }
-    },
-    loadData: function() {
-      this.richTextData = createRichTextHtmlResolver().resolveRichText({
-        element: this.element,
-        linkedItems: linkedItemsHelper.convertLinkedItemsToArray(this.element.linkedItems),
-        contentItemResolver: (itemCodename, contentItem) => {
-          if(contentItem.system.type === 'tweet'){
-            const tweet = contentItem.elements;
-            let tweetLink = tweet.tweetLink.value;
-            let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
+    }
+  }
+};
 
-            let selectedTheme = tweet.theme.value[0].codename;
-            selectedTheme = selectedTheme ? selectedTheme : 'light';
+const loadData = () => {
+  richTextData.value = createRichTextHtmlResolver().resolveRichText({
+    element: props.element,
+    linkedItems: props.element.linkedItems,
+    contentItemResolver: (itemCodename, contentItem) => {
+      if (contentItem?.system.type === 'tweet') {
+        const tweet = contentItem.elements;
+        let tweetLink = tweet.tweetLink.value;
+        let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
 
-            setTimeout(() => {
-              window.twttr.widgets.createTweet(
-                tweetID,
-                document.getElementById(`tweet${tweetID}`),
-                {
-                  theme: selectedTheme,
-                }
-              );
-            }, 150);
+        let selectedTheme = tweet.theme.value[0].codename;
+        selectedTheme = selectedTheme ? selectedTheme : 'light';
 
-            return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
-          }
-          if (contentItem.system.type === 'hosted_video') {
-            const video = contentItem.elements;
-            if (video.videoHost.value.find(item => item.codename === 'vimeo')) {
-              return `<iframe class="hosted-video__wrapper"
+        setTimeout(() => {
+          window.twttr.widgets.createTweet(
+            tweetID,
+            document.getElementById(`tweet${tweetID}`),
+            {
+              theme: selectedTheme,
+            }
+          );
+        }, 150);
+
+        return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
+      }
+      if (contentItem?.system.type === 'hosted_video') {
+        const video = (contentItem as HostedVideo).elements;
+        if (video.videoHost.value.find((item) => item.codename === 'vimeo')) {
+          return {
+            contentItemHtml: `<iframe class="hosted-video__wrapper"
                                 src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
                                 width="640"
                                 height="360"
@@ -78,30 +81,42 @@ export default {
                                 mozallowfullscreen
                                 allowfullscreen
                                 >
-                        </iframe>`;
-            }
-            else if (video.videoHost.value.find(item => item.codename === 'youtube')) {
-              return { contentItemHtml: `<iframe class="hosted-video__wrapper"
+                        </iframe>`,
+          };
+        } else if (
+          video.videoHost.value.find((item) => item.codename === 'youtube')
+        ) {
+          return {
+            contentItemHtml: `<iframe class="hosted-video__wrapper"
                                 width="560"
                                 height="315"
                                 src="https://www.youtube.com/embed/${video.videoId.value}"
                                 frameborder="0"
                                 allowfullscreen
                                 >
-                        </iframe>` };
-            }
-          }
-
-          return '<div></div>';
-        },
-        urlResolver: (linkId, linkText, link) => {
-          return {
-            linkHtml: `<a href="${resolveContentLink(link, this.$i18n.locale)}">${linkText}</a>`,
+                        </iframe>`,
           };
-        },
-      }).html;
+        }
+      }
 
-    }
-  }
-}
+      return { contentItemHtml: '<div></div>' };
+    },
+    urlResolver: (linkId, linkText, link) => {
+      return {
+        linkHtml: `<a href="${resolveContentLink(
+          link as ILink,
+          i18n.locale.value
+        )}">${linkText}</a>`,
+      };
+    },
+  }).html;
+};
+
+onMounted(() => {
+  loadData();
+});
+
+onUpdated(() => {
+  loadData();
+});
 </script>

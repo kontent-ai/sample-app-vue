@@ -1,137 +1,168 @@
 <template>
-    <div class="container">
-        <h2>{{$t('Cafes.ourCafesTitle')}}</h2>
-        <div class="row">
-            <div
-                v-for="(ourCafe, index) in ourCafesData"
-                class="col-md-6"
-                :key="index"
-            >
-                <div
-                    class="cafe-image-tile js-scroll-to-map"
-                    :data-address="ourCafe.dataAddress"
-                >
-                    <div
-                        class="cafe-image-tile-image-wrapper"
-                        :style="{ backgroundImage: ourCafe.imageLink, backgroundSize: 'cover', backgroundPosition: 'right' }"
-                    >
-                    </div>
-                    <div class="cafe-image-tile-content">
-                        <h3 class="cafe-image-tile-name">{{ourCafe.name}}</h3>
-                        <address class="cafe-tile-address">
-                            <span
-                                :name="ourCafe.name"
-                                class="cafe-tile-address-anchor"
-                            >
-                                {{ourCafe.street}}, {{ourCafe.city}}<br/>{{ourCafe.zipCode}}, {{ourCafe.countryWithState}}
-                            </span>
-                        </address>
-                        <p>{{ourCafe.phone}}</p>
-                    </div>
-                </div>
-            </div>
+  <div class="container">
+    <h2>{{ $t('Cafes.ourCafesTitle') }}</h2>
+    <div class="row">
+      <div
+        v-for="(ourCafe, index) in ourCafesData"
+        class="col-md-6"
+        :key="index"
+      >
+        <div
+          class="cafe-image-tile js-scroll-to-map"
+          :data-address="ourCafe.dataAddress"
+        >
+          <div
+            class="cafe-image-tile-image-wrapper"
+            :style="{
+              backgroundImage: ourCafe.imageLink,
+              backgroundSize: 'cover',
+              backgroundPosition: 'right',
+            }"
+          ></div>
+          <div class="cafe-image-tile-content">
+            <h3 class="cafe-image-tile-name">{{ ourCafe.name }}</h3>
+            <address class="cafe-tile-address">
+              <span :name="ourCafe.name" class="cafe-tile-address-anchor">
+                {{ ourCafe.street }}, {{ ourCafe.city }}<br />{{
+                  ourCafe.zipCode
+                }}, {{ ourCafe.countryWithState }}
+              </span>
+            </address>
+            <p>{{ ourCafe.phone }}</p>
+          </div>
         </div>
-        <h2>{{$t('Cafes.partnerCafesTitle')}}</h2>
-        <div class="row">
-            <div
-                v-for="(location, index) in locations"
-                :key="index"
-            >
-                <h3>{{location}}</h3>
-                <p
-                    v-for="(partnerCafeModel, index) in partnerCafesData"
-                    :key="index"
-                    v-if="partnerCafeModel.location === location"
-                >
-                    {{partnerCafeModel.name}}, {{partnerCafeModel.street}}, {{partnerCafeModel.phone}}
-                </p>
-            </div>
-        </div>
+      </div>
     </div>
+    <h2>{{ $t('Cafes.partnerCafesTitle') }}</h2>
+    <div class="row">
+      <div v-for="(location, index) in locations" :key="index">
+        <h3>{{ location }}</h3>
+        <template v-for="(partnerCafeModel, index) in partnerCafesData">
+          <p :key="index" v-if="partnerCafeModel.location === location">
+            {{ partnerCafeModel.name }}, {{ partnerCafeModel.street }},
+            {{ partnerCafeModel.phone }}
+          </p>
+        </template>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Client } from '../Client.js';
-import { initLanguageCodeObject, defaultLanguage } from '../Utilities/LanguageCodes';
+import { computed } from '@vue/reactivity';
+import {
+  initLanguageCodeObject,
+  defaultLanguage,
+  initLanguageCodeObjectWithArray,
+} from '../Utilities/LanguageCodes';
+import type { Cafe } from '@/models';
 
-export default {
-  name: 'Cafes',
-  props: ['language'],
-  data: () => ({
-    ourCafes: [],
-    partnerCafes: []
-  }),
-  computed: {
-    locations: function() {
-      return this.partnerCafesData
-        .map(model => model.location)
-        .reduce((result, location) => {
-          if (result.indexOf(location) < 0) {
-            result.push(location);
-          }
-          return result;
-        }, [])
-        .sort();
-    },
-    partnerCafesData: function() {
-      return this.partnerCafes.map(cafe => this.getModel(cafe));
-    },
-    ourCafesData: function() {
-      return this.ourCafes.map(cafe => this.getModel(cafe));
-    }
-  },
-  watch: {
-    language: function() {
-      this.fetchCafes()
-    }
-  },
-  methods: {
-    getModel: function(cafe) {
-      let model = {
-        name: cafe.system.name,
-        imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
-        street: cafe.elements.street.value,
-        city: cafe.elements.city.value,
-        zipCode: cafe.elements.zipCode.value,
-        country: cafe.elements.country.value,
-        state: cafe.elements.state.value,
-        phone: cafe.elements.phone.value
-      };
-      model.dataAddress = model.city + ', ' + model.street;
-      model.countryWithState =
-        model.country + (model.state ? ', ' + model.state : '');
-      model.location = model.city + ', ' + model.countryWithState;
-      return model;
-    },
-    fetchCafes() {
-      const cafesList = initLanguageCodeObject();
+interface CafeModel {
+  name: string;
+  email: string;
+  imageLink: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  state: string;
+  phone: string;
+  dataAddress: string;
+  countryWithState: string;
+  location: string;
+}
 
-      let query = Client.items()
-        .type('cafe')
-        .orderParameter('elements.name', 'desc');
+const { locale } = useI18n();
+const ourCafes = ref<Array<Cafe>>([]);
+const partnerCafes = ref<Array<Cafe>>([]);
 
-      if (this.language) {
-        query.languageParameter(this.language);
+const locations = computed<Array<string>>(() =>
+  partnerCafesData.value
+    .map((model) => model.location)
+    .reduce<Array<string>>((result, location) => {
+      if (result.indexOf(location) < 0) {
+        result.push(location);
       }
+      return result;
+    }, [])
+    .sort()
+);
 
-      query.toPromise()
-        .then(response => {
-          if (this.language) {
-            cafesList[this.language] = response.data.items;
-          } else {
-            cafesList[defaultLanguage] = response.data.items;
-          }
-          this.ourCafes = this.language ? 
-            cafesList[this.language].filter((cafe) => cafe.elements.country.value === 'USA') :
-            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value === 'USA');
-          this.partnerCafes = this.language ? 
-            cafesList[this.language].filter((cafe) => cafe.elements.country.value !== 'USA') :
-            cafesList[defaultLanguage].filter((cafe) => cafe.elements.country.value !== 'USA');
-        });
-    }
-  },
-  mounted: function() {
-    this.fetchCafes();
-  },
+const partnerCafesData = computed<Array<CafeModel>>(() =>
+  partnerCafes.value.map((cafe) => getModel(cafe))
+);
+
+const ourCafesData = computed<Array<CafeModel>>(() =>
+  ourCafes.value.map((cafe) => getModel(cafe))
+);
+
+const getModel = (cafe: Cafe): CafeModel => {
+  const model = {
+    name: cafe.system.name,
+    email: cafe.elements.email.value,
+    imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
+    street: cafe.elements.street.value,
+    city: cafe.elements.city.value,
+    zipCode: cafe.elements.zipCode.value,
+    country: cafe.elements.country.value,
+    state: cafe.elements.state.value,
+    phone: cafe.elements.phone.value,
+  };
+
+  const addressModel = {
+    dataAddress: model.city + ', ' + model.street,
+    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
+  };
+
+  const locationModel = {
+    location: model.city + ', ' + addressModel.countryWithState,
+  };
+
+  return { ...model, ...addressModel, ...locationModel };
 };
+
+const fetchCafes = (): void => {
+  const cafesList = initLanguageCodeObjectWithArray<Cafe>();
+
+  let query = Client.items<Cafe>()
+    .type('cafe')
+    .orderParameter('elements.name', 'desc');
+
+  if (locale.value) {
+    query.languageParameter(locale.value);
+  }
+
+  query.toPromise().then((response) => {
+    if (locale.value) {
+      cafesList[locale.value] = response.data.items;
+    } else {
+      cafesList[defaultLanguage] = response.data.items;
+    }
+
+    ourCafes.value = locale.value
+      ? cafesList[locale.value].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        )
+      : cafesList[defaultLanguage].filter(
+          (cafe) => cafe.elements.country.value === 'USA'
+        );
+
+    partnerCafes.value = locale.value
+      ? cafesList[locale.value].filter(
+          (cafe) => cafe.elements.country.value !== 'USA'
+        )
+      : cafesList[defaultLanguage].filter(
+          (cafe) => cafe.elements.country.value !== 'USA'
+        );
+  });
+};
+
+onMounted(() => fetchCafes());
+
+watch(locale, () => {
+  fetchCafes();
+});
 </script>

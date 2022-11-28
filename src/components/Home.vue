@@ -1,41 +1,40 @@
 <template>
-    <div class="container">
-        <banner :language="language"/>
-        <latest-articles :language="language"/>
-        <link-button 
-            :text="$t('Home.moreArticles')" 
-            :link="`/${language.toLowerCase()}/articles`"
-        />
-        <our-story/>
-        <link-button 
-            :text="$t('Home.aboutLinkText')" 
-            :link="`/${language.toLowerCase()}/about`"
-        />
-        <taste-our-coffee :language="language"/>
-        <link-button 
-            :text="$t('Home.cafesLinkText')" 
-            :link="`/${language.toLowerCase()}/cafes`"
-        />
-    </div>
+  <div class="container">
+    <Banner />
+
+    <LatestArticles />
+    <LinkButton
+      :text="$t('Home.moreArticles')"
+      :link="latestArticlesLink"
+    />
+    <OurStory />
+    <LinkButton
+      :text="$t('Home.aboutLinkText')"
+      :link="ourStoryLink"
+    />
+    <TasteOurCoffee />
+    <LinkButton
+      :text="$t('Home.cafesLinkText')"
+      :link="tasterOurCoffeeLink"
+    />
+  </div>
 </template>
 
-<script>
-import Banner from './Banner'
-import LatestArticles from './LatestArticles'
-import LinkButton from './LinkButton'
-import OurStory from './OurStory'
-import TasteOurCoffee from './TasteOurCoffee'
+<script setup lang="ts">
+import LinkButton from './LinkButton.vue';
+import OurStory from './OurStory.vue';
+import Banner from './Banner.vue';
+import LatestArticles from './LatestArticles.vue';
+import TasteOurCoffee from './TasteOurCoffee.vue';
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
-export default {
-  name: 'Home',
-  props: ['language'],
-  components: {
-    Banner,
-    LatestArticles,
-    LinkButton,
-    OurStory,
-    TasteOurCoffee,
-  },
-}
+const { locale } = useI18n();
+const latestArticlesLink = computed(
+  () => `/${locale.value.toLowerCase()}/articles`
+);
+const ourStoryLink = computed(() => `/${locale.value.toLowerCase()}/about`);
+const tasterOurCoffeeLink = computed(
+  () => `/${locale.value.toLowerCase()}/cafes`
+);
 </script>
-

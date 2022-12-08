@@ -15,7 +15,6 @@
 <script setup lang="ts">
 import { Client } from '../Client.js';
 import {
-  initLanguageCodeObject,
   defaultLanguage,
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';

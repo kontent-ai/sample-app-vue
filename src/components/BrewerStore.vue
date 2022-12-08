@@ -17,7 +17,6 @@ import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
 import { Client } from '../Client.js';
 import {
-  initLanguageCodeObject,
   defaultLanguage,
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';

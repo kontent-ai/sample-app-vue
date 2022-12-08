@@ -1,4 +1,4 @@
-import type { Coffee, Processing, ProductStatus } from '@/models';
+import type { Coffee } from '@/models';
 
 export class Filter {
   processings: Array<string>;

@@ -59,21 +59,8 @@ import {
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';
 import type { Cafe } from '@/models';
-
-interface CafeModel {
-  name: string;
-  email: string;
-  imageLink: string;
-  street: string;
-  city: string;
-  zipCode: string;
-  country: string;
-  state: string;
-  phone: string;
-  dataAddress: string;
-  countryWithState: string;
-  location: string;
-}
+import type { CafeModel } from '@/ViewModels/CafeModel';
+import { getCafeModel } from '@/Utilities/CafeListing';
 
 const { locale } = useI18n();
 const ourCafes = ref<Array<Cafe>>([]);
@@ -92,37 +79,14 @@ const locations = computed<Array<string>>(() =>
 );
 
 const partnerCafesData = computed<Array<CafeModel>>(() =>
-  partnerCafes.value.map((cafe) => getModel(cafe))
+  partnerCafes.value.map((cafe) => getCafeModel(cafe))
 );
 
 const ourCafesData = computed<Array<CafeModel>>(() =>
-  ourCafes.value.map((cafe) => getModel(cafe))
+  ourCafes.value.map((cafe) => getCafeModel(cafe))
 );
 
-const getModel = (cafe: Cafe): CafeModel => {
-  const model = {
-    name: cafe.system.name,
-    email: cafe.elements.email.value,
-    imageLink: 'url(' + cafe.elements.photo.value[0].url + ')',
-    street: cafe.elements.street.value,
-    city: cafe.elements.city.value,
-    zipCode: cafe.elements.zipCode.value,
-    country: cafe.elements.country.value,
-    state: cafe.elements.state.value,
-    phone: cafe.elements.phone.value,
-  };
 
-  const addressModel = {
-    dataAddress: model.city + ', ' + model.street,
-    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
-  };
-
-  const locationModel = {
-    location: model.city + ', ' + addressModel.countryWithState,
-  };
-
-  return { ...model, ...addressModel, ...locationModel };
-};
 
 const fetchCafes = (): void => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();

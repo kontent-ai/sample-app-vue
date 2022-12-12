@@ -40,7 +40,6 @@
 <script setup lang="ts">
 import dateFormat from 'dateformat';
 import {
-  initLanguageCodeObject,
   defaultLanguage,
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';

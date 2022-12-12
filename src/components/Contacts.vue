@@ -62,34 +62,23 @@ import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import type { Cafe } from '@/models';
-import { first } from 'rxjs';
+import type { CafeModel } from '@/ViewModels/CafeModel';
+import { getCafeModel } from '@/Utilities/CafeListing';
 
-interface CafeModel {
-  name: string;
-  email: string;
-  street: string;
-  city: string;
-  zipCode: string;
-  country: string;
-  state: string;
-  phone: string;
-  dataAddress: string;
-  countryWithState: string;
-}
 
 const { locale } = useI18n();
 
 const cafes = ref<Array<Cafe>>([]);
 const selectedAddress = ref<string | null>(null);
 
-const cafeModels = computed(() => cafes.value.map((cafe) => getModel(cafe)));
+const cafeModels = computed(() => cafes.value.map((cafe) => getCafeModel(cafe)));
 
 const firstCafe = computed<CafeModel | null>(() => {
   if (cafes.value.length === 0) {
     return null;
   }
 
-  return getModel(cafes.value[0]);
+  return getCafeModel(cafes.value[0]);
 });
 
 const cafesAddresses = computed<Array<string>>(() => {
@@ -101,26 +90,6 @@ const cafesAddresses = computed<Array<string>>(() => {
     return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
   });
 });
-
-const getModel = (cafe: Cafe): CafeModel => {
-  const model = {
-    name: cafe.system.name,
-    street: cafe.elements.street.value,
-    city: cafe.elements.city.value,
-    zipCode: cafe.elements.zipCode.value,
-    country: cafe.elements.country.value,
-    state: cafe.elements.state.value,
-    phone: cafe.elements.phone.value,
-    email: cafe.elements.email.value,
-  };
-
-  const addressModel = {
-    dataAddress: model.city + ', ' + model.street,
-    countryWithState: model.country + (model.state ? ', ' + model.state : ''),
-  };
-
-  return { ...model, ...addressModel };
-};
 
 const handleRoasteryClick = (): void => {
   if (selectedAddress.value === firstCafe.value?.dataAddress) {

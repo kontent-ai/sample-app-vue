@@ -9,6 +9,12 @@
       class="banner-text"
       :element="heroUnitData?.bannerText"
     />
+    <div class="banner-text">
+      <NewRichText
+        v-if="heroUnitData"
+        :value="heroUnitData?.bannerText.value"
+      />
+    </div>
   </section>
 </template>
 
@@ -19,6 +25,7 @@ import {
   initLanguageCodeObjectWithArray,
 } from '../Utilities/LanguageCodes';
 import RichTextElement from './RichTextElement.vue';
+import NewRichText from './NewRichText.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';

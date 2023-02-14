@@ -5,11 +5,8 @@ import {
   isLinkedItem,
   type IDomNode,
 } from 'kontent-rich-text-to-json-converter/src';
-import { type VNode, h, render } from 'vue';
-import {
-  type ElementModels,
-  type IContentItem,
-} from '@kontent-ai/delivery-sdk';
+import { type VNode, h } from 'vue';
+import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
 
 export default {
@@ -69,7 +66,7 @@ export default {
                 }, 150);
 
                 // TODO Think wha this is rendered as simple string -> wee need to feed it somehow
-                return `<div id="tweet${tweetID}"></div>`;
+                return h('div', { id: `tweet${tweetID}` }); // `<div id="tweet${tweetID}"></div>`;
               }
               case 'hosted_video': {
                 const video = (linkedItem as HostedVideo).elements;
@@ -78,31 +75,53 @@ export default {
                     (item) => item.codename === 'vimeo'
                   )
                 ) {
-                  return `<iframe class="hosted-video__wrapper"
-                                src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
-                                width="640"
-                                height="360"
-                                frameborder="0"
-                                webkitallowfullscreen
-                                mozallowfullscreen
-                                allowfullscreen
-                                >
-                        </iframe>`;
+                  return h('iframe', {
+                    src: `https://player.vimeo.com/video/${video.videoId.value}?title =0&byline=0&portrait=0`,
+                    width: 640,
+                    height: 360,
+                    frameborder: 0,
+                    webkitallowfullscreen: true,
+                    mozallowfullscreen: true,
+                    allowfullscreen: true,
+                  });
+                  //  `<iframe class="hosted-video__wrapper"
+                  //           src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
+                  //           width="640"
+                  //           height="360"
+                  //           frameborder="0"
+                  //           webkitallowfullscreen
+                  //           mozallowfullscreen
+                  //           allowfullscreen
+                  //           >
+                  //   </iframe>`;
                 } else if (
                   video.videoHost.value.find(
                     (item) => item.codename === 'youtube'
                   )
                 ) {
-                  return `<iframe class="hosted-video__wrapper"
-                                width="560"
-                                height="315"
-                                src="https://www.youtube.com/embed/${video.videoId.value}"
-                                frameborder="0"
-                                allowfullscreen
-                                >
-                        </iframe>`;
+                  return h('iframe', {
+                    src: `https://www.youtube.com/embed/${video.videoId.value}`,
+                    width: 640,
+                    height: 315,
+                    frameborder: 0,
+                    allowfullscreen: true,
+                  });
+                  // return `<iframe class="hosted-video__wrapper"
+                  //               width="560"
+                  //               height="315"
+                  //               src="https://www.youtube.com/embed/${video.videoId.value}"
+                  //               frameborder="0"
+                  //               allowfullscreen
+                  //               >
+                  //       </iframe>`;
                 } else {
-                  return `<div style="backgroundColor: red">ERROR</div>`;
+                  return h(
+                    'div',
+                    {
+                      style: 'backgroundColor: red',
+                    },
+                    'ERROR'
+                  );
                 }
               }
               default:

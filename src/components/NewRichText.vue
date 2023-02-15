@@ -5,9 +5,10 @@ import {
   isLinkedItem,
   type IDomNode,
 } from 'kontent-rich-text-to-json-converter/src';
-import { type VNode, h } from 'vue';
+import { type VNode, h, type Component } from 'vue';
 import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
+import Video from './Video.vue';
 
 export default {
   name: 'NewRichText',
@@ -30,7 +31,7 @@ export default {
       });
 
       // TODO
-      const link = (domNode: IDomNode): string | VNode => {
+      const link = (domNode: IDomNode): string | VNode | Component => {
         if (domNode.type === 'tag') {
           // TODO Recursion vs. cycle
           const childElements = domNode.children.map((node) => link(node));
@@ -75,36 +76,22 @@ export default {
                     (item) => item.codename === 'vimeo'
                   )
                 ) {
-                  return h('iframe', {
-                    src: `https://player.vimeo.com/video/${video.videoId.value}?title =0&byline=0&portrait=0`,
+                  return h(Video, {
+                    src: `https://player.vimeo.com/video/${video.videoId.value}?title=0&byline=0&portrait=0`,
                     width: 640,
                     height: 360,
-                    frameborder: 0,
-                    webkitallowfullscreen: true,
-                    mozallowfullscreen: true,
-                    allowfullscreen: true,
+                    frameBorder: 0,
                   });
-                  //  `<iframe class="hosted-video__wrapper"
-                  //           src="https://player.vimeo.com/video/${video.videoId.value}?title =0&byline =0&portrait =0"
-                  //           width="640"
-                  //           height="360"
-                  //           frameborder="0"
-                  //           webkitallowfullscreen
-                  //           mozallowfullscreen
-                  //           allowfullscreen
-                  //           >
-                  //   </iframe>`;
                 } else if (
                   video.videoHost.value.find(
                     (item) => item.codename === 'youtube'
                   )
                 ) {
-                  return h('iframe', {
+                  return h(Video, {
                     src: `https://www.youtube.com/embed/${video.videoId.value}`,
                     width: 640,
                     height: 315,
                     frameborder: 0,
-                    allowfullscreen: true,
                   });
                   // return `<iframe class="hosted-video__wrapper"
                   //               width="560"

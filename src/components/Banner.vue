@@ -4,11 +4,6 @@
     v-bind:style="heroUnitData?.sectionStyleObject"
   >
     <h2 class="banner-heading">{{ heroUnitData?.bannerHeading }}</h2>
-    <RichTextElement
-      v-if="heroUnitData"
-      class="banner-text"
-      :element="heroUnitData?.bannerText"
-    />
     <div class="banner-text">
       <NewRichText
         v-if="heroUnitData"

@@ -1,5 +1,9 @@
 <script lang="ts">
-import { RichTextBrowserParser, isLinkedItem, type IDomNode } from '@pokornyd/kontent-ai-rich-text-parser';
+import {
+  RichTextBrowserParser,
+  isLinkedItem,
+  type IDomNode,
+} from '@pokornyd/kontent-ai-rich-text-parser';
 import { type VNode, h, type Component } from 'vue';
 import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
@@ -24,6 +28,7 @@ export default {
 
       // TODO
       const link = (domNode: IDomNode): string | VNode | Component => {
+        console.log(domNode.type);
         if (domNode.type === 'tag') {
           // TODO Recursion vs. cycle
           const childElements = domNode.children.map((node) => link(node));
@@ -113,9 +118,9 @@ export default {
           // TODO -> is that correct approach
           const element = h(domNode.tagName, domNode.attributes, childElements);
           return element;
-        }
-
-        if (domNode.type === 'text') {
+        } else if (domNode.type === 'text') {
+          debugger;
+          console.log(domNode);
           return domNode.content;
         }
 

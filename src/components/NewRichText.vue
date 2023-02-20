@@ -1,10 +1,5 @@
-import type { AboutUs from '@/models';
 <script lang="ts">
-import { RichTextResolver } from 'kontent-rich-text-to-json-converter';
-import {
-  isLinkedItem,
-  type IDomNode,
-} from 'kontent-rich-text-to-json-converter/src';
+import { RichTextBrowserParser, isLinkedItem, type IDomNode } from '@pokornyd/kontent-ai-rich-text-parser';
 import { type VNode, h, type Component } from 'vue';
 import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
@@ -25,10 +20,7 @@ export default {
   },
   computed: {
     resolvedValue() {
-      const parsedTree = new RichTextResolver().parse({
-        value: this.value,
-        // Other inputs
-      });
+      const parsedTree = new RichTextBrowserParser().parse(this.value);
 
       // TODO
       const link = (domNode: IDomNode): string | VNode | Component => {
@@ -130,7 +122,7 @@ export default {
         throw new Error('Undefined state');
       };
 
-      return parsedTree.childNodes.map(link);
+      return parsedTree.children.map(link);
     },
   },
   render() {

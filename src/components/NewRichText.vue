@@ -3,11 +3,13 @@ import {
   RichTextBrowserParser,
   isLinkedItem,
   type IDomNode,
+RichTextNodeParser,
 } from '@pokornyd/kontent-ai-rich-text-parser';
 import { type VNode, h, type Component } from 'vue';
 import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
 import Video from './Video.vue';
+import { parse } from 'qs';
 
 export default {
   name: 'NewRichText',
@@ -24,11 +26,11 @@ export default {
   },
   computed: {
     resolvedValue() {
-      const parsedTree = new RichTextBrowserParser().parse(this.value);
+
+      const parsedTree = new RichTextNodeParser().parse(this.value);
 
       // TODO
-      const link = (domNode: IDomNode): string | VNode | Component => {
-        console.log(domNode.type);
+      const link = (domNode: IDomNode): string | VNode => {
         if (domNode.type === 'tag') {
           // TODO Recursion vs. cycle
           const childElements = domNode.children.map((node) => link(node));
@@ -88,16 +90,8 @@ export default {
                     src: `https://www.youtube.com/embed/${video.videoId.value}`,
                     width: 640,
                     height: 315,
-                    frameborder: 0,
+                    frameBorder: 0,
                   });
-                  // return `<iframe class="hosted-video__wrapper"
-                  //               width="560"
-                  //               height="315"
-                  //               src="https://www.youtube.com/embed/${video.videoId.value}"
-                  //               frameborder="0"
-                  //               allowfullscreen
-                  //               >
-                  //       </iframe>`;
                 } else {
                   return h(
                     'div',
@@ -114,13 +108,12 @@ export default {
           }
 
           // TODO For non-pair element like <br/> to avoid error? as in React
+          // TODO For non-pair element like <br/> to avoid error? as in React
 
           // TODO -> is that correct approach
           const element = h(domNode.tagName, domNode.attributes, childElements);
           return element;
         } else if (domNode.type === 'text') {
-          debugger;
-          console.log(domNode);
           return domNode.content;
         }
 

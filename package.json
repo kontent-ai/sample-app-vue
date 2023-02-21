@@ -19,7 +19,7 @@
   "dependencies": {
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@kontent-ai/delivery-sdk": "^12.2.0",
-    "@pokornyd/kontent-ai-rich-text-parser": "^0.0.12",
+    "@pokornyd/kontent-ai-rich-text-parser": "^0.0.13",
     "dateformat": "^5.0.3",
     "qs": "^6.11.0",
     "rxjs": "^7.5.6",

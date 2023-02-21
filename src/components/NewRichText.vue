@@ -3,9 +3,8 @@ import {
   RichTextBrowserParser,
   isLinkedItem,
   type IDomNode,
-  RichTextNodeParser,
 } from '@pokornyd/kontent-ai-rich-text-parser';
-import { type VNode, h, type Component } from 'vue';
+import { type VNode, h } from 'vue';
 import { type IContentItem } from '@kontent-ai/delivery-sdk';
 import type { HostedVideo } from '@/models';
 import Video from './Video.vue';
@@ -17,7 +16,7 @@ const props = defineProps<{
 }>();
 
 const resolvedContent = () => {
-  const parsedTree = new RichTextNodeParser().parse(props.value);
+  const parsedTree = new RichTextBrowserParser().parse(props.value);
 
   const link = (domNode: IDomNode): string | VNode => {
     if (domNode.type === 'tag') {

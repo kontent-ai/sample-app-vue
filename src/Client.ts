@@ -21,10 +21,6 @@ const previewApiKey = import.meta.env.VITE_VUE_APP_PREVIEW_API_KEY || '';
 const getProjectIdFromEnvironment = (): string | null | undefined => {
   const projectIdFromEnv = import.meta.env.VITE_VUE_APP_PROJECT_ID;
 
-  if (projectIdFromEnv === undefined) {
-    return undefined;
-  }
-
   if (projectIdFromEnv && !validator.isUUID(projectIdFromEnv)) {
     console.error(
       `Your projectId (${projectIdFromEnv}) given in your environment variables is not a valid GUID.`

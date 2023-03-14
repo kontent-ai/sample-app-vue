@@ -1,6 +1,7 @@
 <template>
+  <div v-if="getProjectIdFromEnvironment() === null">Your projectId given in your environment variables is not a valid GUID.</div>
   <div
-    v-if="
+    v-else-if="
       route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()
     "
     id="app"
@@ -16,16 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import Cookies from 'universal-cookie';
 import qs from 'qs';
 
 import HeaderVue from './components/Header.vue';
 import FooterVue from './components/Footer.vue';
 
-import {
-  selectedProjectCookieName,
-  projectConfigurationPath,
-} from './Utilities/SelectedProject';
+import {projectConfigurationPath} from './Utilities/SelectedProject';
 
 import {
   languageCodes,
@@ -34,6 +31,7 @@ import {
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
+import { getProjectIdFromEnvironment, getProjectIdFromCookies } from './Client';
 
 const infoMessageText = ref('');
 
@@ -44,10 +42,11 @@ const route = useRoute();
 
 
 onBeforeMount(() => {
-  const cookies = new Cookies(document.cookie);
-  const projectId = cookies.get(selectedProjectCookieName);
-  if (!projectId) {
-    router.push(projectConfigurationPath);
+  if (
+    getProjectIdFromEnvironment() === undefined &&
+    !getProjectIdFromCookies()
+  ) {
+    router.push(projectConfigurationPath)
   }
 });
 
@@ -98,4 +97,5 @@ watch(route, (oldValue, newValue) => {
       ];
   }
 });
+
 </script>

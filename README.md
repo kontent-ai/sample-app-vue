@@ -32,7 +32,7 @@ If you want to change the source Kontent.ai project, follow these steps:
 2. Under Production environment settings, choose API keys.
 3. Copy your Project ID.
 4. Create and open a `.env.local` file in the sample application folder.
-5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
+5. On the first line, add your Project ID constant using the format `VITE_VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
 6. Save the file.
 
 Now, when you run the application, it will retrieve the content from your sample project. This setup has a higher priority than [setting your sample project via the Configuration page](#connecting-to-your-sample-project).

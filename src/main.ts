@@ -1,30 +1,27 @@
-import { createApp } from 'vue';
-import { createRouter, createWebHistory } from 'vue-router';
-import VueScrollTo from 'vue-scrollto';
-import { createI18n } from 'vue-i18n';
-
-import App from './App.vue';
-import Configuration from './components/Admin/Configuration.vue';
-import Home from './components/Home.vue';
-import Store from './components/Store.vue';
-import CoffeeStore from './components/CoffeeStore.vue';
-import BrewerStore from './components/BrewerStore.vue';
-import Articles from './components/Articles.vue';
-import About from './components/About.vue';
-import Cafes from './components/Cafes.vue';
-import Coffee from './components/Coffee.vue';
-import Brewer from './components/Brewer.vue';
-import Contacts from './components/Contacts.vue';
-import Article from './components/Article.vue';
-import NotFound from './components/NotFound.vue';
-
-import { projectConfigurationPath } from './Utilities/SelectedProject';
-
-import en from './Localization/en-US.json';
-import es from './Localization/es-ES.json';
-
 import './index.css';
 import './components/Admin/Admin.css';
+
+import { createApp } from 'vue';
+import { createI18n } from 'vue-i18n';
+import { createRouter, createWebHistory } from 'vue-router';
+
+import App from './App.vue';
+import About from './components/About.vue';
+import Configuration from './components/Admin/Configuration.vue';
+import Article from './components/Article.vue';
+import Articles from './components/Articles.vue';
+import Brewer from './components/Brewer.vue';
+import BrewerStore from './components/BrewerStore.vue';
+import Cafes from './components/Cafes.vue';
+import Coffee from './components/Coffee.vue';
+import CoffeeStore from './components/CoffeeStore.vue';
+import Contacts from './components/Contacts.vue';
+import Home from './components/Home.vue';
+import NotFound from './components/NotFound.vue';
+import Store from './components/Store.vue';
+import en from './Localization/en-US.json';
+import es from './Localization/es-ES.json';
+import { projectConfigurationPath } from './Utilities/SelectedProject';
 
 // TODO
 // Vue.config.productionTip = false;
@@ -41,6 +38,10 @@ const router = createRouter({
     },
     {
       path: '/:lang(en-us|es-es)',
+      component: Home,
+    },
+    {
+      path: '/?infoMessage=:infoMessage(.*)',
       component: Home,
     },
     {

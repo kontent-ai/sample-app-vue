@@ -13,18 +13,17 @@
 </template>
 
 <script setup lang="ts">
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import type { Coffee } from '@/models';
+
+import { Client } from '../Client.js';
 import { Filter } from '../Utilities/CoffeeFilter';
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import CoffeeFilter from './CoffeeFilter.vue';
 import Coffees from './Coffees.vue';
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import type { Coffee } from '@/models';
-import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
 const { locale } = useI18n();
 const coffees = ref<Array<Coffee>>([]);
@@ -34,7 +33,7 @@ const filter = ref<Filter>(new Filter());
 
 const fetchData = (language: string) => {
   const coffeesList = initLanguageCodeObjectWithArray<Coffee>();
-  var query = Client.items<Coffee>()
+  const query = Client.items<Coffee>()
     .type('coffee')
     .orderParameter('elements.product_name', 'desc');
 

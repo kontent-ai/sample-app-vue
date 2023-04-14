@@ -49,18 +49,16 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Client } from '../Client.js';
-import { computed } from '@vue/reactivity';
-import {
-  initLanguageCodeObject,
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
+
 import type { Cafe } from '@/models';
-import type { CafeModel } from '@/ViewModels/CafeModel';
 import { getCafeModel } from '@/Utilities/CafeListing';
+import type { CafeModel } from '@/ViewModels/CafeModel';
+
+import { Client } from '../Client.js';
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 const { locale } = useI18n();
 const ourCafes = ref<Array<Cafe>>([]);
@@ -70,7 +68,7 @@ const locations = computed<Array<string>>(() =>
   partnerCafesData.value
     .map((model) => model.location)
     .reduce<Array<string>>((result, location) => {
-      if (result.indexOf(location) < 0) {
+      if (!result.includes(location)) {
         result.push(location);
       }
       return result;
@@ -91,7 +89,7 @@ const ourCafesData = computed<Array<CafeModel>>(() =>
 const fetchCafes = (): void => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items<Cafe>()
+  const query = Client.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

@@ -45,15 +45,17 @@
 </template>
 
 <script setup lang="ts">
-import RichTextElement from './RichTextElement.vue';
-import { Client } from '../Client.js';
-import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
-import { useI18n } from 'vue-i18n';
+import type { Elements } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import type { Elements } from '@kontent-ai/delivery-sdk';
+
 import type { Coffee } from '@/models';
+
+import { Client } from '../Client.js';
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
+import RichTextElement from './RichTextElement.vue';
 
 interface CoffeeData {
   name: string;
@@ -80,11 +82,11 @@ const coffeeData = computed<CoffeeData>(() => ({
     coffee.value && coffee.value.elements.processing.value.length > 0
       ? coffee.value.elements.processing.value[0].name
       : '',
-  altitude: coffee.value?.elements.altitude.value + ' feet' ?? '',
+  altitude: coffee.value?.elements.altitude.value ? coffee.value.elements.altitude.value + ' feet' : '',
 }));
 
 const fetchData = () => {
-  var query = Client.items<Coffee>()
+  const query = Client.items<Coffee>()
     .type('coffee')
     .equalsFilter('url_pattern', route.params.coffeeSlug as string);
 

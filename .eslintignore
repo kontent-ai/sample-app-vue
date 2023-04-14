@@ -1,2 +1,5 @@
 node_modules
 .vscode
+/src/models/*
+vite.config.ts
+dist

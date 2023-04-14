@@ -37,20 +37,19 @@
 </template>
 
 <script setup lang="ts">
-import dateFormat from 'dateformat';
-import {
-  initLanguageCodeObject,
-  defaultLanguage,
-} from '../Utilities/LanguageCodes';
-import RichTextElement from './RichTextElement.vue';
-import { Client } from '../Client.js';
-import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { computed } from '@vue/reactivity';
-import type { Article } from '@/models';
 import type { Elements } from '@kontent-ai/delivery-sdk';
+import { computed } from '@vue/reactivity';
+import dateFormat from 'dateformat';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+
+import type { Article } from '@/models';
+
+import { Client } from '../Client.js';
+import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
+import RichTextElement from './RichTextElement.vue';
 
 interface ArticleData {
   title: string;
@@ -67,11 +66,11 @@ const articleData = computed<ArticleData | null>(() => {
   }
 
   return {
-    title: article.value?.elements.title.value ?? t('Article.noTitleValue'),
-    imageLink: article.value?.elements.teaserImage.value[0].url,
-    postDate: formatDate(article.value?.elements.postDate.value ?? ''),
+    title: article.value.elements.title.value,
+    imageLink: article.value.elements.teaserImage.value[0].url,
+    postDate: formatDate(article.value.elements.postDate.value ?? ''),
     bodyCopyElement:
-      article.value?.elements.bodyCopy ?? t('Article.noBodyCopyValue'),
+      article.value.elements.bodyCopy,
   };
 });
 
@@ -87,7 +86,7 @@ const formatDate = (value: string) =>
 const fetchArticle = (articleId: string) => {
   const articleDetails = initLanguageCodeObject<Article>();
 
-  let query = Client.items<Article>()
+  const query = Client.items<Article>()
     .type('article')
     .equalsFilter('system.id', articleId)
     .elementsParameter([

@@ -56,10 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { Filter, type PriceRange } from '@/Utilities/BrewerFilter';
 import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
+
+import { type PriceRange,Filter } from '@/Utilities/BrewerFilter';
 
 interface ManufacturersData {
   codename: string;
@@ -91,7 +92,7 @@ const props = defineProps<{
   filter: Filter;
 }>();
 
-const emit = defineEmits<{ (e: 'set-filter', newFilter: Filter): void }>();
+const emit = defineEmits<(e: 'set-filter', newFilter: Filter) => void>();
 const priceRanges: Array<PriceRange> = [
   { min: 0, max: 50 },
   { min: 50, max: 250 },

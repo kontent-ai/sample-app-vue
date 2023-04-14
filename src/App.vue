@@ -18,20 +18,15 @@
 
 <script setup lang="ts">
 import qs from 'qs';
-
-import HeaderVue from './components/Header.vue';
-import FooterVue from './components/Footer.vue';
-
-import {projectConfigurationPath} from './Utilities/SelectedProject';
-
-import {
-  languageCodes,
-  languageCodesLowerCase,
-} from './Utilities/LanguageCodes';
 import { onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { getProjectIdFromEnvironment, getProjectIdFromCookies } from './Client';
+
+import { getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
+import FooterVue from './components/Footer.vue';
+import HeaderVue from './components/Header.vue';
+import { languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
+import {projectConfigurationPath} from './Utilities/SelectedProject';
 
 const infoMessageText = ref('');
 
@@ -61,7 +56,7 @@ const getInfoMessage = (): string => {
 const changeLang = (newLanguage: string) => {
   if (
     i18n.locale.value === newLanguage ||
-    languageCodes.indexOf(newLanguage) < 0
+    !languageCodes.includes(newLanguage)
   ) {
     return;
   }
@@ -70,7 +65,7 @@ const changeLang = (newLanguage: string) => {
   const currentLanguage = route.path.split('/')[1];
 
   if (
-    languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
+    languageCodesLowerCase.includes(currentLanguage.toLocaleLowerCase())
   ) {
     urlParts[1] = newLanguage;
   } else {
@@ -86,11 +81,11 @@ watch(route, (oldValue, newValue) => {
   const newLanguage = newValue.path.split('/')[1];
   if (
     language === newLanguage ||
-    languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0
+    !languageCodesLowerCase.includes(newLanguage.toLocaleLowerCase())
   ) {
     return;
   }
-  if (languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1) {
+  if (languageCodesLowerCase.includes(newLanguage.toLocaleLowerCase())) {
     i18n.locale.value =
       languageCodes[
         languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase())

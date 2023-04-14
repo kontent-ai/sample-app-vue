@@ -13,18 +13,17 @@
 </template>
 
 <script setup lang="ts">
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import type { Brewer } from '@/models';
+
+import { Client } from '../Client.js';
+import { Filter } from '../Utilities/BrewerFilter';
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import { Filter } from '../Utilities/BrewerFilter';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import type { Brewer } from '@/models';
-import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
 const { locale } = useI18n();
 
@@ -35,7 +34,7 @@ const brewerFilter = ref<Filter>(new Filter());
 
 const fetchData = (language: string): void => {
   const brewersList = initLanguageCodeObjectWithArray<Brewer>();
-  var query = Client.items<Brewer>()
+  const query = Client.items<Brewer>()
     .type('brewer')
     .orderParameter('elements.product_name', 'desc');
 

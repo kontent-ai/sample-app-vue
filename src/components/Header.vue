@@ -67,7 +67,8 @@
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
-import { useI18n, type Locale } from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
+
 import MessageBox from './MessageBox.vue';
 
 const { locale } = useI18n();

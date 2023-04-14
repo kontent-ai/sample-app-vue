@@ -40,18 +40,16 @@
 </template>
 
 <script setup lang="ts">
-import {
-  defaultLanguage,
-  initLanguageCodeObject,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import RichTextElement from './RichTextElement.vue';
-import { Client } from '../Client.js';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import { computed } from '@vue/reactivity';
 import type { Elements } from '@kontent-ai/delivery-sdk';
+import { computed } from '@vue/reactivity';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import type { AboutUs, FactAboutUs } from '@/models';
+
+import { Client } from '../Client.js';
+import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
+import RichTextElement from './RichTextElement.vue';
 
 interface FactsData {
   title: string;
@@ -71,7 +69,7 @@ const factsData = computed<Array<FactsData>>(() =>
 
 const fetchFacts = (): void => {
   const factsList = initLanguageCodeObject<AboutUs>();
-  var query = Client.items<AboutUs>().type('about_us');
+  const query = Client.items<AboutUs>().type('about_us');
 
   if (locale.value) {
     query.languageParameter(locale.value);

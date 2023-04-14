@@ -83,26 +83,19 @@
 <script setup lang="ts">
 import Cookies from 'universal-cookie';
 import validator from 'validator';
-
-import SpinnerBox from '../SpinnerBox.vue';
-
-import { resetClient, Client } from '../../Client';
-import {
-  defaultProjectId,
-  selectedProjectCookieName,
-} from '../../Utilities/SelectedProject';
-
-import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+
+import { Client,resetClient } from '../../Client';
+import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
+import { defaultProjectId, selectedProjectCookieName } from '../../Utilities/SelectedProject'
+import SpinnerBox from '../SpinnerBox.vue';
 
 const router = useRouter();
 
 const getWindowCenterPosition = (windowWidth: number, windowHeight: number) => {
-  const dualScreenLeft =
-    window.screenLeft !== undefined ? window.screenLeft : window.screenX;
-  const dualScreenTop =
-    window.screenTop !== undefined ? window.screenTop : window.screenY;
+  const dualScreenLeft = window.screenLeft
+  const dualScreenTop = window.screenTop
   const screenWidth = window.innerWidth
     ? window.innerWidth
     : document.documentElement.clientWidth
@@ -197,9 +190,7 @@ const redirectToHome = (newProjectId: string) => {
     newProjectId === thisDefaultProjectId.value
       ? "You've configured your app to with a project ID of a shared Kontent.ai project."
       : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
-  const dataOriginInfo =
-    'Data on this site originates from Kontent.ai as well from static JSON resources. To distinguish data sources see https://github.com/kontent-ai/sample-app-vue#data-origin';
-  router.push(`/`);
+  router.push(`/?infoMessage=${infoMessage}`);
 };
 
 const receiveMessage = (event: MessageEvent) => {

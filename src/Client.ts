@@ -1,16 +1,10 @@
+// Kontent.ai
+import { camelCasePropertyNameResolver, DeliveryClient } from '@kontent-ai/delivery-sdk'
 import Cookies from 'universal-cookie';
-import {
-  selectedProjectCookieName,
-  defaultProjectId,
-} from './Utilities/SelectedProject';
-import packageInfo from '../package.json';
 import validator from 'validator';
 
-// Kontent.ai
-import {
-  camelCasePropertyNameResolver,
-  DeliveryClient,
-} from '@kontent-ai/delivery-sdk';
+import packageInfo from '../package.json';
+import { selectedProjectCookieName } from './Utilities/SelectedProject'
 
 const sourceTrackingHeaderName = 'X-KC-SOURCE';
 

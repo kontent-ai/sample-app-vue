@@ -113,9 +113,7 @@ export const dateFormats = {
 
 export const defaultLanguage = languageCodes[0];
 
-export interface ILanguageObject<TContentItem extends IContentItem> {
-  [key: string]: TContentItem | null;
-}
+export type ILanguageObject<TContentItem extends IContentItem> = Record<string, TContentItem | null>;
 
 export const initLanguageCodeObject = <TContentItem extends IContentItem>(
   object: ILanguageObject<TContentItem> | null = null
@@ -133,9 +131,7 @@ export const initLanguageCodeObject = <TContentItem extends IContentItem>(
   return object;
 };
 
-export interface ILanguageObjectWithArray<TContentItem extends IContentItem> {
-  [key: string]: TContentItem[];
-}
+export type ILanguageObjectWithArray<TContentItem extends IContentItem> = Record<string, TContentItem[]>;
 
 export const initLanguageCodeObjectWithArray = <
   TContentItem extends IContentItem
@@ -159,7 +155,7 @@ export const getLanguageCode = (route: string): string => {
   const defaultLanguage = languageCodes[0];
   const languageParameter = route.split('/')[1];
 
-  if (languageCodesLowerCase.indexOf(languageParameter.toLowerCase()) > -1) {
+  if (languageCodesLowerCase.includes(languageParameter.toLowerCase())) {
     return languageCodes[
       languageCodesLowerCase.indexOf(languageParameter.toLowerCase())
     ];

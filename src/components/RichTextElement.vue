@@ -3,17 +3,14 @@
 </template>
 
 <script setup lang="ts">
-import { resolveContentLink } from '../Utilities/ContentLinks';
-import {
-  createRichTextHtmlResolver,
-  linkedItemsHelper,
-  type Elements,
-type ILink,
-} from '@kontent-ai/delivery-sdk';
-import { onMounted, onUpdated, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { type Elements, type ILink, createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk'
+import { onMounted, onUpdated, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRouter } from 'vue-router';
+
 import type { HostedVideo } from '@/models';
+
+import { resolveContentLink } from '../Utilities/ContentLinks';
 
 const props = defineProps<{
   element: Elements.RichTextElement;
@@ -50,8 +47,8 @@ const loadData = () => {
     contentItemResolver: (itemCodename, contentItem) => {
       if (contentItem?.system.type === 'tweet') {
         const tweet = contentItem.elements;
-        let tweetLink = tweet.tweetLink.value;
-        let tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
+        const tweetLink = tweet.tweetLink.value;
+        const tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
 
         let selectedTheme = tweet.theme.value[0].codename;
         selectedTheme = selectedTheme ? selectedTheme : 'light';

@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { type Elements, type ILink, createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk'
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
@@ -110,10 +110,7 @@ const loadData = () => {
 };
 
 onMounted(() => {
-  loadData();
+  loadData(); 
 });
 
-onUpdated(() => {
-  loadData();
-});
 </script>

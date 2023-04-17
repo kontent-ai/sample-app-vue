@@ -18,14 +18,16 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Brewer } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { Filter } from '../Utilities/BrewerFilter';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
 
 const { locale } = useI18n();
+
+const Client = injectStrict(ClientKey);
 
 const brewers = ref<Array<Brewer>>([]);
 const manufacturers = ref<Array<ITaxonomyTerms>>([]);
@@ -34,7 +36,7 @@ const brewerFilter = ref<Filter>(new Filter());
 
 const fetchData = (language: string): void => {
   const brewersList = initLanguageCodeObjectWithArray<Brewer>();
-  const query = Client.items<Brewer>()
+  const query = Client.value.items<Brewer>()
     .type('brewer')
     .orderParameter('elements.product_name', 'desc');
 
@@ -53,7 +55,7 @@ const fetchData = (language: string): void => {
 };
 
 const fetchManufacturers = (): void => {
-  Client.taxonomy('manufacturer')
+  Client.value.taxonomy('manufacturer')
     .toPromise()
     .then((response) => {
       manufacturers.value = response.data.taxonomy.terms;
@@ -61,7 +63,7 @@ const fetchManufacturers = (): void => {
 };
 
 const fetchProductStatuses = (): void => {
-  Client.taxonomy('product_status')
+  Client.value.taxonomy('product_status')
     .toPromise()
     .then((response) => {
       productStatuses.value = response.data.taxonomy.terms;

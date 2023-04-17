@@ -59,12 +59,13 @@ import VueScrollTo from 'vue-scrollto';
 
 import type { Cafe } from '@/models';
 import { getCafeModel } from '@/Utilities/CafeListing';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 import type { CafeModel } from '@/ViewModels/CafeModel';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 
+const Client = injectStrict(ClientKey);
 const { locale } = useI18n();
 
 const cafes = ref<Array<Cafe>>([]);
@@ -100,7 +101,7 @@ const handleAddressClick = (model: CafeModel): void => {
 const fetchCafes = () => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  const query = Client.items<Cafe>()
+  const query = Client.value.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

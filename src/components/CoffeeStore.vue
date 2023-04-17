@@ -18,12 +18,14 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Coffee } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { Filter } from '../Utilities/CoffeeFilter';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import CoffeeFilter from './CoffeeFilter.vue';
 import Coffees from './Coffees.vue';
+
+const Client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 const coffees = ref<Array<Coffee>>([]);
@@ -33,7 +35,7 @@ const filter = ref<Filter>(new Filter());
 
 const fetchData = (language: string) => {
   const coffeesList = initLanguageCodeObjectWithArray<Coffee>();
-  const query = Client.items<Coffee>()
+  const query = Client.value.items<Coffee>()
     .type('coffee')
     .orderParameter('elements.product_name', 'desc');
 
@@ -52,7 +54,7 @@ const fetchData = (language: string) => {
 };
 
 const fetchProcessings = (): void => {
-  Client.taxonomy('processing')
+  Client.value.taxonomy('processing')
     .toPromise()
     .then((response) => {
       processings.value = response.data.taxonomy.terms;
@@ -60,7 +62,7 @@ const fetchProcessings = (): void => {
 };
 
 const fetchProductStatuses = (): void => {
-  Client.taxonomy('product_status')
+  Client.value.taxonomy('product_status')
     .toPromise()
     .then((response) => {
       productStatuses.value = response.data.taxonomy.terms;

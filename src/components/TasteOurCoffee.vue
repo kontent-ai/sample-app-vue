@@ -30,14 +30,16 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Cafe } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 interface CafesData {
   name: string;
   imageLink: string;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 const cafes = ref<Array<Cafe>>([]);
@@ -52,7 +54,7 @@ const cafesLink = `${locale.value}/cafes`;
 const fetchCafes = () => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  const query = Client.items<Cafe>()
+  const query = Client.value.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

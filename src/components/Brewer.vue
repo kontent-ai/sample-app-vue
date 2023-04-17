@@ -39,8 +39,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Brewer } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
 
@@ -49,6 +49,8 @@ interface BrewerData {
   imageLink: string;
   descriptionElement: Elements.RichTextElement | undefined;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 const route = useRoute();
@@ -62,7 +64,7 @@ const data = computed<BrewerData>(() => ({
 }));
 
 const fetchBrewer = () => {
-  const query = Client.items<Brewer>()
+  const query = Client.value.items<Brewer>()
     .type('brewer')
     .equalsFilter('url_pattern', route.params.brewerSlug as string);
 

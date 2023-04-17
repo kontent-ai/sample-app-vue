@@ -44,8 +44,8 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Article } from '@/models';
+import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 interface ArticleData {
@@ -55,6 +55,8 @@ interface ArticleData {
   postDate: string;
   summary: string;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale, t } = useI18n();
 const articles = ref<Array<Article>>([]);
@@ -74,7 +76,7 @@ const formatDate = (value: string): string =>
 
 const fetchArticles = () => {
   const articleList = initLanguageCodeObjectWithArray<Article>();
-  const query = Client.items<Article>()
+  const query = Client.value.items<Article>()
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 

@@ -86,6 +86,8 @@ import validator from 'validator';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { ClientKey, injectStrict } from '@/Utilities/Symbols';
+
 import { Client,resetClient } from '../../Client';
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 import { defaultProjectId, selectedProjectCookieName } from '../../Utilities/SelectedProject'
@@ -118,6 +120,8 @@ const thisDefaultProjectId = ref(defaultProjectId);
 const thisKontentLogo = ref(kontentLogo);
 const cookies = new Cookies(document.cookie);
 const projectIdCookie = cookies.get(selectedProjectCookieName);
+
+const client = injectStrict(ClientKey);
 
 onMounted(() => {
   currentProjectInputValue.value = projectIdCookie;
@@ -159,7 +163,7 @@ const setNewProjectId = (
     return;
   }
 
-  resetClient(newProjectId);
+  client.value = resetClient(newProjectId);
   if (newlyGeneratedProject) {
     waitUntilProjectAccessible(newProjectId);
     preparingProject.value = true;

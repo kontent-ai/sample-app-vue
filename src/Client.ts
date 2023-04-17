@@ -43,7 +43,7 @@ const currentProjectId =
 
 const isPreview = () => previewApiKey !== '';
 
-let Client = new DeliveryClient({
+const Client = new DeliveryClient({
   projectId: currentProjectId,
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
@@ -59,7 +59,7 @@ let Client = new DeliveryClient({
 });
 
 const resetClient = (newProjectId: string) => {
-  Client = new DeliveryClient({
+  const newClient = new DeliveryClient({
     projectId: newProjectId,
     propertyNameResolver: camelCasePropertyNameResolver,
     previewApiKey: previewApiKey,
@@ -75,6 +75,7 @@ const resetClient = (newProjectId: string) => {
   });
   const cookies = new Cookies(document.cookie);
   cookies.set(selectedProjectCookieName, newProjectId, { path: '/', sameSite: 'none', secure: true });
+  return newClient;
 };
 
 export { Client, resetClient, getProjectIdFromEnvironment, getProjectIdFromCookies };

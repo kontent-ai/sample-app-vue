@@ -46,8 +46,8 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { AboutUs, FactAboutUs } from '@/models';
+import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
 import RichTextElement from './RichTextElement.vue';
 
@@ -56,6 +56,8 @@ interface FactsData {
   descriptionElement: Elements.RichTextElement;
   imageLink: string;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 const facts = ref<Array<FactAboutUs>>([]);
@@ -69,7 +71,7 @@ const factsData = computed<Array<FactsData>>(() =>
 
 const fetchFacts = (): void => {
   const factsList = initLanguageCodeObject<AboutUs>();
-  const query = Client.items<AboutUs>().type('about_us');
+  const query = Client.value.items<AboutUs>().type('about_us');
 
   if (locale.value) {
     query.languageParameter(locale.value);
@@ -97,4 +99,5 @@ onMounted(() => {
 watch(locale, () => {
   fetchFacts();
 });
+
 </script>

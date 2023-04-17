@@ -74,9 +74,11 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Article } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage,initLanguageCodeObjectWithArray  } from '../Utilities/LanguageCodes';
+
+const Client = injectStrict(ClientKey);
 
 const { t, locale } = useI18n();
 const articleCount = 5;
@@ -99,7 +101,7 @@ const formatDate = (value: string | null): string => {
 
 const fetchArticles = () => {
   const articleList = initLanguageCodeObjectWithArray<Article>();
-  const query = Client.items<Article>()
+  const query = Client.value.items<Article>()
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 
@@ -120,12 +122,11 @@ const fetchArticles = () => {
 };
 
 onMounted(() => {
-  //dateFormat.i18n = dateFormats[locale.value] || dateFormats[0];
   fetchArticles();
 });
 
 watch(locale, () => {
-  //dateFormat.i18n = dateFormats[locale.value]|| dateFormats[0];
   fetchArticles();
 });
+
 </script>

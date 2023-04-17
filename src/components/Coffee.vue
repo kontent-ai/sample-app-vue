@@ -52,8 +52,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Coffee } from '@/models';
+import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
 
@@ -66,6 +66,8 @@ interface CoffeeData {
   processing: string;
   altitude: string;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 const route = useRoute();
@@ -86,7 +88,7 @@ const coffeeData = computed<CoffeeData>(() => ({
 }));
 
 const fetchData = () => {
-  const query = Client.items<Coffee>()
+  const query = Client.value.items<Coffee>()
     .type('coffee')
     .equalsFilter('url_pattern', route.params.coffeeSlug as string);
 

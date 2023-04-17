@@ -18,15 +18,22 @@
 
 <script setup lang="ts">
 import qs from 'qs';
-import { onBeforeMount, onMounted, ref, watch } from 'vue';
+import {
+onBeforeMount,
+onMounted,
+provide,
+ref,
+watch
+} from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import { getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
+import { Client, getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
 import FooterVue from './components/Footer.vue';
 import HeaderVue from './components/Header.vue';
 import { languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
 import {projectConfigurationPath} from './Utilities/SelectedProject';
+import { ClientKey } from './Utilities/Symbols';
 
 const infoMessageText = ref('');
 
@@ -35,6 +42,9 @@ const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
 
+const client = ref(Client);
+
+provide(ClientKey, client);
 
 onBeforeMount(() => {
   if (

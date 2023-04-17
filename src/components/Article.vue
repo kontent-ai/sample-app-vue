@@ -45,8 +45,8 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Article } from '@/models';
+import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
@@ -57,6 +57,8 @@ interface ArticleData {
   postDate: string;
   bodyCopyElement: Elements.RichTextElement;
 }
+
+const Client = injectStrict(ClientKey);
 
 const { locale, t } = useI18n();
 const article = ref<Article | null>(null);
@@ -86,7 +88,7 @@ const formatDate = (value: string) =>
 const fetchArticle = (articleId: string) => {
   const articleDetails = initLanguageCodeObject<Article>();
 
-  const query = Client.items<Article>()
+  const query = Client.value.items<Article>()
     .type('article')
     .equalsFilter('system.id', articleId)
     .elementsParameter([

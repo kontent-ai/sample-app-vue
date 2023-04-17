@@ -12,6 +12,7 @@
   </section>
 </template>
 
+
 <script setup lang="ts">
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
@@ -19,8 +20,8 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { HeroUnit } from '@/models';
+import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
-import { Client } from '../Client.js';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import RichTextElement from './RichTextElement.vue';
 
@@ -32,6 +33,8 @@ interface HeroUnitData {
     backgroundColor: string;
   };
 }
+
+const client = injectStrict(ClientKey);
 
 const { locale } = useI18n();
 
@@ -53,7 +56,7 @@ const heroUnitData = computed<HeroUnitData | null>(() => {
 
 const fetchHeroUnit = () => {
   const heroUnits = initLanguageCodeObjectWithArray<HeroUnit>();
-  const query = Client.items<HeroUnit>()
+  const query = client.value.items<HeroUnit>()
     .type('hero_unit')
     .elementsParameter(['title', 'image', 'marketing_message']);
 

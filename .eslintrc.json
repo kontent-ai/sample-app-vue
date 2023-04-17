@@ -5,16 +5,10 @@
     "es6": true,
     "node": true
   },
-  "parserOptions": {
-    "project": [
-      "./tsconfig.json"
-    ]
-  },
   "extends": [
     "eslint-config-kontent-ai",
     "eslint:recommended",
     "@vue/typescript/recommended",
-    // "plugin:@typescript-eslint/strict",
     "prettier"
   ],
   "plugins": [

@@ -44,7 +44,7 @@ const currentProjectId =
 const isPreview = () => previewApiKey !== '';
 
 const Client = new DeliveryClient({
-  projectId: currentProjectId,
+  environmentId: currentProjectId,
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
   defaultQueryConfig: {
@@ -60,7 +60,7 @@ const Client = new DeliveryClient({
 
 const resetClient = (newProjectId: string) => {
   const newClient = new DeliveryClient({
-    projectId: newProjectId,
+    environmentId: newProjectId,
     propertyNameResolver: camelCasePropertyNameResolver,
     previewApiKey: previewApiKey,
     defaultQueryConfig: {

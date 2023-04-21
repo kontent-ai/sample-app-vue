@@ -1,34 +1,32 @@
+<template>
+  <SanityBlocks :blocks="blocks" :serializers="serializers" />
+</template>
+
 <script setup lang="ts">
-import {
-  RichTextBrowserParser,
-  isLinkedItem,
-  type IDomNode,
-} from '@pokornyd/kontent-ai-rich-text-parser';
-import { type VNode, h } from 'vue';
-import { type IContentItem } from '@kontent-ai/delivery-sdk';
+
 import type { HostedVideo } from '@/models';
+import type { IContentItem } from '@kontent-ai/delivery-sdk';
+import { browserParse, transformToPortableText } from '@kontent-ai/rich-text-resolver';
+import type {IPortableTextComponent} from '@kontent-ai/rich-text-resolver';
+import { SanityBlocks } from 'sanity-blocks-vue-component';
+import { defineProps, h } from 'vue';
 import Video from './Video.vue';
 
 
 const props = defineProps<{
-  value: string;
-  linkedItems?: Array<IContentItem>;
+value: string;
+linkedItems?: Array<IContentItem>;
 }>();
 
-const resolvedContent = () => {
-  const parsedTree = new RichTextBrowserParser().parse(props.value);
-
-  const link = (domNode: IDomNode): string | VNode => {
-    if (domNode.type === 'tag') {
-      // TODO Recursion vs. cycle
-      const childElements = domNode.children.map((node) => link(node));
-
-      // Resolution
-      if (isLinkedItem(domNode)) {
-        const itemCode = domNode.attributes['data-codename'];
-        // TODO Provide a way to get the item by default
-        const linkedItem = props.linkedItems?.find(
-          (item) => item.system.codename === itemCode
+const parsedTree = browserParse(props.value);
+const blocks = transformToPortableText(parsedTree);
+// TODO fix any
+const serializers: any= {
+  types: {
+    // TODO add link resolution
+    component: (block: IPortableTextComponent) => {
+      const linkedItem = props.linkedItems?.find(
+          (item) => item.system.codename === block.component._ref
         );
 
         switch (linkedItem?.system.type) {
@@ -41,6 +39,7 @@ const resolvedContent = () => {
             let selectedTheme = tweet?.theme.value[0].codename;
             selectedTheme = selectedTheme ? selectedTheme : 'light';
 
+            // TODO finish non working tweet
             setTimeout(() => {
               window.twttr.widgets.createTweet(
                 tweetID,
@@ -51,8 +50,8 @@ const resolvedContent = () => {
               );
             }, 150);
 
-            // TODO Think wha this is rendered as simple string -> wee need to feed it somehow
-            return h('div', { id: `tweet${tweetID}` }); // `<div id="tweet${tweetID}"></div>`;
+            // `<div id="tweet${tweetID}"></div>`;
+            return h('div', { id: `tweet${tweetID}` },["Loading tweet..."]); 
           }
           case 'hosted_video': {
             const video = (linkedItem as HostedVideo).elements;
@@ -85,27 +84,9 @@ const resolvedContent = () => {
             }
           }
           default:
-            return `<div style="backgroundColor: red">ERROR</div>`;
+            return h('div', {style: "backgroundColor: red"},["ERROR"]);
         }
-      }
-
-      // TODO For non-pair element like <br/> to avoid error? as in React
-      // TODO For non-pair element like <br/> to avoid error? as in React
-
-      // TODO -> is that correct approach
-      const element = h(domNode.tagName, domNode.attributes, childElements);
-      return element;
-    } else if (domNode.type === 'text') {
-      return domNode.content;
     }
-
-    throw new Error('Undefined state');
-  };
-
-  return parsedTree.children.map(link);
+  }
 };
 </script>
-
-<template>
-  <resolvedContent/>
-</template>

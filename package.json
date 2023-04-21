@@ -19,10 +19,11 @@
   "dependencies": {
     "@intlify/vue-i18n-loader": "^4.2.0",
     "@kontent-ai/delivery-sdk": "^12.2.0",
-    "@pokornyd/kontent-ai-rich-text-parser": "^0.0.13",
+    "@kontent-ai/rich-text-resolver": "^0.0.2",
     "dateformat": "^5.0.3",
     "qs": "^6.11.0",
     "rxjs": "^7.5.6",
+    "sanity-blocks-vue-component": "^1.0.1",
     "twitter-widgets": "^2.0.0",
     "universal-cookie": "^4.0.4",
     "validator": "^13.7.0",
@@ -48,14 +49,14 @@
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-vue": "^9.3.0",
+    "kontent-rich-text-to-json-converter": "file:../rich-text-resolver",
     "lint-staged": "^13.0.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.7.1",
     "typescript": "~4.8.3",
     "vite": "^3.0.9",
     "vue-template-compiler": "^2.7.10",
-    "vue-tsc": "^0.40.7",
-    "kontent-rich-text-to-json-converter": "file:../rich-text-resolver"
+    "vue-tsc": "^0.40.7"
   },
   "babel": {
     "presets": [

@@ -23,11 +23,16 @@
         </div>
       </div>
       <div class="row">
-        <RichTextElement
+        <!-- <RichTextElement
           v-if="articleData.bodyCopyElement"
           class="article-detail-content"
           :element="articleData.bodyCopyElement"
-        />
+        /> -->
+        <div class="article-detail-content" v-if="articleData.bodyCopyElement">
+          <NewRichText 
+          :value="articleData.bodyCopyElement.value" 
+          :linked-items="articleData.bodyCopyElement.linkedItems"/>
+        </div>
         <span v-else class="article-detail-content">{{
           $t('Article.noBodyCopyValue')
         }}</span>
@@ -51,6 +56,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { computed } from '@vue/reactivity';
 import type { Article } from '@/models';
 import type { Elements } from '@kontent-ai/delivery-sdk';
+import NewRichText from './NewRichText.vue';
 
 interface ArticleData {
   title: string;

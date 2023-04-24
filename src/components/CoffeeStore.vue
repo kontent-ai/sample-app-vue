@@ -18,14 +18,14 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Coffee } from '@/models';
-import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
 import { Filter } from '../Utilities/CoffeeFilter';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import CoffeeFilter from './CoffeeFilter.vue';
 import Coffees from './Coffees.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale } = useI18n();
 const coffees = ref<Array<Coffee>>([]);

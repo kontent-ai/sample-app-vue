@@ -59,13 +59,13 @@ import VueScrollTo from 'vue-scrollto';
 
 import type { Cafe } from '@/models';
 import { getCafeModel } from '@/Utilities/CafeListing';
-import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 import type { CafeModel } from '@/ViewModels/CafeModel';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
+import { injectClient } from '@/Utilities/Symbols';
 
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 const { locale } = useI18n();
 
 const cafes = ref<Array<Cafe>>([]);

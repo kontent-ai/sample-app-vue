@@ -18,16 +18,16 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Brewer } from '@/models';
-import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
 import { Filter } from '../Utilities/BrewerFilter';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
 const { locale } = useI18n();
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const brewers = ref<Array<Brewer>>([]);
 const manufacturers = ref<Array<ITaxonomyTerms>>([]);

@@ -55,12 +55,12 @@ import { useI18n } from 'vue-i18n';
 
 import type { Cafe } from '@/models';
 import { getCafeModel } from '@/Utilities/CafeListing';
-import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 import type { CafeModel } from '@/ViewModels/CafeModel';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
+import { injectClient } from '@/Utilities/Symbols';
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale } = useI18n();
 const ourCafes = ref<Array<Cafe>>([]);
@@ -85,8 +85,6 @@ const partnerCafesData = computed<Array<CafeModel>>(() =>
 const ourCafesData = computed<Array<CafeModel>>(() =>
   ourCafes.value.map((cafe) => getCafeModel(cafe))
 );
-
-
 
 const fetchCafes = (): void => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();

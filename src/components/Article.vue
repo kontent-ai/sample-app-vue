@@ -45,11 +45,11 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Article } from '@/models';
-import { ClientKey,injectStrict } from '@/Utilities/Symbols';
 
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
 interface ArticleData {
   title: string;
@@ -58,7 +58,7 @@ interface ArticleData {
   bodyCopyElement: Elements.RichTextElement;
 }
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale, t } = useI18n();
 const article = ref<Article | null>(null);
@@ -135,5 +135,5 @@ onMounted(() => {
 
 watch(locale, () => {
   fetchArticle(route.params.articleId as string);
-});
+}, {immediate:true});
 </script>

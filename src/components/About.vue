@@ -46,10 +46,10 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { AboutUs, FactAboutUs } from '@/models';
-import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
 import { defaultLanguage, initLanguageCodeObject } from '../Utilities/LanguageCodes'
 import RichTextElement from './RichTextElement.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
 interface FactsData {
   title: string;
@@ -57,7 +57,7 @@ interface FactsData {
   imageLink: string;
 }
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale } = useI18n();
 const facts = ref<Array<FactAboutUs>>([]);

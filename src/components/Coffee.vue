@@ -52,10 +52,10 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Coffee } from '@/models';
-import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
 interface CoffeeData {
   name: string;
@@ -67,7 +67,7 @@ interface CoffeeData {
   altitude: string;
 }
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale } = useI18n();
 const route = useRoute();

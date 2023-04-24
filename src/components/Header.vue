@@ -70,10 +70,11 @@ import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
 
 import MessageBox from './MessageBox.vue';
+import type { LanguageCode } from '@/Utilities/LanguageCodes';
 
 const { locale } = useI18n();
 const { changeLang, infoMessageText } = defineProps<{
-  changeLang: (language: string) => void;
+  changeLang: (language: LanguageCode) => void;
   infoMessageText?: string;
 }>();
 

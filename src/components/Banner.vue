@@ -12,7 +12,6 @@
   </section>
 </template>
 
-
 <script setup lang="ts">
 import type { Elements } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
@@ -20,7 +19,7 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { HeroUnit } from '@/models';
-import { ClientKey, injectStrict } from '@/Utilities/Symbols';
+import { injectClient } from '@/Utilities/Symbols';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import RichTextElement from './RichTextElement.vue';
@@ -34,7 +33,7 @@ interface HeroUnitData {
   };
 }
 
-const client = injectStrict(ClientKey);
+const client = injectClient();
 
 const { locale } = useI18n();
 

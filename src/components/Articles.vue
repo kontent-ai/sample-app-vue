@@ -44,9 +44,9 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Article } from '@/models';
-import { ClientKey, injectStrict } from '@/Utilities/Symbols';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
+import { injectClient } from '@/Utilities/Symbols';
 
 interface ArticleData {
   title: string;
@@ -56,7 +56,7 @@ interface ArticleData {
   summary: string;
 }
 
-const Client = injectStrict(ClientKey);
+const Client = injectClient();
 
 const { locale, t } = useI18n();
 const articles = ref<Array<Article>>([]);

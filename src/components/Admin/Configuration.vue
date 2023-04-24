@@ -9,7 +9,7 @@
         <p class="margin-top-xl">
           For your sample app to work, you should have a Kontent.ai project
           containing content. Your app should be then configured with its
-          project ID. You can either get it by signing in using your Kontent.ai
+          environment ID. You can either get it by signing in using your Kontent.ai
           credentials or by signing up for a trial. Later, it will be converted
           to a free plan.
         </p>
@@ -29,7 +29,7 @@
         <input
           type="submit"
           class="button-secondary margin-top-xl"
-          value="Get Project ID from Kontent"
+          value="Get Environment ID from Kontent"
         />
       </form>
     </section>
@@ -37,7 +37,7 @@
       <h2 class="headline-medium">Set A Project ID Manually</h2>
       <p class="margin-top-l">
         Alternatively, you can configure your app manually by submitting a
-        project ID below.
+        environment ID below.
       </p>
       <div class="project-id-form margin-top-xl">
         <form @submit="handleSetProjectSubmit">
@@ -45,7 +45,7 @@
             <input
               id="ProjectGuid"
               name="ProjectGuid"
-              placeholder="Project ID"
+              placeholder="Environment ID"
               type="text"
               class="project-id-form__input"
               v-model="currentProjectInputValue"
@@ -63,8 +63,8 @@
     <section class="section-secondary-two">
       <h2 class="headline-medium">Use the Shared Project</h2>
       <p class="margin-top-l">
-        Alternatively, you may wish to use the shared project (project ID "{{
-          thisDefaultProjectId
+        Alternatively, you may wish to use the shared project (environemt ID "{{
+          thisDefaultEnivronmentId
         }}").
       </p>
       <p class="margin-top-l">
@@ -74,7 +74,7 @@
         type="submit"
         class="button-secondary margin-top-xl"
         value="Use the shared project"
-        @click="setNewProjectId(thisDefaultProjectId)"
+        @click="setNewEnvironmentId(thisDefaultEnivronmentId)"
       />
     </section>
   </div>
@@ -90,7 +90,7 @@ import { injectClient } from '@/Utilities/Symbols';
 
 import { Client, createClient, setEnvironmentIdCookie } from '../../Client';
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
-import { defaultProjectId, selectedProjectCookieName } from '../../Utilities/SelectedProject'
+import { defaultEnvironmentId, selectedEnvironmentCookieName } from '../../Utilities/SelectedProject'
 import SpinnerBox from '../SpinnerBox.vue';
 
 const router = useRouter();
@@ -116,15 +116,15 @@ const getWindowCenterPosition = (windowWidth: number, windowHeight: number) => {
 const currentProjectInputValue = ref('');
 const preparingProject = ref(false);
 const sampleProjectItemCount = ref(0);
-const thisDefaultProjectId = ref(defaultProjectId);
+const thisDefaultEnivronmentId = ref(defaultEnvironmentId);
 const thisKontentLogo = ref(kontentLogo);
 const cookies = new Cookies(document.cookie);
-const projectIdCookie = cookies.get(selectedProjectCookieName);
+const environmentIdCookie = cookies.get(selectedEnvironmentCookieName);
 
 const client = injectClient();
 
 onMounted(() => {
-  currentProjectInputValue.value = projectIdCookie;
+  currentProjectInputValue.value = environmentIdCookie;
   window.addEventListener('message', receiveMessage, false);
 });
 
@@ -134,12 +134,12 @@ onUnmounted(() => {
 
 const handleSetProjectSubmit = (event: Event) => {
   event.preventDefault();
-  const newProjectId = currentProjectInputValue;
-  setNewProjectId(newProjectId.value);
+  const newEnvironmentId = currentProjectInputValue;
+  setNewEnvironmentId(newEnvironmentId.value);
 };
 
 const getSampleProjectItemCount = () => {
-  const client = createClient(thisDefaultProjectId.value);
+  const client = createClient(thisDefaultEnivronmentId.value);
 
   client.items()
     .elementsParameter(['id'])
@@ -150,30 +150,30 @@ const getSampleProjectItemCount = () => {
     });
 };
 
-const setNewProjectId = (
-  newProjectId: string,
+const setNewEnvironmentId = (
+  newEnvironmentId: string,
   newlyGeneratedProject?: string
 ) => {
-  if (!validator.isUUID(newProjectId)) {
-    const message = `Selected project (${newProjectId}) is not a valid GUID`;
+  if (!validator.isUUID(newEnvironmentId)) {
+    const message = `Selected project (${newEnvironmentId}) is not a valid GUID`;
     // eslint-disable-next-line
     console.error(message);
     alert(message);
-    currentProjectInputValue.value = projectIdCookie;
+    currentProjectInputValue.value = environmentIdCookie;
     return;
   }
 
-  client.value = createClient(newProjectId);
-  setEnvironmentIdCookie(newProjectId);
+  client.value = createClient(newEnvironmentId);
+  setEnvironmentIdCookie(newEnvironmentId);
   if (newlyGeneratedProject) {
-    waitUntilProjectAccessible(newProjectId);
+    waitUntilProjectAccessible(newEnvironmentId);
     preparingProject.value = true;
     return;
   }
-  redirectToHome(newProjectId);
+  redirectToHome(newEnvironmentId);
 };
 
-const waitUntilProjectAccessible = (newProjectId: string) => {
+const waitUntilProjectAccessible = (newEnvironmentId: string) => {
   setTimeout(() => {
     Client.items()
       .elementsParameter(['id'])
@@ -182,19 +182,19 @@ const waitUntilProjectAccessible = (newProjectId: string) => {
       .then((response) => {
         if (response.data.items.length >= sampleProjectItemCount.value) {
           preparingProject.value = false;
-          redirectToHome(newProjectId);
+          redirectToHome(newEnvironmentId);
         } else {
-          waitUntilProjectAccessible(newProjectId);
+          waitUntilProjectAccessible(newEnvironmentId);
         }
       });
   }, 2000);
 };
 
-const redirectToHome = (newProjectId: string) => {
+const redirectToHome = (newEnvironmentId: string) => {
   const infoMessage =
-    newProjectId === thisDefaultProjectId.value
+    newEnvironmentId === thisDefaultEnivronmentId.value
       ? "You've configured your app to with a project ID of a shared Kontent.ai project."
-      : `You've configured your app with a project ID "${newProjectId}". You can edit its contents at https://app.kontent.ai/.`;
+      : `You've configured your app with a project ID "${newEnvironmentId}". You can edit its contents at https://app.kontent.ai/.`;
   router.push(`/?infoMessage=${infoMessage}`);
 };
 
@@ -205,7 +205,7 @@ const receiveMessage = (event: MessageEvent) => {
     return;
   }
 
-  setNewProjectId(event.data.projectGuid, event.data.newlyGeneratedProject);
+  setNewEnvironmentId(event.data.projectGuid, event.data.newlyGeneratedProject);
 };
 
 const openKontentProjectSelector = (event: Event) => {

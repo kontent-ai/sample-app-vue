@@ -28,11 +28,10 @@ Alternatively, you can connect your project manually as per the chapter below.
 
 If you want to change the source Kontent.ai project, follow these steps:
 
-1. In Kontent.ai, choose Project settings from the app menu.
-2. Under Production environment settings, choose API keys.
-3. Copy your Project ID.
+1. In Kontent.ai, choose Environment settings from the app menu.
+2. Under the General settings, copy Environment ID.
 4. Create and open a `.env.local` file in the sample application folder.
-5. On the first line, add your Project ID constant using the format `VITE_VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
+5. On the first line, add your Environment ID constant using the format `VITE_VUE_APP_ENVIRONMENT_ID=00000000-0000-0000-0000-000000000000`.
 6. Save the file.
 
 Now, when you run the application, it will retrieve the content from your sample project. This setup has a higher priority than [setting your sample project via the Configuration page](#connecting-to-your-sample-project).
@@ -43,9 +42,9 @@ To preview unpublished content in the sample application, follow these steps:
 
 1. In Kontent.ai, choose Project settings from the app menu.
 2. Under Production environment settings, choose API keys.
-3. Copy your Project ID and Preview API key.
+3. Copy your Environment ID and Preview API key.
 4. Create and open a `.env.local` file in the sample application folder.
-5. On the first line, add your Project ID constant using the format `VUE_APP_PROJECT_ID=00000000-0000-0000-0000-000000000000`.
+5. On the first line, add your Environment ID constant using the format `VITE_VUE_APP_ENVIRONMENT_ID=00000000-0000-0000-0000-000000000000`.
 6. On the next line, add your Preview API key using the format `VUE_APP_PREVIEW_API_KEY=00000000-0000-0000-0000-000000000000`.
 7. Save the file.
 
@@ -63,8 +62,8 @@ You can learn [more about content editing](https://kontent.ai/learn/tutorials/wr
 
 You can retrieve content either through the Kontent.ai Delivery SDKs or the Kontent.ai Delivery API:
 
-- For published content, use `https://deliver.kontent.ai/PROJECT_ID/items`.
-- For unpublished content, use `https://preview-deliver.kontent.ai/PROJECT_ID/items`.
+- For published content, use `https://deliver.kontent.ai/ENVIRONMENT_ID/items`.
+- For unpublished content, use `https://preview-deliver.kontent.ai/ENVIRONMENT_ID/items`.
 
 For more info about the API, see the [API reference](hhttps://kontent.ai/learn/reference/kontent-apis-overview/).
 

@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 import validator from 'validator';
 
 import packageInfo from '../package.json';
-import { selectedProjectCookieName } from './Utilities/SelectedProject'
+import { selectedEnvironmentCookieName } from './Utilities/SelectedProject'
 
 const sourceTrackingHeaderName = 'X-KC-SOURCE';
 
@@ -12,39 +12,39 @@ const cookies = new Cookies(document.cookie);
 
 const previewApiKey = import.meta.env.VITE_VUE_APP_PREVIEW_API_KEY || '';
 
-const getProjectIdFromEnvironment = (): string | null | undefined => {
-  const projectIdFromEnv = import.meta.env.VITE_VUE_APP_PROJECT_ID;
+const getEnvironmentIdFromEnvironment = (): string | null | undefined => {
+  const environmentIdFromEnv = import.meta.env.VITE_VUE_APP_ENVIRONMENT_ID;
 
-  if (projectIdFromEnv && !validator.isUUID(projectIdFromEnv)) {
+  if (environmentIdFromEnv && !validator.isUUID(environmentIdFromEnv)) {
     console.error(
-      `Your projectId (${projectIdFromEnv}) given in your environment variables is not a valid GUID.`
+      `Your environmentId (${environmentIdFromEnv}) given in your environment variables is not a valid GUID.`
     );
     return null;
   }
 
-  return projectIdFromEnv;
+  return environmentIdFromEnv;
 };
 
-const getProjectIdFromCookies = (): string | null => {
-  const projectIdFromCookie = cookies.get(selectedProjectCookieName);
+const getEnvironmentIdFromCookies = (): string | null => {
+  const environmentIdFromCookie = cookies.get(selectedEnvironmentCookieName);
 
-  if (projectIdFromCookie && !validator.isUUID(projectIdFromCookie)) {
+  if (environmentIdFromCookie && !validator.isUUID(environmentIdFromCookie)) {
     console.error(
-      `Your projectId (${projectIdFromCookie}) from cookies is not a valid GUID.`
+      `Your environmentId (${environmentIdFromCookie}) from cookies is not a valid GUID.`
     );
     return null;
   }
 
-  return projectIdFromCookie;
+  return environmentIdFromCookie;
 };
 
-const currentProjectId =
-  getProjectIdFromEnvironment() ?? getProjectIdFromCookies() ?? '';
+const currentEnvironmentId =
+  getEnvironmentIdFromEnvironment() ?? getEnvironmentIdFromCookies() ?? '';
 
 const isPreview = () => previewApiKey !== '';
 
-const createClient = (newProjectId: string) => new DeliveryClient({
-  environmentId: newProjectId,
+const createClient = (newEnvironmentId: string) => new DeliveryClient({
+  environmentId: newEnvironmentId,
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
   defaultQueryConfig: {
@@ -58,11 +58,11 @@ const createClient = (newProjectId: string) => new DeliveryClient({
   ],
 });
 
-const Client = createClient(currentProjectId);
+const Client = createClient(currentEnvironmentId);
 
-const setEnvironmentIdCookie = (newProjectId: string) => {
+const setEnvironmentIdCookie = (newEnvironmentId: string) => {
   const cookies = new Cookies(document.cookie);
-  cookies.set(selectedProjectCookieName, newProjectId, { path: '/', sameSite: 'none', secure: true });
+  cookies.set(selectedEnvironmentCookieName, newEnvironmentId, { path: '/', sameSite: 'none', secure: true });
 }
 
-export { Client, createClient, getProjectIdFromEnvironment, getProjectIdFromCookies, setEnvironmentIdCookie };
+export { Client, createClient, getEnvironmentIdFromEnvironment, getEnvironmentIdFromCookies, setEnvironmentIdCookie };

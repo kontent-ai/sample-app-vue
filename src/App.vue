@@ -1,5 +1,5 @@
 <template>
-  <div v-if="getProjectIdFromEnvironment() === null">Your projectId given in your environment variables is not a valid GUID.</div>
+  <div v-if="getEnvironmentIdFromEnvironment() === null">Your environmentId given in your environment variables is not a valid GUID.</div>
   <div
     v-else-if="
       route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()
@@ -22,7 +22,7 @@ import { onBeforeMount, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Client, getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
+import { Client, getEnvironmentIdFromCookies, getEnvironmentIdFromEnvironment } from './Client';
 import FooterVue from './components/Footer.vue';
 import HeaderVue from './components/Header.vue';
 import { type LanguageCode,languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
@@ -41,8 +41,8 @@ provide(ClientKey, client);
 
 onBeforeMount(() => {
   if (
-    getProjectIdFromEnvironment() === undefined &&
-    !getProjectIdFromCookies()
+    getEnvironmentIdFromEnvironment() === undefined &&
+    !getEnvironmentIdFromCookies()
   ) {
     router.push(projectConfigurationPath)
   }

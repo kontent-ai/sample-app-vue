@@ -55,10 +55,10 @@ import { useI18n } from 'vue-i18n';
 
 import type { Cafe } from '@/models';
 import { getCafeModel } from '@/Utilities/CafeListing';
+import { injectClient } from '@/Utilities/Symbols';
 import type { CafeModel } from '@/ViewModels/CafeModel';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
-import { injectClient } from '@/Utilities/Symbols';
 
 const Client = injectClient();
 

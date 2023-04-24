@@ -18,12 +18,12 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Brewer } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
 
 import { Filter } from '../Utilities/BrewerFilter';
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
-import { injectClient } from '@/Utilities/Symbols';
 
 const { locale } = useI18n();
 

@@ -86,11 +86,12 @@ import validator from 'validator';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+import { injectClient } from '@/Utilities/Symbols';
+
 import { Client, createClient, setEnvironmentIdCookie } from '../../Client';
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 import { defaultProjectId, selectedProjectCookieName } from '../../Utilities/SelectedProject'
 import SpinnerBox from '../SpinnerBox.vue';
-import { injectClient } from '@/Utilities/Symbols';
 
 const router = useRouter();
 

@@ -4,12 +4,14 @@
 
 <script setup lang="ts">
 import { type Elements, type ILink, createRichTextHtmlResolver } from '@kontent-ai/delivery-sdk'
+import { computed } from '@vue/reactivity';
 import { onUpdated } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+
 import type { HostedVideo } from '@/models';
+
 import { resolveContentLink } from '../Utilities/ContentLinks';
-import { computed } from '@vue/reactivity';
 
 const props = defineProps<{
   element: Elements.RichTextElement;

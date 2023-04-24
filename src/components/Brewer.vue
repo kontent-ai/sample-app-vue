@@ -39,10 +39,10 @@ import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
 import type { Brewer } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
 
 import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
 import RichTextElement from './RichTextElement.vue';
-import { injectClient } from '@/Utilities/Symbols';
 
 interface BrewerData {
   name: string;

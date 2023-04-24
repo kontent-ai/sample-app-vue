@@ -30,9 +30,9 @@ import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 import type { Cafe } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
 
 import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
-import { injectClient } from '@/Utilities/Symbols';
 
 interface CafesData {
   name: string;

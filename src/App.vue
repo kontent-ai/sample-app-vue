@@ -23,7 +23,6 @@ onBeforeMount,
 onMounted,
 provide,
 ref,
-watch
 } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
@@ -31,7 +30,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Client, getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
 import FooterVue from './components/Footer.vue';
 import HeaderVue from './components/Header.vue';
-import { languageCodes, languageCodesLowerCase, type LanguageCode } from './Utilities/LanguageCodes'
+import { type LanguageCode,languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
 import {projectConfigurationPath} from './Utilities/SelectedProject';
 import { ClientKey } from './Utilities/Symbols';
 

@@ -6,8 +6,7 @@
     "node": true
   },
   "extends": [
-    "eslint-config-kontent-ai",
-    "eslint:recommended",
+    "kontent-ai",
     "@vue/typescript/recommended",
     "prettier"
   ],

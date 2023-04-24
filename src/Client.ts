@@ -43,8 +43,8 @@ const currentProjectId =
 
 const isPreview = () => previewApiKey !== '';
 
-const Client = new DeliveryClient({
-  environmentId: currentProjectId,
+const createClient = (newProjectId: string) => new DeliveryClient({
+  environmentId: newProjectId,
   propertyNameResolver: camelCasePropertyNameResolver,
   previewApiKey: previewApiKey,
   defaultQueryConfig: {
@@ -58,24 +58,11 @@ const Client = new DeliveryClient({
   ],
 });
 
-const resetClient = (newProjectId: string) => {
-  const newClient = new DeliveryClient({
-    environmentId: newProjectId,
-    propertyNameResolver: camelCasePropertyNameResolver,
-    previewApiKey: previewApiKey,
-    defaultQueryConfig: {
-      usePreviewMode: isPreview(),
-    },
-    globalHeaders: () => [
-      {
-        header: sourceTrackingHeaderName,
-        value: `${packageInfo.name};${packageInfo.version}`,
-      },
-    ],
-  });
+const Client = createClient(currentProjectId);
+
+const setEnvironmentIdCookie = (newProjectId: string) => {
   const cookies = new Cookies(document.cookie);
   cookies.set(selectedProjectCookieName, newProjectId, { path: '/', sameSite: 'none', secure: true });
-  return newClient;
-};
+}
 
-export { Client, resetClient, getProjectIdFromEnvironment, getProjectIdFromCookies };
+export { Client, createClient, getProjectIdFromEnvironment, getProjectIdFromCookies, setEnvironmentIdCookie };

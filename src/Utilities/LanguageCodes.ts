@@ -3,7 +3,9 @@ import type { IContentItem } from '@kontent-ai/delivery-sdk';
 export const languageCodes = [
   'en-US', // default languages
   'es-ES',
-];
+] as const;
+
+export type LanguageCode = typeof languageCodes[number];
 
 export const languageCodesLowerCase = languageCodes.map((code) =>
   code.toLowerCase()

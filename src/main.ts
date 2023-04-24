@@ -21,8 +21,19 @@ import NotFound from './components/NotFound.vue';
 import Store from './components/Store.vue';
 import en from './Localization/en-US.json';
 import es from './Localization/es-ES.json';
+import { languageCodes,languageCodesLowerCase } from './Utilities/LanguageCodes';
 import { projectConfigurationPath } from './Utilities/SelectedProject';
 
+
+const i18n = createI18n({
+  legacy: false,
+  locale: 'en-US',
+  allowComposition: true,
+  messages: {
+    'en-US': en,
+    'es-ES': es,
+  },
+});
 // TODO
 // Vue.config.productionTip = false;
 const router = createRouter({
@@ -69,6 +80,9 @@ const router = createRouter({
     {
       path: '/:lang(en-us|es-es)/articles/:articleId',
       component: Article,
+      beforeEnter(to, from, next){
+        next(vm => vm.$forceUpdate());
+      }
     },
     {
       path: '/:lang(en-us|es-es)/about',
@@ -106,16 +120,26 @@ const router = createRouter({
   ],
 });
 
+router.beforeEach((to, from, next) => {
+  console.log("before each router");
+  if (
+    from.params.lang === to.params.lang ||
+    !languageCodesLowerCase.includes(to.params.lang as string)
+  ) {
+    next();
+    return;
+  }
+  if (languageCodesLowerCase.includes(to.params.lang as string)) {
+    i18n.global.locale.value =
+      languageCodes[
+      languageCodesLowerCase.indexOf(to.params.lang as string)
+      ];
+  }
+  next();
+})
+
 const app = createApp(App);
 app.use(router);
-const i18n = createI18n({
-  legacy: false,
-  locale: 'en-US',
-  allowComposition: true,
-  messages: {
-    'en-US': en,
-    'es-ES': es,
-  },
-});
+
 app.use(i18n);
 app.mount('#app');

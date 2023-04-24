@@ -31,7 +31,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { Client, getProjectIdFromCookies,getProjectIdFromEnvironment } from './Client';
 import FooterVue from './components/Footer.vue';
 import HeaderVue from './components/Header.vue';
-import { languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
+import { languageCodes, languageCodesLowerCase, type LanguageCode } from './Utilities/LanguageCodes'
 import {projectConfigurationPath} from './Utilities/SelectedProject';
 import { ClientKey } from './Utilities/Symbols';
 
@@ -63,7 +63,7 @@ const getInfoMessage = (): string => {
   return qs.parse(location.search.slice(1)).infoMessage as string;
 };
 
-const changeLang = (newLanguage: string) => {
+const changeLang = (newLanguage: LanguageCode) => {
   if (
     i18n.locale.value === newLanguage ||
     !languageCodes.includes(newLanguage)
@@ -82,25 +82,6 @@ const changeLang = (newLanguage: string) => {
     urlParts.splice(1, 0, newLanguage);
   }
 
-  i18n.locale.value = newLanguage;
-
-  router.push(urlParts.join('/').toLowerCase());
+  router.replace(urlParts.join('/').toLowerCase());
 };
-
-watch(route, (oldValue, newValue) => {
-  const newLanguage = newValue.path.split('/')[1];
-  if (
-    language === newLanguage ||
-    !languageCodesLowerCase.includes(newLanguage.toLocaleLowerCase())
-  ) {
-    return;
-  }
-  if (languageCodesLowerCase.includes(newLanguage.toLocaleLowerCase())) {
-    i18n.locale.value =
-      languageCodes[
-        languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase())
-      ];
-  }
-});
-
 </script>

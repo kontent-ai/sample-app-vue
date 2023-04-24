@@ -86,12 +86,11 @@ import validator from 'validator';
 import { onMounted, onUnmounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { ClientKey, injectStrict } from '@/Utilities/Symbols';
-
-import { Client,resetClient } from '../../Client';
+import { Client, createClient, setEnvironmentIdCookie } from '../../Client';
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
 import { defaultProjectId, selectedProjectCookieName } from '../../Utilities/SelectedProject'
 import SpinnerBox from '../SpinnerBox.vue';
+import { injectClient } from '@/Utilities/Symbols';
 
 const router = useRouter();
 
@@ -121,7 +120,7 @@ const thisKontentLogo = ref(kontentLogo);
 const cookies = new Cookies(document.cookie);
 const projectIdCookie = cookies.get(selectedProjectCookieName);
 
-const client = injectStrict(ClientKey);
+const client = injectClient();
 
 onMounted(() => {
   currentProjectInputValue.value = projectIdCookie;
@@ -139,9 +138,9 @@ const handleSetProjectSubmit = (event: Event) => {
 };
 
 const getSampleProjectItemCount = () => {
-  resetClient(thisDefaultProjectId.value);
+  const client = createClient(thisDefaultProjectId.value);
 
-  Client.items()
+  client.items()
     .elementsParameter(['id'])
     .depthParameter(0)
     .toPromise()
@@ -163,7 +162,8 @@ const setNewProjectId = (
     return;
   }
 
-  client.value = resetClient(newProjectId);
+  client.value = createClient(newProjectId);
+  setEnvironmentIdCookie(newProjectId);
   if (newlyGeneratedProject) {
     waitUntilProjectAccessible(newProjectId);
     preparingProject.value = true;

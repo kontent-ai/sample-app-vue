@@ -8,7 +8,7 @@
     class="application-content"
   >
     <HeaderVue :changeLang="changeLang" :infoMessageText="infoMessageText" />
-    <router-view :language="language" />
+    <router-view :key="route.fullPath" :language="language" />
     <FooterVue :language="language" />
   </div>
   <div v-else>
@@ -17,13 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import qs from 'qs';
-import {
-onBeforeMount,
-onMounted,
-provide,
-ref,
-} from 'vue'
+import { computed } from '@vue/reactivity';
+import { onBeforeMount, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -34,14 +29,13 @@ import { type LanguageCode,languageCodes, languageCodesLowerCase } from './Utili
 import {projectConfigurationPath} from './Utilities/SelectedProject';
 import { ClientKey } from './Utilities/Symbols';
 
-const infoMessageText = ref('');
-
 const i18n = useI18n({ useScope: 'global' });
 const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
-
 const client = ref(Client);
+
+const infoMessageText = computed<string>(() => route.query['infoMessage'] as string);
 
 provide(ClientKey, client);
 
@@ -53,14 +47,6 @@ onBeforeMount(() => {
     router.push(projectConfigurationPath)
   }
 });
-
-onMounted(() => {
-  infoMessageText.value = getInfoMessage();
-});
-
-const getInfoMessage = (): string => {
-  return qs.parse(location.search.slice(1)).infoMessage as string;
-};
 
 const changeLang = (newLanguage: LanguageCode) => {
   if (

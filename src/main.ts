@@ -121,7 +121,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log("before each router");
   if (
     from.params.lang === to.params.lang ||
     !languageCodesLowerCase.includes(to.params.lang as string)

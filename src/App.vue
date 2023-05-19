@@ -22,22 +22,21 @@ import { onBeforeMount, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import { Client, getEnvironmentIdFromCookies, getEnvironmentIdFromEnvironment } from './Client';
+import {createClient, getEnvironmentIdFromCookies, getEnvironmentIdFromEnvironment, initialEnvironmentId } from './Client';
 import FooterVue from './components/Footer.vue';
 import HeaderVue from './components/Header.vue';
 import { type LanguageCode,languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
-import {projectConfigurationPath} from './Utilities/SelectedProject';
-import { ClientKey } from './Utilities/Symbols';
+import {projectConfigurationPath} from './Utilities/SelectedEnvironment';
+import { provideClient } from './Utilities/Symbols';
 
 const i18n = useI18n({ useScope: 'global' });
 const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
-const client = ref(Client);
 
-const infoMessageText = computed<string>(() => route.query['infoMessage'] as string);
+const infoMessageText = computed<string | undefined>(() => route.query['infoMessage'] as string ?? undefined);
 
-provide(ClientKey, client);
+provideClient(createClient(initialEnvironmentId));
 
 onBeforeMount(() => {
   if (

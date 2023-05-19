@@ -4,7 +4,7 @@ import Cookies from 'universal-cookie';
 import validator from 'validator';
 
 import packageInfo from '../package.json';
-import { selectedEnvironmentCookieName } from './Utilities/SelectedProject'
+import { selectedEnvironmentCookieName } from './Utilities/SelectedEnvironment'
 
 const sourceTrackingHeaderName = 'X-KC-SOURCE';
 
@@ -58,11 +58,9 @@ const createClient = (newEnvironmentId: string) => new DeliveryClient({
   ],
 });
 
-const Client = createClient(currentEnvironmentId);
-
 const setEnvironmentIdCookie = (newEnvironmentId: string) => {
   const cookies = new Cookies(document.cookie);
   cookies.set(selectedEnvironmentCookieName, newEnvironmentId, { path: '/', sameSite: 'none', secure: true });
 }
 
-export { Client, createClient, getEnvironmentIdFromEnvironment, getEnvironmentIdFromCookies, setEnvironmentIdCookie };
+export {createClient, currentEnvironmentId as initialEnvironmentId, getEnvironmentIdFromEnvironment, getEnvironmentIdFromCookies, setEnvironmentIdCookie };

@@ -20,10 +20,10 @@
       </div>
     </header>
     <section class="margin-top-xl">
-      <h2 class="headline-medium">Get a Project ID</h2>
+      <h2 class="headline-medium">Get a Environment ID</h2>
       <p class="margin-top-l">
         You may wish to either select from existing projects or create a new
-        sample project. The app will be configured with its project ID.
+        sample project. The app will be configured with its environemt ID.
       </p>
       <form @submit="openKontentProjectSelector">
         <input
@@ -34,7 +34,7 @@
       </form>
     </section>
     <section class="section-secondary">
-      <h2 class="headline-medium">Set A Project ID Manually</h2>
+      <h2 class="headline-medium">Set A Environment ID Manually</h2>
       <p class="margin-top-l">
         Alternatively, you can configure your app manually by submitting a
         environment ID below.
@@ -88,9 +88,9 @@ import { useRouter } from 'vue-router';
 
 import { injectClient } from '@/Utilities/Symbols';
 
-import { Client, createClient, setEnvironmentIdCookie } from '../../Client';
+import {createClient, setEnvironmentIdCookie } from '../../Client';
 import kontentLogo from '../../Images/Admin/kontent-ai-logo.svg';
-import { defaultEnvironmentId, selectedEnvironmentCookieName } from '../../Utilities/SelectedProject'
+import { defaultEnvironmentId, selectedEnvironmentCookieName } from '../../Utilities/SelectedEnvironment'
 import SpinnerBox from '../SpinnerBox.vue';
 
 const router = useRouter();
@@ -175,7 +175,8 @@ const setNewEnvironmentId = (
 
 const waitUntilProjectAccessible = (newEnvironmentId: string) => {
   setTimeout(() => {
-    Client.items()
+    createClient(newEnvironmentId)
+      .items()
       .elementsParameter(['id'])
       .depthParameter(0)
       .toPromise()

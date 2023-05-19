@@ -51,10 +51,7 @@ const richTextData = computed(() => createRichTextHtmlResolver().resolveRichText
       const tweetLink = tweet.tweetLink.value;
       const tweetID = tweetLink.match('^.*twitter.com/.*/(\\d+)/?.*$')[1];
 
-      let selectedTheme = tweet.theme.value[0].codename;
-      selectedTheme = selectedTheme ? selectedTheme : 'light';
-
-      tweetsToResolve[tweetID] = selectedTheme;
+      tweetsToResolve[tweetID] = tweet.theme.value[0].codename ?? 'light';
 
       return { contentItemHtml: `<div id="tweet${tweetID}"></div>` };
     }

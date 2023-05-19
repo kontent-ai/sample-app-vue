@@ -1,7 +1,13 @@
 import { DeliveryClient } from "@kontent-ai/delivery-sdk";
-import { type InjectionKey, type Ref,inject } from "vue";
+import {
+type InjectionKey,
+type Ref,
+inject,
+provide,
+ref
+} from "vue"
 
-export const ClientKey: InjectionKey<Ref<DeliveryClient>> = Symbol('client');
+const ClientKey: InjectionKey<Ref<DeliveryClient>> = Symbol('client');
 
 export const injectClient = () => {
   const client = inject(ClientKey);
@@ -11,3 +17,5 @@ export const injectClient = () => {
 
   return client;
 }
+
+export const provideClient = (client: DeliveryClient) => provide(ClientKey, ref(client));

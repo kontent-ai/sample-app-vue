@@ -22,7 +22,7 @@ import Store from './components/Store.vue';
 import en from './Localization/en-US.json';
 import es from './Localization/es-ES.json';
 import { languageCodes,languageCodesLowerCase } from './Utilities/LanguageCodes';
-import { projectConfigurationPath } from './Utilities/SelectedProject';
+import { projectConfigurationPath } from './Utilities/SelectedEnvironment';
 
 
 const i18n = createI18n({
@@ -121,18 +121,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (
-    from.params.lang === to.params.lang ||
-    !languageCodesLowerCase.includes(to.params.lang as string)
-  ) {
-    next();
-    return;
-  }
-  if (languageCodesLowerCase.includes(to.params.lang as string)) {
-    i18n.global.locale.value =
-      languageCodes[
-      languageCodesLowerCase.indexOf(to.params.lang as string)
-      ];
+  const toLang = to.params.lang as string;
+  if (from.params.lang !== toLang && languageCodesLowerCase.includes(toLang)) {
+    i18n.global.locale.value = languageCodes[languageCodesLowerCase.indexOf(toLang)];
   }
   next();
 })

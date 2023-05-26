@@ -20,7 +20,7 @@
       </div>
     </header>
     <section class="margin-top-xl">
-      <h2 class="headline-medium">Get a Environment ID</h2>
+      <h2 class="headline-medium">Get an Environment ID</h2>
       <p class="margin-top-l">
         You may wish to either select from existing projects or create a new
         sample project. The app will be configured with its environemt ID.
@@ -34,9 +34,9 @@
       </form>
     </section>
     <section class="section-secondary">
-      <h2 class="headline-medium">Set A Environment ID Manually</h2>
+      <h2 class="headline-medium">Set an Environment ID Manually</h2>
       <p class="margin-top-l">
-        Alternatively, you can configure your app manually by submitting a
+        Alternatively, you can configure your app manually by submitting an
         environment ID below.
       </p>
       <div class="project-id-form margin-top-xl">
@@ -155,7 +155,7 @@ const setNewEnvironmentId = (
   newlyGeneratedProject?: string
 ) => {
   if (!validator.isUUID(newEnvironmentId)) {
-    const message = `Selected project (${newEnvironmentId}) is not a valid GUID`;
+    const message = `Selected environment (${newEnvironmentId}) is not a valid GUID`;
     // eslint-disable-next-line
     console.error(message);
     alert(message);
@@ -194,8 +194,8 @@ const waitUntilProjectAccessible = (newEnvironmentId: string) => {
 const redirectToHome = (newEnvironmentId: string) => {
   const infoMessage =
     newEnvironmentId === thisDefaultEnivronmentId.value
-      ? "You've configured your app to with a project ID of a shared Kontent.ai project."
-      : `You've configured your app with a project ID "${newEnvironmentId}". You can edit its contents at https://app.kontent.ai/.`;
+      ? "You've configured your app to with an environment ID of a shared Kontent.ai project."
+      : `You've configured your app with an environment ID "${newEnvironmentId}". You can edit its contents at https://app.kontent.ai/.`;
   router.push(`/?infoMessage=${infoMessage}`);
 };
 

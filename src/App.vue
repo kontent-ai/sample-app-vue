@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
-import { onBeforeMount, provide, ref } from 'vue'
+import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -34,7 +34,11 @@ const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
 
-const infoMessageText = computed<string | undefined>(() => route.query['infoMessage'] as string ?? undefined);
+const infoMessageText = computed<string | undefined>(() => {
+  const val = route.query['infoMessage'];
+
+  return typeof val !== 'string' ? undefined : val;
+});
 
 provideClient(createClient(initialEnvironmentId));
 

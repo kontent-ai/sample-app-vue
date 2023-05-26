@@ -38,7 +38,7 @@ const getEnvironmentIdFromCookies = (): string | null => {
   return environmentIdFromCookie;
 };
 
-const currentEnvironmentId =
+const initialEnvironmentId =
   getEnvironmentIdFromEnvironment() ?? getEnvironmentIdFromCookies() ?? '';
 
 const isPreview = () => previewApiKey !== '';
@@ -63,4 +63,4 @@ const setEnvironmentIdCookie = (newEnvironmentId: string) => {
   cookies.set(selectedEnvironmentCookieName, newEnvironmentId, { path: '/', sameSite: 'none', secure: true });
 }
 
-export {createClient, currentEnvironmentId as initialEnvironmentId, getEnvironmentIdFromEnvironment, getEnvironmentIdFromCookies, setEnvironmentIdCookie };
+export {createClient, initialEnvironmentId, getEnvironmentIdFromEnvironment, getEnvironmentIdFromCookies, setEnvironmentIdCookie };

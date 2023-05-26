@@ -25,22 +25,23 @@
 </template>
 
 <script setup lang="ts">
-import type { Cafe } from '@/models';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
+
+import type { Cafe } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
+
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 interface CafesData {
   name: string;
   imageLink: string;
 }
 
-const { locale, t } = useI18n();
+const Client = injectClient();
+
+const { locale } = useI18n();
 const cafes = ref<Array<Cafe>>([]);
 const cafesData = computed<Array<CafesData>>(() =>
   cafes.value.map((cafe) => ({
@@ -53,7 +54,7 @@ const cafesLink = `${locale.value}/cafes`;
 const fetchCafes = () => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items<Cafe>()
+  const query = Client.value.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

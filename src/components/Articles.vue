@@ -38,16 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import dateFormat from 'dateformat';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import { Client } from '../Client.js';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
 import { computed } from '@vue/reactivity';
+import dateFormat from 'dateformat';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import type { Article } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
+
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 interface ArticleData {
   title: string;
@@ -56,6 +55,8 @@ interface ArticleData {
   postDate: string;
   summary: string;
 }
+
+const Client = injectClient();
 
 const { locale, t } = useI18n();
 const articles = ref<Array<Article>>([]);
@@ -75,7 +76,7 @@ const formatDate = (value: string): string =>
 
 const fetchArticles = () => {
   const articleList = initLanguageCodeObjectWithArray<Article>();
-  let query = Client.items<Article>()
+  const query = Client.value.items<Article>()
     .type('article')
     .orderParameter('elements.post_date', 'desc');
 

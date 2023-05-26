@@ -67,12 +67,15 @@
 
 <script setup lang="ts">
 import { computed } from '@vue/reactivity';
-import { useI18n, type Locale } from 'vue-i18n';
+import { useI18n } from 'vue-i18n';
+
+import type { LanguageCode } from '@/Utilities/LanguageCodes';
+
 import MessageBox from './MessageBox.vue';
 
 const { locale } = useI18n();
 const { changeLang, infoMessageText } = defineProps<{
-  changeLang: (language: string) => void;
+  changeLang: (language: LanguageCode) => void;
   infoMessageText?: string;
 }>();
 

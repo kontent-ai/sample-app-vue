@@ -32,21 +32,25 @@
 </template>
 
 <script setup lang="ts">
-import { Client } from '../Client.js';
-import RichTextElement from './RichTextElement.vue';
-import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import { computed } from '@vue/reactivity';
-import { useRoute, useRouter } from 'vue-router';
-import type { Brewer } from '@/models';
 import type { Elements } from '@kontent-ai/delivery-sdk';
+import { computed } from '@vue/reactivity';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+
+import type { Brewer } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
+
+import { resolveChangeLanguageLink } from '../Utilities/RouterLink';
+import RichTextElement from './RichTextElement.vue';
 
 interface BrewerData {
   name: string;
   imageLink: string;
   descriptionElement: Elements.RichTextElement | undefined;
 }
+
+const Client = injectClient();
 
 const { locale } = useI18n();
 const route = useRoute();
@@ -60,7 +64,7 @@ const data = computed<BrewerData>(() => ({
 }));
 
 const fetchBrewer = () => {
-  var query = Client.items<Brewer>()
+  const query = Client.value.items<Brewer>()
     .type('brewer')
     .equalsFilter('url_pattern', route.params.brewerSlug as string);
 

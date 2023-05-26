@@ -13,17 +13,16 @@
 </template>
 
 <script setup lang="ts">
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import RichTextElement from './RichTextElement.vue';
+import type { Elements } from '@kontent-ai/delivery-sdk';
+import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { computed } from '@vue/reactivity';
+
 import type { HeroUnit } from '@/models';
-import type { Elements } from '@kontent-ai/delivery-sdk';
+import { injectClient } from '@/Utilities/Symbols';
+
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
+import RichTextElement from './RichTextElement.vue';
 
 interface HeroUnitData {
   bannerHeading: string;
@@ -34,7 +33,9 @@ interface HeroUnitData {
   };
 }
 
-const { t, locale } = useI18n();
+const client = injectClient();
+
+const { locale } = useI18n();
 
 const heroUnit = ref<HeroUnit | null>(null);
 const heroUnitData = computed<HeroUnitData | null>(() => {
@@ -43,12 +44,10 @@ const heroUnitData = computed<HeroUnitData | null>(() => {
   }
 
   return {
-    bannerHeading: heroUnit.value?.elements.title.value ?? t('Banner.loading'),
-    bannerText: heroUnit.value?.elements.marketingMessage ?? 'Loading',
+    bannerHeading: heroUnit.value.elements.title.value,
+    bannerText: heroUnit.value.elements.marketingMessage,
     sectionStyleObject: {
-      backgroundImage: heroUnit.value
-        ? `url(${heroUnit.value.elements.image.value[0].url})`
-        : undefined,
+      backgroundImage: `url(${heroUnit.value.elements.image.value[0].url})`,
       backgroundColor: '#B24143',
     },
   };
@@ -56,7 +55,7 @@ const heroUnitData = computed<HeroUnitData | null>(() => {
 
 const fetchHeroUnit = () => {
   const heroUnits = initLanguageCodeObjectWithArray<HeroUnit>();
-  var query = Client.items<HeroUnit>()
+  const query = client.value.items<HeroUnit>()
     .type('hero_unit')
     .elementsParameter(['title', 'image', 'marketing_message']);
 

@@ -32,10 +32,12 @@
 </template>
 
 <script setup lang="ts">
-import type { Coffee } from '@/models';
-import { Filter } from '@/Utilities/CoffeeFilter';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
+
+import type { Coffee } from '@/models';
+import { Filter } from '@/Utilities/CoffeeFilter';
+
 import { resolveContentLink } from '../Utilities/ContentLinks';
 
 interface CoffeesData {
@@ -49,7 +51,7 @@ interface CoffeesData {
 
 const props = defineProps<{
   coffees: Array<Coffee>;
-  filter: Filter;
+  filter?: Filter;
 }>();
 
 const { locale } = useI18n();
@@ -59,7 +61,7 @@ const filteredCoffees = computed<Array<Coffee>>(() => {
     return [];
   }
 
-  return props.coffees.filter((coffee) => props.filter.matches(coffee));
+  return props.coffees.filter((coffee) => props.filter?.matches(coffee));
 });
 
 const coffeesData = computed<Array<CoffeesData>>(() =>

@@ -13,20 +13,21 @@
 </template>
 
 <script setup lang="ts">
+import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
+import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+import type { Brewer } from '@/models';
+import { injectClient } from '@/Utilities/Symbols';
+
+import { Filter } from '../Utilities/BrewerFilter';
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 import BrewerFilter from './BrewerFilter.vue';
 import Brewers from './Brewers.vue';
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import { Filter } from '../Utilities/BrewerFilter';
-import { useI18n } from 'vue-i18n';
-import { onMounted, ref, watch } from 'vue';
-import type { Brewer } from '@/models';
-import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 
 const { locale } = useI18n();
+
+const Client = injectClient();
 
 const brewers = ref<Array<Brewer>>([]);
 const manufacturers = ref<Array<ITaxonomyTerms>>([]);
@@ -35,7 +36,7 @@ const brewerFilter = ref<Filter>(new Filter());
 
 const fetchData = (language: string): void => {
   const brewersList = initLanguageCodeObjectWithArray<Brewer>();
-  var query = Client.items<Brewer>()
+  const query = Client.value.items<Brewer>()
     .type('brewer')
     .orderParameter('elements.product_name', 'desc');
 
@@ -54,7 +55,7 @@ const fetchData = (language: string): void => {
 };
 
 const fetchManufacturers = (): void => {
-  Client.taxonomy('manufacturer')
+  Client.value.taxonomy('manufacturer')
     .toPromise()
     .then((response) => {
       manufacturers.value = response.data.taxonomy.terms;
@@ -62,7 +63,7 @@ const fetchManufacturers = (): void => {
 };
 
 const fetchProductStatuses = (): void => {
-  Client.taxonomy('product_status')
+  Client.value.taxonomy('product_status')
     .toPromise()
     .then((response) => {
       productStatuses.value = response.data.taxonomy.terms;

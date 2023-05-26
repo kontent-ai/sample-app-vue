@@ -1,5 +1,5 @@
 <template>
-  <div v-if="getProjectIdFromEnvironment() === null">Your projectId given in your environment variables is not a valid GUID.</div>
+  <div v-if="getEnvironmentIdFromEnvironment() === null">Your environmentId given in your environment variables is not a valid GUID.</div>
   <div
     v-else-if="
       route.path.toLowerCase() !== projectConfigurationPath.toLowerCase()
@@ -8,7 +8,7 @@
     class="application-content"
   >
     <HeaderVue :changeLang="changeLang" :infoMessageText="infoMessageText" />
-    <router-view :language="language" />
+    <router-view :key="route.fullPath" :language="language" />
     <FooterVue :language="language" />
   </div>
   <div v-else>
@@ -17,51 +17,44 @@
 </template>
 
 <script setup lang="ts">
-import qs from 'qs';
-
-import HeaderVue from './components/Header.vue';
-import FooterVue from './components/Footer.vue';
-
-import {projectConfigurationPath} from './Utilities/SelectedProject';
-
-import {
-  languageCodes,
-  languageCodesLowerCase,
-} from './Utilities/LanguageCodes';
-import { onBeforeMount, onMounted, ref, watch } from 'vue';
+import { computed } from '@vue/reactivity';
+import { onBeforeMount } from 'vue'
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
-import { getProjectIdFromEnvironment, getProjectIdFromCookies } from './Client';
 
-const infoMessageText = ref('');
+import {createClient, getEnvironmentIdFromCookies, getEnvironmentIdFromEnvironment, initialEnvironmentId } from './Client';
+import FooterVue from './components/Footer.vue';
+import HeaderVue from './components/Header.vue';
+import { type LanguageCode,languageCodes, languageCodesLowerCase } from './Utilities/LanguageCodes'
+import {projectConfigurationPath} from './Utilities/SelectedEnvironment';
+import { provideClient } from './Utilities/Symbols';
 
 const i18n = useI18n({ useScope: 'global' });
 const language = i18n.locale.value;
 const router = useRouter();
 const route = useRoute();
 
+const infoMessageText = computed<string | undefined>(() => {
+  const val = route.query['infoMessage'];
+
+  return typeof val !== 'string' ? undefined : val;
+});
+
+provideClient(createClient(initialEnvironmentId));
 
 onBeforeMount(() => {
   if (
-    getProjectIdFromEnvironment() === undefined &&
-    !getProjectIdFromCookies()
+    getEnvironmentIdFromEnvironment() === undefined &&
+    !getEnvironmentIdFromCookies()
   ) {
     router.push(projectConfigurationPath)
   }
 });
 
-onMounted(() => {
-  infoMessageText.value = getInfoMessage();
-});
-
-const getInfoMessage = (): string => {
-  return qs.parse(location.search.slice(1)).infoMessage as string;
-};
-
-const changeLang = (newLanguage: string) => {
+const changeLang = (newLanguage: LanguageCode) => {
   if (
     i18n.locale.value === newLanguage ||
-    languageCodes.indexOf(newLanguage) < 0
+    !languageCodes.includes(newLanguage)
   ) {
     return;
   }
@@ -70,32 +63,13 @@ const changeLang = (newLanguage: string) => {
   const currentLanguage = route.path.split('/')[1];
 
   if (
-    languageCodesLowerCase.indexOf(currentLanguage.toLocaleLowerCase()) > -1
+    languageCodesLowerCase.includes(currentLanguage.toLocaleLowerCase())
   ) {
     urlParts[1] = newLanguage;
   } else {
     urlParts.splice(1, 0, newLanguage);
   }
 
-  i18n.locale.value = newLanguage;
-
-  router.push(urlParts.join('/').toLowerCase());
+  router.replace(urlParts.join('/').toLowerCase());
 };
-
-watch(route, (oldValue, newValue) => {
-  const newLanguage = newValue.path.split('/')[1];
-  if (
-    language === newLanguage ||
-    languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) < 0
-  ) {
-    return;
-  }
-  if (languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase()) > -1) {
-    i18n.locale.value =
-      languageCodes[
-        languageCodesLowerCase.indexOf(newLanguage.toLocaleLowerCase())
-      ];
-  }
-});
-
 </script>

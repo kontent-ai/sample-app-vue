@@ -7,17 +7,22 @@
       "@/*": ["./src/*"]
     },
     "allowJs": true,
-    "importsNotUsedAsValues": "remove",
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    // workaround for https://github.com/vuejs/tsconfig/issues/6
+    "importsNotUsedAsValues": "remove",
+    "preserveValueImports": false,
+    "verbatimModuleSyntax": true,
+    // end workaround
   },
 
   "references": [

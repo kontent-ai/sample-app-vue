@@ -52,20 +52,20 @@
 </template>
 
 <script setup lang="ts">
-import { Client } from '../Client.js';
-import {
-  defaultLanguage,
-  initLanguageCodeObjectWithArray,
-} from '../Utilities/LanguageCodes';
-import VueScrollTo from 'vue-scrollto';
-import { useI18n } from 'vue-i18n';
 import { computed } from '@vue/reactivity';
 import { onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import VueScrollTo from 'vue-scrollto';
+
 import type { Cafe } from '@/models';
-import type { CafeModel } from '@/ViewModels/CafeModel';
 import { getCafeModel } from '@/Utilities/CafeListing';
+import { injectClient } from '@/Utilities/Symbols';
+import type { CafeModel } from '@/ViewModels/CafeModel';
+
+import { defaultLanguage, initLanguageCodeObjectWithArray } from '../Utilities/LanguageCodes'
 
 
+const Client = injectClient();
 const { locale } = useI18n();
 
 const cafes = ref<Array<Cafe>>([]);
@@ -79,16 +79,6 @@ const firstCafe = computed<CafeModel | null>(() => {
   }
 
   return getCafeModel(cafes.value[0]);
-});
-
-const cafesAddresses = computed<Array<string>>(() => {
-  if (cafes.value.length === 0) {
-    return [];
-  }
-
-  return cafes.value.map((cafe) => {
-    return `${cafe.elements.city.value}, ${cafe.elements.street.value}`;
-  });
 });
 
 const handleRoasteryClick = (): void => {
@@ -111,7 +101,7 @@ const handleAddressClick = (model: CafeModel): void => {
 const fetchCafes = () => {
   const cafesList = initLanguageCodeObjectWithArray<Cafe>();
 
-  let query = Client.items<Cafe>()
+  const query = Client.value.items<Cafe>()
     .type('cafe')
     .orderParameter('elements.name', 'desc');
 

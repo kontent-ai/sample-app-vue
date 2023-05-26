@@ -21,13 +21,14 @@
 </template>
 
 <script setup lang="ts">
-import LinkButton from './LinkButton.vue';
-import OurStory from './OurStory.vue';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 import Banner from './Banner.vue';
 import LatestArticles from './LatestArticles.vue';
+import LinkButton from './LinkButton.vue';
+import OurStory from './OurStory.vue';
 import TasteOurCoffee from './TasteOurCoffee.vue';
-import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
 
 const { locale } = useI18n();
 const latestArticlesLink = computed(

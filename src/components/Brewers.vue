@@ -32,11 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n';
-import { resolveContentLink } from '../Utilities/ContentLinks';
 import { computed } from '@vue/reactivity';
+import { useI18n } from 'vue-i18n';
+
 import type { Brewer } from '@/models';
 import { Filter } from '@/Utilities/BrewerFilter';
+
+import { resolveContentLink } from '../Utilities/ContentLinks';
 
 interface BrewersData {
   price: string;
@@ -50,7 +52,7 @@ interface BrewersData {
 const { locale } = useI18n();
 const props = defineProps<{
   brewers: Array<Brewer>;
-  filter: Filter;
+  filter?: Filter;
 }>();
 
 const filteredBrewers = computed<Array<Brewer>>(() => {
@@ -58,7 +60,7 @@ const filteredBrewers = computed<Array<Brewer>>(() => {
     return [];
   }
 
-  return props.brewers.filter((brewer) => props.filter.matches(brewer));
+  return props.brewers.filter((brewer) => props.filter?.matches(brewer));
 });
 
 const brewersData = computed<Array<BrewersData>>(() =>

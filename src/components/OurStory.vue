@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+
 import StoryImage from '../Images/our-story.jpg';
 
 const { t } = useI18n();

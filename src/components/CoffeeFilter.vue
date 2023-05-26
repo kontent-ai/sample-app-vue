@@ -37,10 +37,11 @@
 </template>
 
 <script setup lang="ts">
-import { Filter } from '@/Utilities/CoffeeFilter';
 import type { ITaxonomyTerms } from '@kontent-ai/delivery-sdk';
 import { computed } from '@vue/reactivity';
 import { useI18n } from 'vue-i18n';
+
+import { Filter } from '@/Utilities/CoffeeFilter';
 
 interface ProcessingData {
   codename: string;

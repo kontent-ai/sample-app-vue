@@ -1,7 +1,7 @@
 > [!IMPORTANT]
 > This sample app relies on the Dancing Goat project, which is no longer available for creation in Kontent.ai.
 >
-> If you still wish to use this project, you can import the Dancing Goat project using the [Data Ops] tool(https://github.com/kontent-ai/data-ops) by following the instructions provided in our [Dancing Goat repository](https://github.com/kontent-ai-bot/dancing-goat).
+> If you still wish to use this project, you can import the Dancing Goat project using the [Data Ops](https://github.com/kontent-ai/data-ops) tool by following the instructions provided in our [Dancing Goat repository](https://github.com/kontent-ai-bot/dancing-goat).
 
 # Kontent.ai sample Vue.js single-page application
 

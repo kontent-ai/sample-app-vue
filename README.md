@@ -1,3 +1,8 @@
+> [!Warning]
+> Deprecation Notice: This repository is no longer maintained.
+>
+> We encourage you to explore our newer solutions [Kickstart Vue.js solution](https://github.com/kontent-ai/kickstart-vue-app)
+
 > [!IMPORTANT]
 > This sample app relies on the Dancing Goat project, which is no longer available for creation in Kontent.ai.
 >
